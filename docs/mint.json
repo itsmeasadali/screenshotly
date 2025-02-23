@@ -1,0 +1,92 @@
+{
+  "$schema": "https://mintlify.com/schema.json",
+  "name": "Screenshotly",
+  "logo": {
+    "light": "/logo/light.png",
+    "dark": "/logo/dark.png"
+  },
+  "favicon": "/favicon.png",
+  "colors": {
+    "primary": "#2563eb",
+    "light": "#3b82f6",
+    "dark": "#1d4ed8"
+  },
+  "topbarLinks": [
+    {
+      "name": "Dashboard",
+      "url": "https://screenshotly.app/dashboard"
+    }
+  ],
+  "topbarCtaButton": {
+    "name": "Get Started",
+    "url": "https://screenshotly.app/sign-up"
+  },
+  "anchors": [
+    {
+      "name": "API Reference",
+      "icon": "code",
+      "url": "api"
+    },
+    {
+      "name": "Guides",
+      "icon": "book",
+      "url": "guides"
+    },
+    {
+      "name": "Dashboard",
+      "icon": "layout-dashboard",
+      "url": "https://screenshotly.app/dashboard"
+    }
+  ],
+  "navigation": [
+    {
+      "group": "Getting Started",
+      "pages": [
+        "introduction/welcome",
+        "introduction/quickstart",
+        "introduction/authentication"
+      ]
+    },
+    {
+      "group": "API Reference",
+      "pages": [
+        "api/screenshots",
+        "api/rate-limits"
+      ]
+    },
+    {
+      "group": "Guides",
+      "pages": [
+        "guides/capturing-screenshots",
+        "guides/using-mockups",
+        "guides/best-practices"
+      ]
+    },
+    {
+      "group": "Resources",
+      "pages": [
+        "resources/faq",
+        "resources/troubleshooting",
+        "resources/changelog"
+      ]
+    }
+  ],
+  "footerSocials": {
+    "github": "https://github.com/yourusername/screenshotly",
+    "twitter": "https://twitter.com/screenshotly"
+  },
+  "feedback": {
+    "suggestEdit": true,
+    "raiseIssue": true
+  },
+  "analytics": {
+    "ga4": {
+      "measurementId": "G-XXXXXXXXXX"
+    }
+  },
+  "modeToggle": {
+    "default": "light",
+    "isHidden": false
+  },
+  "backgroundImage": "/images/background.png"
+} 

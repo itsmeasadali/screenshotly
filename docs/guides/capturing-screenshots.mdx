@@ -1,0 +1,421 @@
+---
+title: "Capturing Screenshots"
+description: "Learn how to capture and customize screenshots"
+---
+
+# Capturing Screenshots
+
+This guide provides comprehensive examples of using the Screenshotly API to capture screenshots with various options and features.
+
+## Quick Start
+
+### Basic Screenshot
+The simplest way to capture a screenshot:
+
+```typescript
+const response = await fetch('https://api.screenshotly.app/screenshot', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer YOUR_API_TOKEN',
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    url: 'https://example.com',
+  }),
+});
+
+const screenshot = await response.blob();
+```
+
+### Save to File
+Save the screenshot directly to a file:
+
+```typescript
+const fs = require('fs');
+
+const response = await fetch('https://api.screenshotly.app/screenshot', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer YOUR_API_TOKEN',
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    url: 'https://example.com',
+    format: 'png',
+  }),
+});
+
+const buffer = await response.arrayBuffer();
+fs.writeFileSync('screenshot.png', Buffer.from(buffer));
+```
+
+## Device & Viewport Options
+
+### Predefined Devices
+Use standard device presets for consistent screenshots:
+
+```typescript
+// Mobile Device
+const mobileScreenshot = await fetch('https://api.screenshotly.app/screenshot', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer YOUR_API_TOKEN',
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    url: 'https://example.com',
+    device: 'mobile', // 375×812
+  }),
+});
+
+// Tablet Device
+const tabletScreenshot = await fetch('https://api.screenshotly.app/screenshot', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer YOUR_API_TOKEN',
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    url: 'https://example.com',
+    device: 'tablet', // 768×1024
+  }),
+});
+
+// Desktop Device
+const desktopScreenshot = await fetch('https://api.screenshotly.app/screenshot', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer YOUR_API_TOKEN',
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    url: 'https://example.com',
+    device: 'desktop', // 1920×1080
+  }),
+});
+```
+
+### Custom Viewport
+For specific dimensions:
+
+```typescript
+const response = await fetch('https://api.screenshotly.app/screenshot', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer YOUR_API_TOKEN',
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    url: 'https://example.com',
+    width: 1440,
+    height: 900,
+  }),
+});
+```
+
+## Output Formats
+
+### PNG (Default)
+Best for screenshots with transparency:
+
+```typescript
+const response = await fetch('https://api.screenshotly.app/screenshot', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer YOUR_API_TOKEN',
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    url: 'https://example.com',
+    format: 'png',
+  }),
+});
+```
+
+### JPEG with Quality
+Smaller file size with adjustable quality:
+
+```typescript
+const response = await fetch('https://api.screenshotly.app/screenshot', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer YOUR_API_TOKEN',
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    url: 'https://example.com',
+    format: 'jpeg',
+    quality: 80, // 1-100
+  }),
+});
+```
+
+### PDF Format
+For document-style output:
+
+```typescript
+const response = await fetch('https://api.screenshotly.app/screenshot', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer YOUR_API_TOKEN',
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    url: 'https://example.com',
+    format: 'pdf',
+    fullPage: true,
+  }),
+});
+```
+
+## Capture Options
+
+### Full Page Screenshots
+Capture the entire scrollable page:
+
+```typescript
+const response = await fetch('https://api.screenshotly.app/screenshot', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer YOUR_API_TOKEN',
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    url: 'https://example.com',
+    fullPage: true,
+  }),
+});
+```
+
+### Element Screenshots
+Capture specific elements:
+
+```typescript
+const response = await fetch('https://api.screenshotly.app/screenshot', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer YOUR_API_TOKEN',
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    url: 'https://example.com',
+    selector: '#hero-section', // CSS selector
+  }),
+});
+```
+
+### Delayed Capture
+Wait for dynamic content:
+
+```typescript
+const response = await fetch('https://api.screenshotly.app/screenshot', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer YOUR_API_TOKEN',
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    url: 'https://example.com',
+    delay: 2000, // Wait 2 seconds
+  }),
+});
+```
+
+## AI Element Removal
+
+### Basic Usage
+Remove common unwanted elements:
+
+```typescript
+const response = await fetch('https://api.screenshotly.app/screenshot', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer YOUR_API_TOKEN',
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    url: 'https://example.com',
+    aiRemoval: {
+      enabled: true,
+      types: ['cookie-banner', 'ad'],
+      confidence: 0.8
+    }
+  }),
+});
+```
+
+### Advanced Configuration
+Fine-tune element removal:
+
+```typescript
+const response = await fetch('https://api.screenshotly.app/screenshot', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer YOUR_API_TOKEN',
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    url: 'https://example.com',
+    delay: 1000, // Wait for elements to appear
+    aiRemoval: {
+      enabled: true,
+      types: [
+        'cookie-banner',
+        'newsletter',
+        'chat-widget',
+        'social-overlay',
+        'ad'
+      ],
+      confidence: 0.7 // More aggressive removal
+    }
+  }),
+});
+```
+
+### Element Type Guide
+Choose which elements to remove:
+- `cookie-banner`: Cookie notices, GDPR banners
+- `newsletter`: Signup forms, subscription prompts
+- `chat-widget`: Support chats, messenger widgets
+- `social-overlay`: Share buttons, social media widgets
+- `ad`: Advertisements, promotional content
+
+### Confidence Levels
+Adjust the confidence threshold:
+- 0.9: High precision, fewer false positives
+- 0.8: Balanced (recommended)
+- 0.7: More aggressive, might include more elements
+- 0.6: Most aggressive, higher chance of false positives
+
+## Device Mockups
+
+### Browser Mockup
+Add a modern browser frame:
+
+```typescript
+const response = await fetch('https://api.screenshotly.app/screenshot', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer YOUR_API_TOKEN',
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    url: 'https://example.com',
+    device: 'desktop',
+    mockup: 'browser-light',
+  }),
+});
+```
+
+### Mobile Device Mockup
+Show in an iPhone frame:
+
+```typescript
+const response = await fetch('https://api.screenshotly.app/screenshot', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer YOUR_API_TOKEN',
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    url: 'https://example.com',
+    device: 'mobile',
+    mockup: 'iphone-14',
+  }),
+});
+```
+
+## Error Handling
+
+Implement robust error handling:
+
+```typescript
+try {
+  const response = await fetch('https://api.screenshotly.app/screenshot', {
+    method: 'POST',
+    headers: {
+      'Authorization': 'Bearer YOUR_API_TOKEN',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      url: 'https://example.com',
+      device: 'desktop',
+      aiRemoval: {
+        enabled: true,
+        types: ['cookie-banner', 'ad'],
+        confidence: 0.8
+      }
+    }),
+  });
+
+  // Check HTTP status
+  if (!response.ok) {
+    const error = await response.json();
+    
+    switch (response.status) {
+      case 400:
+        console.error('Invalid parameters:', error.details);
+        break;
+      case 401:
+        console.error('Invalid API key');
+        break;
+      case 429:
+        const reset = new Date(error.reset * 1000);
+        console.error(`Rate limit exceeded. Resets at: ${reset}`);
+        break;
+      default:
+        console.error('Screenshot failed:', error);
+    }
+    return;
+  }
+
+  // Check rate limit headers
+  const rateLimit = {
+    limit: response.headers.get('X-RateLimit-Limit'),
+    remaining: response.headers.get('X-RateLimit-Remaining'),
+    reset: response.headers.get('X-RateLimit-Reset'),
+  };
+
+  console.log('Rate limit status:', rateLimit);
+
+  // Process successful response
+  const screenshot = await response.blob();
+  // Use the screenshot...
+
+} catch (error) {
+  console.error('Request failed:', error);
+}
+```
+
+## Best Practices
+
+1. **Rate Limiting**
+   - Monitor your usage with response headers
+   - Implement backoff when approaching limits
+   - Consider caching frequently accessed screenshots
+
+2. **Performance**
+   - Use appropriate image formats
+   - Enable AI removal only when needed
+   - Set reasonable delays for dynamic content
+
+3. **Quality**
+   - Use PNG for highest quality
+   - Adjust JPEG quality based on needs
+   - Test different device viewports
+
+4. **Reliability**
+   - Implement proper error handling
+   - Check rate limit headers
+   - Cache screenshots when possible
+
+5. **AI Removal**
+   - Start with high confidence (0.8-0.9)
+   - Enable only needed element types
+   - Use delay with dynamic elements
+
+## Next Steps
+
+- Explore [mockup templates](/guides/using-mockups)
+- Learn about [API tokens](/guides/managing-tokens)
+- View the [API reference](/api/screenshots) 

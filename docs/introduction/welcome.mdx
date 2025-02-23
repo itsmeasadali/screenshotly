@@ -1,0 +1,73 @@
+---
+title: "Welcome to Screenshotly"
+description: "Capture, customize, and share screenshots with our powerful API"
+---
+
+# Welcome to Screenshotly
+
+Screenshotly is a powerful API service that allows you to capture high-quality screenshots of any webpage, customize them with mockups, and integrate them into your applications.
+
+## Features
+
+- **High-Quality Screenshots**: Capture full-page or specific element screenshots with customizable viewport sizes
+- **Mockup Templates**: Apply beautiful device mockups to your screenshots
+- **Element Hiding**: Automatically hide unwanted elements like cookie banners, ads, and popups
+- **Flexible Output**: Get your screenshots in PNG, JPEG, or PDF formats
+- **Simple Integration**: RESTful API with comprehensive SDKs and documentation
+
+## Getting Started
+
+To start using Screenshotly:
+
+1. [Sign up](/sign-up) for a free account
+2. Get your API token from the [dashboard](/dashboard/tokens)
+3. Follow our [quickstart guide](/introduction/quickstart)
+
+## Example
+
+Here's a quick example of how to capture a screenshot:
+
+```bash
+curl -X POST https://api.screenshotly.app/screenshot \
+  -H "Authorization: Bearer YOUR_API_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "url": "https://example.com",
+    "device": "desktop",
+    "format": "png",
+    "hideElements": {
+      "cookieBanners": true,
+      "ads": true
+    }
+  }'
+```
+
+## Plans and Pricing
+
+<CardGroup>
+  <Card title="Free" icon="sparkles">
+    Perfect for testing and small projects
+    * 100 requests/hour
+    * 2 concurrent requests
+    * Basic mockup templates
+  </Card>
+  <Card title="Pro" icon="rocket">
+    For growing businesses
+    * 1,000 requests/hour
+    * 5 concurrent requests
+    * All mockup templates
+  </Card>
+  <Card title="Enterprise" icon="building">
+    For large-scale applications
+    * 10,000 requests/hour
+    * Unlimited concurrent requests
+    * Custom mockup templates
+  </Card>
+</CardGroup>
+
+## Support
+
+Need help? Check out our:
+- [API Reference](/api/screenshots)
+- [Guides](/guides/capturing-screenshots)
+- [FAQ](/guides/faq) 

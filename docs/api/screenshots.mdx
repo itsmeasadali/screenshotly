@@ -1,0 +1,343 @@
+---
+title: "Screenshots API"
+description: "API reference for capturing screenshots with optional mockups"
+api: "POST https://api.screenshotly.app/screenshot"
+---
+
+# Screenshots API
+
+The Screenshots API allows you to capture high-quality screenshots of any webpage with customizable options and apply device mockups.
+
+## Endpoint
+
+```bash
+POST https://api.screenshotly.app/screenshot
+```
+
+## Authentication
+
+All requests must include your API key in the Authorization header:
+```bash
+Authorization: Bearer YOUR_API_TOKEN
+```
+
+## Request Parameters
+
+### Core Parameters
+
+<ParamField body="url" type="string" required>
+  The URL of the webpage to capture
+</ParamField>
+
+### Viewport Configuration
+
+<ParamField body="device" type="string">
+  Predefined device viewport. Options:
+  - `desktop` (1920×1080)
+  - `laptop` (1366×768)
+  - `tablet` (768×1024)
+  - `mobile` (375×812)
+</ParamField>
+
+<ParamField body="width" type="number">
+  Custom viewport width in pixels (ignored if device is specified)
+</ParamField>
+
+<ParamField body="height" type="number">
+  Custom viewport height in pixels (ignored if device is specified)
+</ParamField>
+
+### Output Options
+
+<ParamField body="format" type="string" default="png">
+  Output format:
+  - `png`: High quality with transparency
+  - `jpeg`: Smaller file size
+  - `pdf`: Document format (mockups not available)
+</ParamField>
+
+<ParamField body="quality" type="number" default="100">
+  Image quality for JPEG format (1-100)
+</ParamField>
+
+<ParamField body="fullPage" type="boolean" default="false">
+  Whether to capture the full scrollable page
+</ParamField>
+
+### Capture Options
+
+<ParamField body="delay" type="number" default="0">
+  Delay in milliseconds before capturing (0-10000). Useful for:
+  - Waiting for animations
+  - Loading dynamic content
+  - Ensuring popups appear
+</ParamField>
+
+<ParamField body="selector" type="string">
+  CSS selector to capture specific element. Examples:
+  - `#hero-section`
+  - `.product-card`
+  - `[data-testid="main-content"]`
+</ParamField>
+
+### Mockup Options
+
+<ParamField body="mockup" type="string">
+  Apply a device mockup:
+  - `browser-light`: Modern browser with light theme (1920×1036)
+  - `browser-dark`: Modern browser with dark theme (1920×1036)
+  - `iphone-14`: iPhone 14 Pro with Dynamic Island (1000×1760)
+  - `macbook-pro`: Modern MacBook Pro (1980×1230)
+</ParamField>
+
+### AI Element Removal
+
+<ParamField body="aiRemoval" type="object">
+  AI-powered element removal configuration:
+  ```json
+  {
+    "enabled": boolean,
+    "types": string[],  // Array of element types to remove
+    "confidence": number  // Confidence threshold (0-1)
+  }
+  ```
+  Available element types:
+  - `cookie-banner`: Cookie consent banners and GDPR notices
+  - `newsletter`: Newsletter signup forms and subscription prompts
+  - `chat-widget`: Customer support chat widgets and messengers
+  - `social-overlay`: Social media buttons and sharing widgets
+  - `ad`: Advertisement elements and promotional content
+</ParamField>
+
+## Response
+
+### Success Response
+
+- **Status**: 200 OK
+- **Content-Type**: `image/png`, `image/jpeg`, or `application/pdf`
+- **Body**: Binary file content
+
+### Headers
+
+```bash
+Content-Type: image/png
+X-RateLimit-Limit: 100
+X-RateLimit-Remaining: 99
+X-RateLimit-Reset: 1635724800
+```
+
+### Error Responses
+
+<ResponseField name="400" type="object">
+  Invalid request parameters
+  ```json
+  {
+    "error": "Invalid request parameters",
+    "details": [
+      {
+        "code": "invalid_type",
+        "path": ["quality"],
+        "message": "Expected number, received string"
+      }
+    ]
+  }
+  ```
+</ResponseField>
+
+<ResponseField name="401" type="object">
+  Missing or invalid API token
+  ```json
+  {
+    "error": "Invalid API key"
+  }
+  ```
+</ResponseField>
+
+<ResponseField name="429" type="object">
+  Rate limit exceeded
+  ```json
+  {
+    "error": "Rate limit exceeded",
+    "reset": 1635724800
+  }
+  ```
+</ResponseField>
+
+<ResponseField name="500" type="object">
+  Internal server error
+  ```json
+  {
+    "error": "Failed to capture screenshot"
+  }
+  ```
+</ResponseField>
+
+## Examples
+
+### Basic Screenshot
+
+<CodeGroup>
+```bash cURL
+curl -X POST https://api.screenshotly.app/screenshot \
+  -H "Authorization: Bearer YOUR_API_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "url": "https://example.com",
+    "device": "desktop",
+    "format": "png"
+  }' \
+  --output screenshot.png
+```
+
+```typescript TypeScript
+const response = await fetch('https://api.screenshotly.app/screenshot', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer YOUR_API_TOKEN',
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    url: 'https://example.com',
+    device: 'desktop',
+    format: 'png',
+  }),
+});
+
+const screenshot = await response.blob();
+```
+
+```python Python
+import requests
+
+response = requests.post(
+    'https://api.screenshotly.app/screenshot',
+    headers={
+        'Authorization': 'Bearer YOUR_API_TOKEN',
+    },
+    json={
+        'url': 'https://example.com',
+        'device': 'desktop',
+        'format': 'png',
+    },
+)
+
+screenshot = response.content
+```
+</CodeGroup>
+
+### With AI Element Removal and Mockup
+
+<CodeGroup>
+```bash cURL
+curl -X POST https://api.screenshotly.app/screenshot \
+  -H "Authorization: Bearer YOUR_API_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "url": "https://example.com",
+    "device": "desktop",
+    "mockup": "browser-light",
+    "format": "png",
+    "aiRemoval": {
+      "enabled": true,
+      "types": ["cookie-banner", "ad", "chat-widget"],
+      "confidence": 0.8
+    }
+  }' \
+  --output screenshot_with_mockup.png
+```
+
+```typescript TypeScript
+const response = await fetch('https://api.screenshotly.app/screenshot', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer YOUR_API_TOKEN',
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    url: 'https://example.com',
+    device: 'desktop',
+    mockup: 'browser-light',
+    format: 'png',
+    aiRemoval: {
+      enabled: true,
+      types: ['cookie-banner', 'ad', 'chat-widget'],
+      confidence: 0.8
+    },
+  }),
+});
+
+const screenshot = await response.blob();
+```
+
+```python Python
+import requests
+
+response = requests.post(
+    'https://api.screenshotly.app/screenshot',
+    headers={
+        'Authorization': 'Bearer YOUR_API_TOKEN',
+    },
+    json={
+        'url': 'https://example.com',
+        'device': 'desktop',
+        'mockup': 'browser-light',
+        'format': 'png',
+        'aiRemoval': {
+            'enabled': True,
+            'types': ['cookie-banner', 'ad', 'chat-widget'],
+            'confidence': 0.8
+        },
+    },
+)
+
+screenshot = response.content
+```
+</CodeGroup>
+
+### Full Page PDF
+
+<CodeGroup>
+```bash cURL
+curl -X POST https://api.screenshotly.app/screenshot \
+  -H "Authorization: Bearer YOUR_API_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "url": "https://example.com",
+    "format": "pdf",
+    "fullPage": true,
+    "delay": 1000
+  }' \
+  --output document.pdf
+```
+
+```typescript TypeScript
+const response = await fetch('https://api.screenshotly.app/screenshot', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer YOUR_API_TOKEN',
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    url: 'https://example.com',
+    format: 'pdf',
+    fullPage: true,
+    delay: 1000,
+  }),
+});
+
+const pdf = await response.blob();
+```
+</CodeGroup>
+
+## Rate Limits
+
+Rate limits vary by plan:
+- Free: 500 requests/day
+- Pro: 5000 requests/day
+
+Rate limit information is included in response headers:
+```bash
+X-RateLimit-Limit: Your plan's limit
+X-RateLimit-Remaining: Requests remaining
+X-RateLimit-Reset: Timestamp when limit resets
+``` 

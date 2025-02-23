@@ -1,0 +1,119 @@
+---
+title: "Using Mockups"
+description: "Learn how to enhance screenshots with device mockups"
+---
+
+# Using Mockups
+
+This guide will show you how to enhance your screenshots by applying device mockups directly through the screenshot API.
+
+## Available Mockups
+
+Screenshotly provides several mockup templates that can be applied when capturing screenshots:
+
+| Template ID | Description | Best For |
+|------------|-------------|-----------|
+| `browser-light` | Modern browser with light theme (1920×1036) | Websites, web apps |
+| `browser-dark` | Modern browser with dark theme (1920×1036) | Dark mode websites |
+| `iphone-14` | iPhone 14 Pro with Dynamic Island (1000×1760) | Mobile apps, responsive designs |
+| `macbook-pro` | Modern MacBook Pro (1980×1230) | Desktop applications |
+
+## Using Mockups
+
+To apply a mockup, simply include the `mockup` parameter in your screenshot request:
+
+```typescript
+const response = await fetch('https://api.screenshotly.app/screenshot', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer YOUR_API_TOKEN',
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    url: 'https://example.com',
+    device: 'desktop',
+    mockup: 'browser-light',
+    format: 'png'
+  }),
+});
+
+const screenshot = await response.blob();
+```
+
+## Browser Window Mockup
+
+The browser mockup is perfect for showcasing websites:
+
+```typescript
+const response = await fetch('https://api.screenshotly.app/screenshot', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer YOUR_API_TOKEN',
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    url: 'https://example.com',
+    device: 'desktop',
+    mockup: 'browser-light',
+    aiRemoval: {
+      enabled: true,
+      types: ['cookie-banner', 'ad'],
+      confidence: 0.8
+    }
+  }),
+});
+```
+
+## Mobile Device Mockup
+
+Perfect for showcasing mobile-responsive designs:
+
+```typescript
+const response = await fetch('https://api.screenshotly.app/screenshot', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer YOUR_API_TOKEN',
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    url: 'https://example.com',
+    device: 'mobile',
+    mockup: 'iphone-14'
+  }),
+});
+```
+
+## Best Practices
+
+1. **Match Device and Mockup**: Use appropriate device settings for each mockup:
+   - `browser-light`/`browser-dark`: Use with `device: 'desktop'`
+   - `iphone-14`: Use with `device: 'mobile'`
+   - `macbook-pro`: Use with `device: 'desktop'`
+
+2. **Clean Screenshots**: Use AI removal to clean up unwanted elements before applying mockups:
+   ```typescript
+   {
+     device: 'desktop',
+     mockup: 'browser-light',
+     aiRemoval: {
+       enabled: true,
+       types: ['cookie-banner', 'ad', 'chat-widget'],
+       confidence: 0.8
+     }
+   }
+   ```
+
+3. **Image Quality**: Use PNG format for best results with mockups:
+   ```typescript
+   {
+     device: 'desktop',
+     mockup: 'browser-light',
+     format: 'png'
+   }
+   ```
+
+## Next Steps
+
+- Learn about [AI element removal](/guides/capturing-screenshots#ai-element-removal)
+- Explore [API token management](/guides/managing-tokens)
+- Check out the [API reference](/api/screenshots) 
