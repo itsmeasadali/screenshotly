@@ -8,11 +8,11 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Loader2, Globe, Image as ImageIcon, Download, ArrowRight } from 'lucide-react';
+import Image from 'next/image';
 
 export default function ScreenshotCapture() {
   const [url, setUrl] = useState('');
   const [loading, setLoading] = useState(false);
-  const [screenshot, setScreenshot] = useState<string | null>(null);
   const [finalImage, setFinalImage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -37,7 +37,7 @@ export default function ScreenshotCapture() {
         throw new Error(data.error || 'Failed to capture screenshot');
       }
 
-      setScreenshot(data.screenshot);
+      setFinalImage(data.screenshot);
 
       if (data.screenshot) {
         await applyMockup(data.screenshot, 'browser-light');
@@ -173,9 +173,11 @@ export default function ScreenshotCapture() {
               {finalImage ? (
                 <div className="space-y-6">
                   <div className="aspect-video bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg overflow-hidden border shadow-sm">
-                    <img
+                    <Image
                       src={finalImage}
                       alt="Screenshot with mockup"
+                      width={1920}
+                      height={1080}
                       className="w-full h-full object-contain"
                     />
                   </div>

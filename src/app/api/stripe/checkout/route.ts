@@ -3,17 +3,31 @@ import { auth } from '@clerk/nextjs/server';
 import Stripe from 'stripe';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2023-10-16',
+  apiVersion: '2025-01-27.acacia',
 });
 
-const PLANS = {
+interface PlanDetails {
+  priceId: string;
+  amount: number;
+}
+
+interface PlanInterval {
+  monthly: PlanDetails;
+  yearly: PlanDetails;
+}
+
+interface Plans {
+  pro: PlanInterval;
+}
+
+const PLANS: Plans = {
   pro: {
     monthly: {
-      priceId: 'price_1QNM4QJWak4JrUEkndXqS2Ho', // Replace with your Stripe price ID
+      priceId: 'price_1QNM4QJWak4JrUEkndXqS2Ho',
       amount: 29,
     },
     yearly: {
-      priceId: 'price_1QNM4QJWak4JrUEkndXqS2Ho', // Replace with your Stripe price ID
+      priceId: 'price_1QNM4QJWak4JrUEkndXqS2Ho',
       amount: 290,
     },
   },
@@ -27,7 +41,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { planId, interval } = body;
+    const { planId, interval } = body as { planId: keyof Plans; interval: keyof PlanInterval };
 
     if (!planId || !interval || !PLANS[planId]?.[interval]) {
       return NextResponse.json({ error: 'Invalid plan' }, { status: 400 });

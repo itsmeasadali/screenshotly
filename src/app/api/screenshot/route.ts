@@ -4,6 +4,9 @@ import sharp from 'sharp';
 import { z } from 'zod';
 import { validateApiKey, trackApiRequest, getRateLimitInfo } from '@/lib/api-keys';
 import { detectElements } from '@/lib/ai/element-detection';
+import { PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient();
 
 // Predefined device viewports
 const deviceViewports = {
@@ -33,55 +36,6 @@ const mockupTemplates = {
   }
 } as const;
 
-// Common selectors for elements to hide
-const COMMON_SELECTORS = {
-  cookieBanners: [
-    '#cookie-banner',
-    '#cookie-consent',
-    '.cookie-notice',
-    '[class*="cookie-banner"]',
-    '[class*="cookie-consent"]',
-    '[id*="cookie-banner"]',
-    '[id*="cookie-consent"]',
-    '.cc-window',
-    '.cc-banner',
-  ],
-  ads: [
-    '[id*="google_ads"]',
-    '[class*="ad-container"]',
-    '[class*="ad-wrapper"]',
-    '[id*="ad-container"]',
-    '.advertisement',
-    '[class*="adsbygoogle"]',
-    'ins.adsbygoogle',
-  ],
-  popups: [
-    '[class*="popup"]',
-    '[id*="popup"]',
-    '[class*="modal"]',
-    '[id*="modal"]',
-    '[class*="overlay"]',
-    '[id*="overlay"]',
-    '[aria-modal="true"]',
-  ],
-  chatWidgets: [
-    '[class*="chat-widget"]',
-    '[id*="chat-widget"]',
-    '[class*="messenger"]',
-    '[id*="messenger"]',
-    '[class*="intercom"]',
-    '[id*="intercom"]',
-    '#drift-widget',
-    '.drift-frame-controller',
-  ],
-  newsletterPrompts: [
-    '[class*="newsletter"]',
-    '[id*="newsletter"]',
-    '[class*="subscribe"]',
-    '[id*="subscribe"]',
-  ],
-} as const;
-
 const screenshotSchema = z.object({
   url: z.string().url(),
   device: z.enum(['desktop', 'laptop', 'tablet', 'mobile']).optional(),
@@ -101,18 +55,6 @@ const screenshotSchema = z.object({
     confidence: z.number().min(0).max(1).optional().default(0.8),
   }).optional().default({}),
 });
-
-async function hideElements(page: Page, selectors: string[]) {
-  await page.evaluate((selectorList) => {
-    selectorList.forEach((selector) => {
-      document.querySelectorAll(selector).forEach((element) => {
-        if (element instanceof HTMLElement) {
-          element.style.display = 'none';
-        }
-      });
-    });
-  }, selectors);
-}
 
 async function applyMockup(screenshot: Buffer, mockupType: keyof typeof mockupTemplates): Promise<Buffer> {
   const template = mockupTemplates[mockupType];
@@ -200,6 +142,21 @@ async function removeElementsWithAI(page: Page, types: string[], confidenceThres
   }
 }
 
+async function checkProPlan(apiKeyId: string): Promise<boolean> {
+  // For playground key
+  if (apiKeyId === 'playground') {
+    return false;
+  }
+
+  // Check if user has Pro plan
+  const key = await prisma.apiKey.findUnique({
+    where: { id: apiKeyId },
+    include: { user: true },
+  });
+
+  return key?.usageLimit === 5000; // Pro plan has 5000 requests/day
+}
+
 export async function POST(request: NextRequest) {
   const startTime = Date.now();
   let apiKeyId: string | null = null;
@@ -252,6 +209,18 @@ export async function POST(request: NextRequest) {
         error: 'Invalid request parameters',
         details: parsedBody.error.errors
       }, { status: 400 });
+    }
+
+    // Check if AI features are requested but user is not on Pro plan
+    if (parsedBody.data.aiRemoval?.enabled) {
+      const isProPlan = await checkProPlan(key.id);
+      if (!isProPlan) {
+        await logApiRequest(key.id, 403, startTime, request);
+        return NextResponse.json({
+          error: 'AI features are only available on Pro plan',
+          upgrade_url: 'https://screenshotly.app/pricing'
+        }, { status: 403 });
+      }
     }
 
     const {

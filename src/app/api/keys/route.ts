@@ -8,7 +8,7 @@ const apiKeySchema = z.object({
   expiresIn: z.number().min(1).max(365).optional(), // days
 });
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     const session = await auth();
     const userId = session.userId;

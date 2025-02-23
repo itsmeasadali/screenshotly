@@ -36,12 +36,12 @@ const plans: PricingPlan[] = [
       yearly: 0,
     },
     features: [
-      'All mockup templates included',
-      'Standard resolution (1920×1080)',
-      'Basic API access',
-      'All screenshot formats (PNG, JPEG, PDF)',
-      'Remove ads and popups',
+      'High-quality screenshots',
+      'Device mockups included',
+      'Multiple formats (PNG, JPEG, PDF)',
       'Full page screenshots',
+      'Custom viewport sizes',
+      'Basic API access',
     ],
     limits: {
       requests: 500,
@@ -57,16 +57,16 @@ const plans: PricingPlan[] = [
       yearly: 290,
     },
     features: [
-      'All mockup templates included',
-      'Higher resolution (2560×1600)',
-      'Advanced API features',
-      'All screenshot formats (PNG, JPEG, PDF)',
-      'Remove ads and popups',
-      'Full page screenshots',
+      'Everything in Free, plus:',
+      'AI-powered element removal',
+      'Smart element detection',
+      'Adjustable confidence controls',
+      'Higher resolution (4K)',
+      'Priority support',
     ],
     limits: {
       requests: 5000,
-      resolution: '2560×1600',
+      resolution: '3840×2160',
     },
     badge: 'Most Popular',
     popular: true,
@@ -223,13 +223,13 @@ export default function Pricing() {
           <div>
             <h4 className="text-lg font-semibold mb-2">What happens if I exceed my API limit?</h4>
             <p className="text-gray-600">
-              Requests beyond your plan's limit will receive a 429 status code. Consider upgrading your plan or implementing rate limiting in your application.
+              Requests beyond your plan&apos;s limit will receive a 429 status code. Consider upgrading your plan or implementing rate limiting in your application.
             </p>
           </div>
           <div>
             <h4 className="text-lg font-semibold mb-2">Can I change plans at any time?</h4>
             <p className="text-gray-600">
-              Yes, you can upgrade or downgrade your plan at any time. Changes take effect immediately, and we'll prorate any charges.
+              Yes, you can upgrade or downgrade your plan at any time. Changes take effect immediately, and we&apos;ll prorate any charges.
             </p>
           </div>
           <div>

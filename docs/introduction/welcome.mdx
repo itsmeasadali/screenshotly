@@ -10,10 +10,9 @@ Screenshotly is a powerful API service that allows you to capture high-quality s
 ## Features
 
 - **High-Quality Screenshots**: Capture full-page or specific element screenshots with customizable viewport sizes
-- **Mockup Templates**: Apply beautiful device mockups to your screenshots
-- **Element Hiding**: Automatically hide unwanted elements like cookie banners, ads, and popups
+- **Device Mockups**: Apply beautiful device frames to your screenshots
 - **Flexible Output**: Get your screenshots in PNG, JPEG, or PDF formats
-- **Simple Integration**: RESTful API with comprehensive SDKs and documentation
+- **Pro Features**: AI-powered element removal and smart cleaning capabilities
 
 ## Getting Started
 
@@ -34,11 +33,7 @@ curl -X POST https://api.screenshotly.app/screenshot \
   -d '{
     "url": "https://example.com",
     "device": "desktop",
-    "format": "png",
-    "hideElements": {
-      "cookieBanners": true,
-      "ads": true
-    }
+    "format": "png"
   }'
 ```
 
@@ -47,15 +42,18 @@ curl -X POST https://api.screenshotly.app/screenshot \
 <CardGroup>
   <Card title="Free" icon="sparkles">
     Perfect for testing and small projects
-    * 100 requests/hour
-    * 2 concurrent requests
-    * Basic mockup templates
+    * 500 requests/day
+    * Basic screenshot features
+    * Device mockups
+    * Multiple formats (PNG, JPEG, PDF)
   </Card>
   <Card title="Pro" icon="rocket">
     For growing businesses
-    * 1,000 requests/hour
-    * 5 concurrent requests
-    * All mockup templates
+    * 5,000 requests/day
+    * Everything in Free, plus:
+    * AI-powered element removal
+    * Smart element detection
+    * Adjustable confidence controls
   </Card>
   <Card title="Enterprise" icon="building">
     For large-scale applications

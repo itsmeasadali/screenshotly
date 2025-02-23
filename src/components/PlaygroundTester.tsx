@@ -1,14 +1,13 @@
 'use client';
 
 import { useState } from 'react';
-import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Loader2, Play } from 'lucide-react';
 
 interface PlaygroundTesterProps {
   endpoint: string;
   method: 'GET' | 'POST' | 'PUT' | 'DELETE';
-  defaultPayload: Record<string, any>;
+  defaultPayload: Record<string, unknown>;
 }
 
 export default function PlaygroundTester({

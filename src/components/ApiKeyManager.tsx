@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useUser } from '@clerk/nextjs';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
@@ -23,25 +22,26 @@ interface ApiKey {
 }
 
 export default function ApiKeyManager() {
-  const { user } = useUser();
-  const [apiKeys, setApiKeys] = useState<ApiKey[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [keys, setKeys] = useState<ApiKey[]>([]);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [newKeyName, setNewKeyName] = useState('');
   const [showNewKey, setShowNewKey] = useState<string | null>(null);
 
   useEffect(() => {
-    fetchApiKeys();
+    fetchKeys();
   }, []);
 
-  const fetchApiKeys = async () => {
+  const fetchKeys = async () => {
     try {
       const response = await fetch('/api/keys');
       if (!response.ok) throw new Error('Failed to fetch API keys');
       const data = await response.json();
-      setApiKeys(data.keys);
+      setKeys(data.keys);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch API keys');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -50,7 +50,7 @@ export default function ApiKeyManager() {
       setLoading(true);
       setError(null);
       
-      const response = await fetch('/api/keys/generate', {
+      const response = await fetch('/api/keys', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name: newKeyName || 'Default API Key' }),
@@ -61,7 +61,7 @@ export default function ApiKeyManager() {
       const data = await response.json();
       setShowNewKey(data.apiKey);
       setNewKeyName('');
-      fetchApiKeys();
+      fetchKeys();
       toast.success('API key generated successfully');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
@@ -79,7 +79,7 @@ export default function ApiKeyManager() {
 
       if (!response.ok) throw new Error('Failed to revoke API key');
       
-      fetchApiKeys();
+      fetchKeys();
       toast.success('API key revoked successfully');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to revoke API key');
@@ -171,7 +171,7 @@ export default function ApiKeyManager() {
                     </div>
                     <p className="mt-2 text-sm text-red-600 flex items-center gap-2">
                       <AlertTriangle className="h-4 w-4" />
-                      Make sure to copy your API key now. You won't be able to see it again!
+                      Make sure to copy your API key now. You won&apos;t be able to see it again!
                     </p>
                   </AlertDescription>
                 </Alert>
@@ -185,7 +185,7 @@ export default function ApiKeyManager() {
               )}
 
               <div className="space-y-4">
-                {apiKeys.map((key) => (
+                {keys.map((key) => (
                   <div
                     key={key.id}
                     className="border rounded-lg p-4 space-y-3 hover:border-gray-300 transition-colors"
@@ -233,7 +233,7 @@ export default function ApiKeyManager() {
                   </div>
                 ))}
 
-                {apiKeys.length === 0 && !loading && (
+                {keys.length === 0 && !loading && (
                   <div className="text-center py-12 text-muted-foreground">
                     <KeyRound className="w-12 h-12 mx-auto mb-4 opacity-50" />
                     <p>No API keys found</p>
@@ -263,7 +263,7 @@ export default function ApiKeyManager() {
                     </CardHeader>
                     <CardContent>
                       <div className="text-2xl font-bold">
-                        {apiKeys.reduce((sum, key) => sum + key.usageCount, 0)}
+                        {keys.reduce((sum, key) => sum + key.usageCount, 0)}
                       </div>
                     </CardContent>
                   </Card>
@@ -275,7 +275,7 @@ export default function ApiKeyManager() {
                     </CardHeader>
                     <CardContent>
                       <div className="text-2xl font-bold">
-                        {apiKeys.filter(key => key.status.toLowerCase() === 'active').length}
+                        {keys.filter(key => key.status.toLowerCase() === 'active').length}
                       </div>
                     </CardContent>
                   </Card>
@@ -287,7 +287,7 @@ export default function ApiKeyManager() {
                     </CardHeader>
                     <CardContent>
                       <div className="text-2xl font-bold">
-                        {apiKeys[0]?.usageLimit || 0}/hr
+                        {keys[0]?.usageLimit || 0}/hr
                       </div>
                     </CardContent>
                   </Card>
@@ -307,6 +307,9 @@ export default function ApiKeyManager() {
           </Card>
         </TabsContent>
       </Tabs>
+      <div className="text-sm text-gray-500">
+        Don&apos;t share your API keys in publicly accessible places like GitHub repositories.
+      </div>
     </div>
   );
 } 

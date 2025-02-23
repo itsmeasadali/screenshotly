@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Loader2, Download, Smartphone, Laptop, Monitor, Tablet } from "lucide-react";
+import Image from 'next/image';
 
 const deviceOptions = [
   { id: 'desktop', name: 'Desktop', icon: Monitor, dimensions: '1920×1080' },
@@ -49,12 +50,16 @@ interface MockupOption {
   description?: string;
 }
 
+// Add proper types for device and format
+type DeviceType = typeof deviceOptions[number]['id'];
+type FormatType = typeof formatOptions[number]['id'];
+
 export default function PlaygroundPage() {
   const [url, setUrl] = useState('');
-  const [device, setDevice] = useState<typeof deviceOptions[number]['id']>('desktop');
+  const [device, setDevice] = useState<DeviceType>('desktop');
   const [mockup, setMockup] = useState<string>('none');
   const [mockupTemplates, setMockupTemplates] = useState<MockupTemplate[]>([]);
-  const [format, setFormat] = useState<typeof formatOptions[number]['id']>('png');
+  const [format, setFormat] = useState<FormatType>('png');
   const [quality, setQuality] = useState(90);
   const [fullPage, setFullPage] = useState(false);
   const [delay, setDelay] = useState(0);
@@ -184,7 +189,7 @@ export default function PlaygroundPage() {
                   {/* Device Selection */}
                   <div className="space-y-2">
                     <Label>Device</Label>
-                    <Select value={device} onValueChange={(value) => setDevice(value as any)}>
+                    <Select value={device} onValueChange={(value: DeviceType) => setDevice(value)}>
                       <SelectTrigger>
                         <SelectValue />
                       </SelectTrigger>
@@ -231,7 +236,7 @@ export default function PlaygroundPage() {
                   {/* Format Selection */}
                   <div className="space-y-2">
                     <Label>Format</Label>
-                    <Select value={format} onValueChange={(value) => setFormat(value as any)}>
+                    <Select value={format} onValueChange={(value: FormatType) => setFormat(value)}>
                       <SelectTrigger>
                         <SelectValue />
                       </SelectTrigger>
@@ -388,9 +393,11 @@ export default function PlaygroundPage() {
                   {result ? (
                     <div className="space-y-4">
                       <div className="aspect-video bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg overflow-hidden border">
-                        <img
+                        <Image
                           src={result}
                           alt="Screenshot"
+                          width={1920}
+                          height={1080}
                           className="w-full h-full object-contain"
                         />
                       </div>

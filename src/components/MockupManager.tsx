@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { MockupTemplate } from '@/types/mockup';
 import { Monitor, Smartphone, Laptop, Layout } from 'lucide-react';
+import Image from 'next/image';
 
 export default function MockupManager() {
   const [mockups, setMockups] = useState<MockupTemplate[]>([]);
@@ -60,9 +61,11 @@ export default function MockupManager() {
         <Card key={mockup.id} className="group overflow-hidden rounded-2xl border-gray-100 hover:border-gray-200 hover:shadow-lg transition-all duration-300">
           <div className="relative aspect-video">
             <div className="absolute inset-0 bg-gradient-to-t from-black/5 to-transparent group-hover:from-black/10 transition-all duration-300" />
-            <img
+            <Image
               src={mockup.imagePath}
               alt={mockup.name}
+              width={mockup.dimensions.width}
+              height={mockup.dimensions.height}
               className="w-full h-full object-cover"
             />
           </div>

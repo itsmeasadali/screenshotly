@@ -1,6 +1,5 @@
 import { prisma } from '@/lib/db';
 import { createHash, randomBytes } from 'crypto';
-import { Prisma } from '@prisma/client';
 import { RATE_LIMITS, checkRateLimit } from '@/utils/rateLimit';
 
 const KeyStatus = {
@@ -114,25 +113,25 @@ export async function trackApiRequest(
     }
 
     // For regular API keys, track in database
-    const [request, key] = await prisma.$transaction([
-      prisma.apiRequest.create({
-        data: {
-          apiKeyId,
-          endpoint,
-          status,
-          duration,
-          ip,
-          userAgent,
-        },
-      }),
-      prisma.apiKey.update({
-        where: { id: apiKeyId },
-        data: {
-          usageCount: { increment: 1 },
-          lastUsedAt: new Date(),
-        },
-      }),
-    ]);
+    const request = await prisma.apiRequest.create({
+      data: {
+        apiKeyId,
+        endpoint,
+        status,
+        duration,
+        ip,
+        userAgent,
+      },
+    });
+
+    // Update usage count
+    await prisma.apiKey.update({
+      where: { id: apiKeyId },
+      data: {
+        usageCount: { increment: 1 },
+        lastUsedAt: new Date(),
+      },
+    });
 
     return request;
   } catch (error) {

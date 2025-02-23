@@ -1,5 +1,4 @@
 import { Redis } from '@upstash/redis';
-import { Ratelimit } from '@upstash/ratelimit';
 
 if (!process.env.UPSTASH_REDIS_REST_URL || !process.env.UPSTASH_REDIS_REST_TOKEN) {
   throw new Error('Redis configuration is missing. Please set UPSTASH_REDIS_REST_URL and UPSTASH_REDIS_REST_TOKEN environment variables.');
@@ -9,14 +8,6 @@ if (!process.env.UPSTASH_REDIS_REST_URL || !process.env.UPSTASH_REDIS_REST_TOKEN
 const redis = new Redis({
   url: process.env.UPSTASH_REDIS_REST_URL,
   token: process.env.UPSTASH_REDIS_REST_TOKEN,
-});
-
-// Create a new ratelimiter that allows 5 requests per hour for unauthenticated users
-const ratelimit = new Ratelimit({
-  redis,
-  limiter: Ratelimit.slidingWindow(5, '1 h'),
-  analytics: true,
-  prefix: '@upstash/ratelimit',
 });
 
 interface RateLimitEntry {
@@ -51,38 +42,28 @@ export const RATE_LIMITS: Record<string, RateLimitTier> = {
   }
 };
 
-// Simple in-memory store for rate limiting
-const rateLimitStore = new Map<string, RateLimitEntry>();
-
-// Clean up expired entries every hour
-setInterval(() => {
-  const now = Date.now();
-  for (const [key, entry] of rateLimitStore.entries()) {
-    if (entry.reset <= now) {
-      rateLimitStore.delete(key);
-    }
-  }
-}, 3600000); // 1 hour
-
 export async function checkRateLimit(identifier: string, tier: string = 'free'): Promise<RateLimitResult> {
   const now = Date.now();
   const limits = RATE_LIMITS[tier] || RATE_LIMITS.free;
   const windowInMs = limits.windowInHours * 3600000;
+  const key = `ratelimit:${identifier}`;
 
-  // Clean up expired entry if exists
-  const existing = rateLimitStore.get(identifier);
-  if (existing && existing.reset <= now) {
-    rateLimitStore.delete(identifier);
-  }
-
-  // Get or create rate limit entry
-  let entry = rateLimitStore.get(identifier);
-  if (!entry) {
-    entry = {
-      count: 0,
+  // Get current count and reset time from Redis
+  const entry = await redis.get<RateLimitEntry>(key);
+  
+  // If no entry exists or it's expired, create a new one
+  if (!entry || entry.reset <= now) {
+    const newEntry: RateLimitEntry = {
+      count: 1,
       reset: now + windowInMs,
     };
-    rateLimitStore.set(identifier, entry);
+    await redis.set(key, newEntry, { ex: Math.ceil(windowInMs / 1000) });
+    return {
+      success: true,
+      limit: limits.requestsPerWindow,
+      remaining: limits.requestsPerWindow - 1,
+      reset: newEntry.reset,
+    };
   }
 
   // Check if limit is exceeded
@@ -91,7 +72,10 @@ export async function checkRateLimit(identifier: string, tier: string = 'free'):
 
   // Increment count if successful
   if (success) {
-    entry.count++;
+    await redis.set(key, {
+      ...entry,
+      count: entry.count + 1,
+    }, { ex: Math.ceil((entry.reset - now) / 1000) });
   }
 
   return {

@@ -2,7 +2,7 @@ import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import MockupManager from "@/components/MockupManager";
-import { ArrowLeft, Laptop, Smartphone, Monitor, Tablet, Layout } from "lucide-react";
+import { ArrowLeft, Laptop, Smartphone, Monitor, Layout } from "lucide-react";
 
 export default async function MockupsPage() {
   const { userId } = await auth();

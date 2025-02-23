@@ -1,0 +1,15 @@
+{
+  "name": "Screenshotly Documentation",
+  "subdomain": "screenshotly",
+  "logo": {
+    "light": "/logo/light.png",
+    "dark": "/logo/dark.png"
+  },
+  "versions": [
+    {
+      "name": "v1",
+      "path": "docs",
+      "isDefault": true
+    }
+  ]
+} 
