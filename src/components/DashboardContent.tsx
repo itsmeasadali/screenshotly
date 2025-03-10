@@ -13,10 +13,7 @@ export default function DashboardContent() {
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
           <p className="mt-2 text-gray-600">
-            Manage your API tokens and capture screenshots{" "}
-            <Link href="https://docs.screenshotly.app/introduction/quickstart" className="text-blue-600 hover:underline" target="_blank">
-              View Documentation →
-            </Link>
+            Manage your API tokens and capture screenshots.
           </p>
         </div>
         <Button asChild>

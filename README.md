@@ -34,9 +34,13 @@ Screenshotly is an AI-powered screenshot API that automatically removes unwanted
 ### 💪 Powerful Features
 - Full-page screenshots
 - Custom element capture
-- Multiple output formats (PNG, JPEG, PDF)
-- Adjustable quality settings
+- Multiple output formats:
+  - PNG (Best for transparency)
+  - JPEG (Adjustable quality)
+  - PDF (Document format)
 - Configurable capture delay
+- Intuitive UI with tooltips and feedback
+- Real-time format preview
 
 ## Tech Stack
 

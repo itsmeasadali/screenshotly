@@ -7,9 +7,10 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Loader2, Download, Smartphone, Laptop, Monitor, Tablet } from "lucide-react";
+import { Loader2, Download, Smartphone, Laptop, Monitor, Tablet, Lock, CheckCircle2, ScanSearch } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import Image from 'next/image';
 
 const deviceOptions = [
@@ -20,9 +21,9 @@ const deviceOptions = [
 ] as const;
 
 const formatOptions = [
-  { id: 'png', name: 'PNG', description: 'Best for screenshots with transparency' },
-  { id: 'jpeg', name: 'JPEG', description: 'Smaller file size, adjustable quality' },
-  { id: 'pdf', name: 'PDF', description: 'Document format (mockups not available)' },
+  { id: 'png', name: 'PNG', icon: ScanSearch, description: 'Best for screenshots with transparency' },
+  { id: 'jpeg', name: 'JPEG', icon: ScanSearch, description: 'Smaller file size, adjustable quality' },
+  { id: 'pdf', name: 'PDF', icon: ScanSearch, description: 'Document format (mockups not available)' },
 ] as const;
 
 interface MockupTemplate {
@@ -63,7 +64,7 @@ export default function PlaygroundPage() {
   const [quality, setQuality] = useState(90);
   const [fullPage, setFullPage] = useState(false);
   const [delay, setDelay] = useState(0);
-  const [aiRemoval, setAiRemoval] = useState({
+  const [aiRemoval] = useState({
     enabled: false,
     types: ['cookie-banner', 'newsletter', 'chat-widget', 'social-overlay', 'ad'],
     confidence: 0.8,
@@ -71,6 +72,8 @@ export default function PlaygroundPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState('capture');
 
   useEffect(() => {
     const fetchMockups = async () => {
@@ -110,6 +113,7 @@ export default function PlaygroundPage() {
       setLoading(true);
       setError(null);
       setResult(null);
+      setSuccessMessage(null);
 
       const payload = {
         url,
@@ -140,12 +144,30 @@ export default function PlaygroundPage() {
       const blob = await response.blob();
       const objectUrl = URL.createObjectURL(blob);
       setResult(objectUrl);
+      setSuccessMessage('Screenshot captured successfully!');
+      setActiveTab('result');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
       setLoading(false);
     }
   };
+
+  const renderProFeatureTooltip = (children: React.ReactNode, feature: string) => (
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <div className="opacity-50 cursor-not-allowed">
+            {children}
+            <Lock className="w-4 h-4 inline-block ml-2" />
+          </div>
+        </TooltipTrigger>
+        <TooltipContent>
+          <p>{feature} is only available in Pro plan</p>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
+  );
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white py-8">
@@ -159,7 +181,7 @@ export default function PlaygroundPage() {
             </p>
           </div>
 
-          <Tabs defaultValue="capture" className="space-y-8">
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-8">
             <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value="capture">Capture Screenshot</TabsTrigger>
               <TabsTrigger value="result">Result</TabsTrigger>
@@ -238,14 +260,17 @@ export default function PlaygroundPage() {
                     <Label>Format</Label>
                     <Select value={format} onValueChange={(value: FormatType) => setFormat(value)}>
                       <SelectTrigger>
-                        <SelectValue />
+                        <SelectValue placeholder="Select format" />
                       </SelectTrigger>
                       <SelectContent>
                         {formatOptions.map(option => (
                           <SelectItem key={option.id} value={option.id}>
                             <div className="flex flex-col">
-                              <span>{option.name}</span>
-                              <span className="text-gray-500 text-sm">{option.description}</span>
+                              <div className="flex items-center gap-2">
+                                <option.icon className="w-4 h-4" />
+                                <span>{option.name}</span>
+                              </div>
+                              <span className="text-xs text-muted-foreground mt-1">{option.description}</span>
                             </div>
                           </SelectItem>
                         ))}
@@ -297,69 +322,27 @@ export default function PlaygroundPage() {
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
                       <Label>AI Element Removal</Label>
-                      <Switch
-                        checked={aiRemoval.enabled}
-                        onCheckedChange={(checked) => 
-                          setAiRemoval(prev => ({ ...prev, enabled: checked }))
-                        }
-                      />
+                      {renderProFeatureTooltip(
+                        <Switch
+                          checked={false}
+                          disabled={true}
+                        />,
+                        "AI Element Removal"
+                      )}
                     </div>
-                    
-                    {aiRemoval.enabled && (
-                      <div className="space-y-4 mt-4">
-                        <div className="space-y-2">
-                          <Label>Element Types to Remove</Label>
-                          <div className="grid gap-2">
-                            {[
-                              { id: 'cookie-banner', label: 'Cookie Banners' },
-                              { id: 'newsletter', label: 'Newsletter Popups' },
-                              { id: 'chat-widget', label: 'Chat Widgets' },
-                              { id: 'social-overlay', label: 'Social Media Overlays' },
-                              { id: 'ad', label: 'Advertisements' },
-                            ].map(({ id, label }) => (
-                              <div key={id} className="flex items-center space-x-2">
-                                <Switch
-                                  id={id}
-                                  checked={aiRemoval.types.includes(id)}
-                                  onCheckedChange={(checked) => 
-                                    setAiRemoval(prev => ({
-                                      ...prev,
-                                      types: checked 
-                                        ? [...prev.types, id]
-                                        : prev.types.filter(t => t !== id)
-                                    }))
-                                  }
-                                />
-                                <Label htmlFor={id}>{label}</Label>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-
-                        <div className="space-y-2">
-                          <Label>Confidence Threshold ({Math.round(aiRemoval.confidence * 100)}%)</Label>
-                          <Input
-                            type="range"
-                            min="0"
-                            max="1"
-                            step="0.1"
-                            value={aiRemoval.confidence}
-                            onChange={(e) => setAiRemoval(prev => ({
-                              ...prev,
-                              confidence: parseFloat(e.target.value)
-                            }))}
-                          />
-                          <p className="text-sm text-gray-500">
-                            Higher values mean more accurate but potentially fewer detections
-                          </p>
-                        </div>
-                      </div>
-                    )}
                   </div>
 
                   {error && (
                     <Alert variant="destructive">
                       <AlertDescription>{error}</AlertDescription>
+                    </Alert>
+                  )}
+
+                  {successMessage && (
+                    <Alert>
+                      <CheckCircle2 className="h-4 w-4" />
+                      <AlertTitle>Success</AlertTitle>
+                      <AlertDescription>{successMessage}</AlertDescription>
                     </Alert>
                   )}
 
@@ -401,7 +384,7 @@ export default function PlaygroundPage() {
                           className="w-full h-full object-contain"
                         />
                       </div>
-                      <div className="flex justify-end">
+                      <div className="flex justify-end gap-4">
                         <Button asChild variant="outline">
                           <a href={result} download={`screenshot.${format}`}>
                             <Download className="w-4 h-4 mr-2" />

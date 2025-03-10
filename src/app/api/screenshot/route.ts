@@ -145,6 +145,7 @@ async function removeElementsWithAI(page: Page, types: string[], confidenceThres
 async function checkProPlan(apiKeyId: string): Promise<boolean> {
   // For playground key
   if (apiKeyId === 'playground') {
+    console.log('Checking Pro plan for playground key - returning false');
     return false;
   }
 
@@ -154,7 +155,14 @@ async function checkProPlan(apiKeyId: string): Promise<boolean> {
     include: { user: true },
   });
 
-  return key?.usageLimit === 5000; // Pro plan has 5000 requests/day
+  console.log('Pro plan check result:', {
+    apiKeyId,
+    usageLimit: key?.usageLimit,
+    isPro: Boolean(key?.usageLimit && key.usageLimit >= 5000)
+  });
+
+  // Consider Pro plan if usageLimit is 5000 or higher
+  return Boolean(key?.usageLimit && key.usageLimit >= 5000); // Pro plan has 5000 or more requests/day
 }
 
 export async function POST(request: NextRequest) {

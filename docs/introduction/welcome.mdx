@@ -1,41 +1,77 @@
 ---
-title: "Welcome to Screenshotly"
-description: "Capture, customize, and share screenshots with our powerful API"
+title: 'Welcome'
+description: 'Welcome to Screenshotly - The AI-powered screenshot API'
 ---
 
 # Welcome to Screenshotly
 
-Screenshotly is a powerful API service that allows you to capture high-quality screenshots of any webpage, customize them with mockups, and integrate them into your applications.
+Screenshotly is an AI-powered screenshot API that automatically removes unwanted elements like cookie banners, ads, and popups to create clean, professional screenshots.
 
-## Features
+## Key Features
 
-- **High-Quality Screenshots**: Capture full-page or specific element screenshots with customizable viewport sizes
-- **Device Mockups**: Apply beautiful device frames to your screenshots
-- **Flexible Output**: Get your screenshots in PNG, JPEG, or PDF formats
-- **Pro Features**: AI-powered element removal and smart cleaning capabilities
+### 🤖 AI-Powered Cleaning
+- Automatic detection and removal of:
+  - Cookie consent banners
+  - Advertisement elements
+  - Chat widgets
+  - Newsletter popups
+  - Social media overlays
+- Adjustable confidence thresholds for precise control
+- Smart element detection using GPT-4 Vision
+
+### 📱 Device Support
+- Multiple device viewports:
+  - Desktop (1920×1080)
+  - Laptop (1366×768)
+  - Tablet (768×1024)
+  - Mobile (375×812)
+- Custom viewport sizes supported
+
+### 🖼️ Device Mockups
+- Professional device frames:
+  - Browser window (Light/Dark)
+  - iPhone 14 Pro
+  - MacBook Pro
+- High-quality mockup templates
+
+### 💪 Powerful Features
+- Full-page screenshots
+- Custom element capture
+- Multiple output formats:
+  - PNG (Best for transparency)
+  - JPEG (Adjustable quality)
+  - PDF (Document format)
+- Configurable capture delay
+- Intuitive UI with tooltips and feedback
+- Real-time format preview
 
 ## Getting Started
 
-To start using Screenshotly:
+<CardGroup>
+  <Card title="Quickstart" icon="rocket" href="/introduction/quickstart">
+    Get started with Screenshotly in minutes
+  </Card>
+  <Card title="Authentication" icon="key" href="/introduction/authentication">
+    Learn about API authentication
+  </Card>
+  <Card title="API Reference" icon="code" href="/api/screenshot">
+    Explore the API endpoints
+  </Card>
+  <Card title="Guides" icon="book" href="/guides/ai-removal">
+    Learn about advanced features
+  </Card>
+</CardGroup>
 
-1. [Sign up](/sign-up) for a free account
-2. Get your API token from the [dashboard](/dashboard/tokens)
-3. Follow our [quickstart guide](/introduction/quickstart)
+## Tech Stack
 
-## Example
-
-Here's a quick example of how to capture a screenshot:
-
-```bash
-curl -X POST https://api.screenshotly.app/screenshot \
-  -H "Authorization: Bearer YOUR_API_TOKEN" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "url": "https://example.com",
-    "device": "desktop",
-    "format": "png"
-  }'
-```
+- **Frontend**: Next.js 14, React, TypeScript, Tailwind CSS
+- **Backend**: Next.js API Routes
+- **AI**: OpenAI GPT-4 Vision API
+- **Authentication**: Clerk
+- **Database**: PostgreSQL with Prisma
+- **Rate Limiting**: Upstash Redis
+- **Screenshot Engine**: Puppeteer
+- **Image Processing**: Sharp
 
 ## Plans and Pricing
 

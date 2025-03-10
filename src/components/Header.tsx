@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { useUser, SignInButton, SignUpButton, UserButton } from '@clerk/nextjs';
 import { Button } from '@/components/ui/button';
 import { Zap } from 'lucide-react';
@@ -12,8 +13,9 @@ export default function Header() {
     <header className="border-b">
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
         <div className="flex items-center gap-8">
-          <Link href="/" className="text-xl font-bold">
-            Screenshotly
+          <Link href="/" className="flex items-center gap-2">
+            <Image src="/logo.svg" alt="Screenshotly" width={24} height={24} className="text-primary" />
+            <span className="text-xl font-bold">Screenshotly</span>
           </Link>
           
           <nav className="hidden md:flex items-center gap-6">
@@ -24,7 +26,7 @@ export default function Header() {
             <Link href="/pricing" className="text-gray-600 hover:text-gray-900">
               Pricing
             </Link>
-            <Link href="/docs" className="text-gray-600 hover:text-gray-900">
+            <Link href="https://docs.screenshotly.app" className="text-gray-600 hover:text-gray-900" target="_blank" rel="noopener noreferrer">
               Docs
             </Link>
           </nav>
