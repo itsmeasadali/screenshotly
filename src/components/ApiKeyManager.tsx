@@ -34,11 +34,21 @@ export default function ApiKeyManager() {
 
   const fetchKeys = async () => {
     try {
+      setError(null);
       const response = await fetch('/api/keys');
-      if (!response.ok) throw new Error('Failed to fetch API keys');
+      if (!response.ok) {
+        if (response.status === 401) {
+          throw new Error('Please sign in to access your API keys');
+        }
+        if (response.status === 500) {
+          throw new Error('Database connection error. Please ensure your database is set up correctly.');
+        }
+        throw new Error(`Failed to fetch API keys (${response.status})`);
+      }
       const data = await response.json();
-      setKeys(data.keys);
+      setKeys(data.keys || []);
     } catch (err) {
+      console.error('API keys fetch error:', err);
       setError(err instanceof Error ? err.message : 'Failed to fetch API keys');
     } finally {
       setLoading(false);
@@ -104,6 +114,58 @@ export default function ApiKeyManager() {
         return 'bg-gray-500';
     }
   };
+
+  if (loading) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>API Keys</CardTitle>
+          <CardDescription>Loading your API keys...</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex items-center justify-center py-8">
+            <RefreshCwIcon className="w-6 h-6 animate-spin text-blue-500" />
+            <span className="ml-2 text-gray-600">Loading API keys...</span>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  if (error) {
+    return (
+      <Alert variant="destructive">
+        <AlertTriangle className="h-4 w-4" />
+        <AlertTitle>Error Loading API Keys</AlertTitle>
+        <AlertDescription className="mt-2">
+          {error}
+          {error.includes('Database connection') && (
+            <div className="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+              <h4 className="font-medium text-yellow-800 mb-2">Database Setup Required</h4>
+              <p className="text-yellow-700 text-sm mb-3">
+                To use API keys, you need to set up your database. Please follow these steps:
+              </p>
+              <ol className="text-yellow-700 text-sm space-y-1 list-decimal list-inside">
+                <li>Set up your DATABASE_URL environment variable</li>
+                <li>Run <code className="bg-yellow-100 px-1 rounded">npx prisma generate</code></li>
+                <li>Run <code className="bg-yellow-100 px-1 rounded">npx prisma db push</code></li>
+                <li>Refresh this page</li>
+              </ol>
+              <Button 
+                onClick={() => window.location.reload()} 
+                variant="outline" 
+                size="sm" 
+                className="mt-3"
+              >
+                <RefreshCwIcon className="w-4 h-4 mr-2" />
+                Retry
+              </Button>
+            </div>
+          )}
+        </AlertDescription>
+      </Alert>
+    );
+  }
 
   return (
     <div className="space-y-8">

@@ -1,13 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { auth } from '@clerk/nextjs/server';
 import puppeteer, { PuppeteerLaunchOptions, Viewport, Page } from 'puppeteer';
 import sharp from 'sharp';
 import { z } from 'zod';
-import { validateApiKey, trackApiRequest, getRateLimitInfo } from '@/lib/api-keys';
+import { checkRateLimit } from '@/utils/rateLimit';
 import { detectElements } from '@/lib/ai/element-detection';
-import { PrismaClient } from '@prisma/client';
 import { mockupTemplates } from '@/data/mockupTemplates';
-
-const prisma = new PrismaClient();
 
 // Predefined device viewports
 const deviceViewports = {
@@ -42,8 +40,8 @@ const screenshotSchema = z.object({
   fullPage: z.boolean().optional().default(false),
   format: z.enum(['png', 'jpeg', 'pdf']).optional().default('png'),
   quality: z.number().min(0).max(100).optional().default(100),
-  delay: z.number().min(0).max(10000).optional().default(0), // Delay in milliseconds
-  selector: z.string().optional(), // CSS selector to capture specific element
+  delay: z.number().min(0).max(10000).optional().default(0),
+  selector: z.string().optional(),
   mockup: z.enum(availableMockupIds as [string, ...string[]]).optional(),
   aiRemoval: z.object({
     enabled: z.boolean().optional().default(false),
@@ -185,32 +183,6 @@ async function applyMockup(screenshot: Buffer, mockupType: string): Promise<Buff
   }
 }
 
-async function logApiRequest(
-  apiKeyId: string,
-  status: number,
-  startTime: number,
-  request: NextRequest
-) {
-  try {
-    const duration = Date.now() - startTime;
-    const ip = request.headers.get('x-forwarded-for') || 
-               request.headers.get('x-real-ip') || 
-               'unknown';
-    const userAgent = request.headers.get('user-agent') || 'unknown';
-
-    await trackApiRequest(
-      apiKeyId,
-      '/api/screenshot',
-      status,
-      duration,
-      ip,
-      userAgent
-    );
-  } catch (error) {
-    console.error('Failed to log API request:', error);
-  }
-}
-
 async function removeElementsWithAI(page: Page, types: string[], confidenceThreshold: number) {
   try {
     // Get page HTML
@@ -245,93 +217,83 @@ async function removeElementsWithAI(page: Page, types: string[], confidenceThres
   }
 }
 
-async function checkProPlan(apiKeyId: string): Promise<boolean> {
-  // For playground key
-  if (apiKeyId === 'playground') {
-    console.log('Checking Pro plan for playground key - returning false');
-    return false;
-  }
+async function autoScroll(page: any) {
+  await page.evaluate(async () => {
+    await new Promise<void>((resolve) => {
+      let totalHeight = 0;
+      const distance = 100;
+      const timer = setInterval(() => {
+        const scrollHeight = document.body.scrollHeight;
+        window.scrollBy(0, distance);
+        totalHeight += distance;
 
-  // Check if user has Pro plan
-  const key = await prisma.apiKey.findUnique({
-    where: { id: apiKeyId },
-    include: { user: true },
+        if (totalHeight >= scrollHeight) {
+          clearInterval(timer);
+          resolve();
+        }
+      }, 100);
+    });
   });
-
-  console.log('Pro plan check result:', {
-    apiKeyId,
-    usageLimit: key?.usageLimit,
-    isPro: Boolean(key?.usageLimit && key.usageLimit >= 5000)
-  });
-
-  // Consider Pro plan if usageLimit is 5000 or higher
-  return Boolean(key?.usageLimit && key.usageLimit >= 5000); // Pro plan has 5000 or more requests/day
 }
 
 export async function POST(request: NextRequest) {
   const startTime = Date.now();
-  let apiKeyId: string | null = null;
 
   try {
-    // Validate API key
-    const authHeader = request.headers.get('authorization');
-    if (!authHeader?.startsWith('Bearer ')) {
-      return NextResponse.json({ error: 'Missing API key' }, { status: 401 });
-    }
-
-    const apiKey = authHeader.split(' ')[1];
-    console.log('Validating API key:', { apiKey: apiKey.substring(0, 10) + '...' });
+    // Get the client's IP for rate limiting
+    const ip = request.headers.get('x-forwarded-for') || 
+               request.headers.get('x-real-ip') || 
+               'anonymous';
     
-    const { isValid, key } = await validateApiKey(apiKey);
-    console.log('API key validation result:', { isValid, keyId: key?.id });
-
-    if (!isValid || !key) {
-      return NextResponse.json({ error: 'Invalid API key' }, { status: 401 });
-    }
-
-    apiKeyId = key.id;
-
-    // Check rate limit
-    console.log('Checking rate limit for:', { apiKeyId });
-    const rateLimit = await getRateLimitInfo(key.id);
-    console.log('Rate limit info:', rateLimit);
-
-    if (!rateLimit) {
-      await logApiRequest(key.id, 500, startTime, request);
-      return NextResponse.json({ error: 'Rate limit info not found' }, { status: 500 });
-    }
-
-    if (rateLimit.remaining <= 0) {
-      await logApiRequest(key.id, 429, startTime, request);
+    // Check rate limit for playground (more generous limits for signed-in users)
+    const { userId } = await auth();
+    
+    // Different rate limiting based on authentication status
+    const rateLimitIdentifier = userId ? `playground-user:${userId}` : `playground-anon:${ip}`;
+    const tier = userId ? 'free' : 'playground'; // Signed-in users get free tier limits, anonymous get playground limits
+    
+    const rateLimit = await checkRateLimit(rateLimitIdentifier, tier);
+    
+    if (!rateLimit.success) {
       return NextResponse.json({
-        error: 'Rate limit exceeded',
-        reset: rateLimit.reset,
-      }, { status: 429 });
+        error: 'Rate limit exceeded for playground',
+        limit: rateLimit.limit,
+        reset: new Date(rateLimit.reset).toISOString(),
+        message: userId ? 
+          'You have reached the playground rate limit. Consider upgrading to Pro for higher limits.' :
+          'Rate limit exceeded. Sign in for higher limits or try again later.'
+      }, { 
+        status: 429,
+        headers: {
+          'X-RateLimit-Limit': rateLimit.limit.toString(),
+          'X-RateLimit-Remaining': rateLimit.remaining.toString(),
+          'X-RateLimit-Reset': rateLimit.reset.toString(),
+        }
+      });
     }
 
     // Parse request body
     const body = await request.json();
-    console.log('Request body:', body);
     const parsedBody = screenshotSchema.safeParse(body);
 
     if (!parsedBody.success) {
-      await logApiRequest(key.id, 400, startTime, request);
       return NextResponse.json({
         error: 'Invalid request parameters',
         details: parsedBody.error.errors
       }, { status: 400 });
     }
 
-    // Check if AI features are requested but user is not on Pro plan
+    // Check if AI features are requested - only allow for signed-in users
     if (parsedBody.data.aiRemoval?.enabled) {
-      const isProPlan = await checkProPlan(key.id);
-      if (!isProPlan) {
-        await logApiRequest(key.id, 403, startTime, request);
+      if (!userId) {
         return NextResponse.json({
-          error: 'AI features are only available on Pro plan',
-          upgrade_url: 'https://screenshotly.app/pricing'
-        }, { status: 403 });
+          error: 'AI features require authentication. Please sign in.',
+          requiresAuth: true
+        }, { status: 401 });
       }
+      
+      // For playground, we can allow AI features but with limitations
+      console.log('AI features requested in playground by user:', userId);
     }
 
     const {
@@ -377,9 +339,9 @@ export async function POST(request: NextRequest) {
       // Navigate to URL and wait for network to be idle
       await page.goto(url, { waitUntil: 'networkidle0' });
 
-      // Handle AI-powered element removal if enabled
-      if (aiRemoval.enabled) {
-        console.log('Starting AI element detection...');
+      // Handle AI-powered element removal if enabled and user is authenticated
+      if (aiRemoval.enabled && userId) {
+        console.log('Starting AI element detection for playground...');
         const removedElements = await removeElementsWithAI(
           page,
           aiRemoval.types,
@@ -423,56 +385,26 @@ export async function POST(request: NextRequest) {
         screenshot = await applyMockup(screenshot, mockup);
       }
 
-      // Log successful request
-      await logApiRequest(key.id, 200, startTime, request);
-
       return new NextResponse(screenshot, {
         headers: {
           'Content-Type': format === 'pdf' ? 'application/pdf' : `image/${format}`,
           'X-RateLimit-Limit': rateLimit.limit.toString(),
           'X-RateLimit-Remaining': (rateLimit.remaining - 1).toString(),
-          'X-RateLimit-Reset': rateLimit.reset.getTime().toString(),
+          'X-RateLimit-Reset': rateLimit.reset.toString(),
         },
       });
     } finally {
       await browser.close();
     }
   } catch (error) {
-    console.error('Screenshot error:', error);
-
-    // Log failed request
-    if (apiKeyId) {
-      await logApiRequest(
-        apiKeyId,
-        error instanceof z.ZodError ? 400 : 500,
-        startTime,
-        request
-      );
-    }
+    console.error('Playground screenshot error:', error);
 
     return NextResponse.json(
-      { error: 'Failed to capture screenshot' },
+      { 
+        error: 'Failed to capture screenshot',
+        message: error instanceof Error ? error.message : 'An unexpected error occurred'
+      },
       { status: 500 }
     );
   }
-}
-
-// Helper function to handle smooth scrolling
-async function autoScroll(page: Page) {
-  await page.evaluate(async () => {
-    await new Promise<void>((resolve) => {
-      let totalHeight = 0;
-      const distance = 100;
-      const timer = setInterval(() => {
-        const scrollHeight = document.body.scrollHeight;
-        window.scrollBy(0, distance);
-        totalHeight += distance;
-
-        if (totalHeight >= scrollHeight) {
-          clearInterval(timer);
-          resolve();
-        }
-      }, 100);
-    });
-  });
 } 

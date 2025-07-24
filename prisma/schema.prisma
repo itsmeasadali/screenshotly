@@ -1,35 +1,34 @@
-// This is your Prisma schema file
-datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
-}
-
 generator client {
   provider = "prisma-client-js"
 }
 
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")  // Uncommented for connection pooling
+}
+
 model User {
-  id        String    @id
-  email     String    @unique
+  id        String   @id
+  email     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   apiKeys   ApiKey[]
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
 }
 
 model ApiKey {
   id          String       @id @default(cuid())
   name        String
-  key         String       @unique // Hashed API key
+  key         String       @unique
   userId      String
-  user        User         @relation(fields: [userId], references: [id])
   status      KeyStatus    @default(ACTIVE)
-  usageLimit  Int          @default(100) // Requests per hour
+  usageLimit  Int          @default(100)
   usageCount  Int          @default(0)
   lastUsedAt  DateTime?
   createdAt   DateTime     @default(now())
   expiresAt   DateTime
   revokedAt   DateTime?
+  user        User         @relation(fields: [userId], references: [id])
   apiRequests ApiRequest[]
 
   @@index([key])
@@ -39,13 +38,13 @@ model ApiKey {
 model ApiRequest {
   id        String   @id @default(cuid())
   apiKeyId  String
-  apiKey    ApiKey   @relation(fields: [apiKeyId], references: [id])
   endpoint  String
   status    Int
-  duration  Int      // Response time in milliseconds
+  duration  Int
   createdAt DateTime @default(now())
   ip        String?
   userAgent String?
+  apiKey    ApiKey   @relation(fields: [apiKeyId], references: [id])
 
   @@index([apiKeyId])
   @@index([createdAt])
@@ -55,4 +54,4 @@ enum KeyStatus {
   ACTIVE
   EXPIRED
   REVOKED
-} 
+}

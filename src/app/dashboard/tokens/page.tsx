@@ -68,10 +68,10 @@ export default async function TokensPage() {
                     <td className="px-6 py-4">100</td>
                     <td className="px-6 py-4">2</td>
                   </tr>
-                  <tr>
-                    <td className="px-6 py-4">Pro</td>
-                    <td className="px-6 py-4">1,000</td>
-                    <td className="px-6 py-4">5</td>
+                  <tr className="bg-blue-50">
+                    <td className="px-6 py-4 font-medium">Pro</td>
+                    <td className="px-6 py-4 font-medium">1,000</td>
+                    <td className="px-6 py-4 font-medium">5</td>
                   </tr>
                   <tr>
                     <td className="px-6 py-4">Enterprise</td>

@@ -4,7 +4,8 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { 
   ArrowRight, Brain, Sparkles, Zap, 
-  ShieldCheck, Laptop, Target 
+  ShieldCheck, Laptop, Target, Eye, 
+  Code, Wand2, Camera, Database
 } from 'lucide-react';
 
 interface HomeContentProps {
@@ -110,8 +111,94 @@ export default function HomeContent({ userId }: HomeContentProps) {
         </div>
       </section>
 
+      {/* LLM Use Cases Section */}
+      <section className="py-20 bg-gradient-to-br from-gray-50 to-blue-50">
+        <div className="container mx-auto px-4">
+          <div className="max-w-3xl mx-auto text-center mb-16">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-100 text-blue-700 mb-4">
+              <Brain className="w-4 h-4" />
+              <span className="text-sm font-medium">Perfect for AI & LLMs</span>
+            </div>
+            <h2 className="text-3xl font-bold mb-4">Built for AI Applications</h2>
+            <p className="text-gray-600">
+              Screenshotly creates clean, distraction-free screenshots that are perfect for training and using with Large Language Models and AI systems.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
+            <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+              <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-4">
+                <Database className="w-6 h-6 text-blue-600" />
+              </div>
+              <h3 className="font-semibold text-gray-900 mb-2">Clean Training Data</h3>
+              <p className="text-sm text-gray-600">
+                AI-powered element removal ensures screenshots are free from ads, cookie banners, and distractions for better training datasets.
+              </p>
+            </div>
+
+            <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+              <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mb-4">
+                <Eye className="w-6 h-6 text-green-600" />
+              </div>
+              <h3 className="font-semibold text-gray-900 mb-2">Vision Model Input</h3>
+              <p className="text-sm text-gray-600">
+                Standardized mockups provide consistent context for vision-language models like GPT-4 Vision to analyze interfaces.
+              </p>
+            </div>
+
+            <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+              <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
+                <Code className="w-6 h-6 text-purple-600" />
+              </div>
+              <h3 className="font-semibold text-gray-900 mb-2">Automated Documentation</h3>
+              <p className="text-sm text-gray-600">
+                Generate professional API docs, tutorials, and presentations automatically with consistent visual formatting.
+              </p>
+            </div>
+
+            <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+              <div className="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center mb-4">
+                <Wand2 className="w-6 h-6 text-orange-600" />
+              </div>
+              <h3 className="font-semibold text-gray-900 mb-2">Design Systems</h3>
+              <p className="text-sm text-gray-600">
+                Consistent component showcases across different devices and screen sizes for comprehensive design documentation.
+              </p>
+            </div>
+          </div>
+
+          {/* Additional Use Cases */}
+          <div className="mt-12 bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+            <h3 className="text-xl font-semibold text-center mb-8">Real-World Applications</h3>
+            <div className="grid md:grid-cols-3 gap-6 text-center">
+              <div>
+                <div className="w-10 h-10 bg-indigo-100 rounded-xl flex items-center justify-center mx-auto mb-3">
+                  <Brain className="w-5 h-5 text-indigo-600" />
+                </div>
+                <h4 className="font-medium mb-2">Computer Vision Training</h4>
+                <p className="text-sm text-gray-600">Train models on clean UI elements without visual noise</p>
+              </div>
+              <div>
+                <div className="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center mx-auto mb-3">
+                  <Target className="w-5 h-5 text-green-600" />
+                </div>
+                <h4 className="font-medium mb-2">Automated Testing</h4>
+                <p className="text-sm text-gray-600">Visual regression testing with consistent screenshots</p>
+              </div>
+              <div>
+                <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center mx-auto mb-3">
+                  <Camera className="w-5 h-5 text-purple-600" />
+                </div>
+                <h4 className="font-medium mb-2">Marketing Assets</h4>
+                <p className="text-sm text-gray-600">Professional app store screenshots at scale</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Code Example Section */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto">
             <div className="grid md:grid-cols-2 gap-12 items-center">

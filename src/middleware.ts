@@ -12,6 +12,7 @@ const isPublicRoute = createRouteMatcher([
   "/playground",
   "/api/playground",
   "/api/screenshot(.*)",
+  "/api/screenshot-playground",
   "/api/mockups(.*)",
   "/api/webhook/clerk",
   "/api/webhook/stripe"

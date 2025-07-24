@@ -2,6 +2,8 @@ export interface MockupTemplate {
   id: string;
   name: string;
   description: string;
+  imagePath: string;
+  category: 'browser' | 'mobile' | 'tablet' | 'laptop' | 'desktop' | 'smartwatch' | 'tv';
   dimensions: {
     width: number;
     height: number;
@@ -12,5 +14,6 @@ export interface MockupTemplate {
     width: number;
     height: number;
   };
-  imagePath: string;
+  features?: string[];
+  backgroundColor?: string;
 } 
