@@ -4,9 +4,8 @@ import { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { MockupTemplate } from '@/types/mockup';
-import { Monitor, Smartphone, Laptop, Layout, Tablet, MonitorSpeaker, Watch, Tv, Sparkles, Filter, Copy, ExternalLink, Maximize2, X, Check } from 'lucide-react';
+import { Monitor, Smartphone, Laptop, Layout, Tablet, MonitorSpeaker, Watch, Tv, Sparkles, Filter, Copy, Maximize2, X, Check } from 'lucide-react';
 import Image from 'next/image';
 
 interface PreviewModalProps {

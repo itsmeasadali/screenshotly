@@ -217,7 +217,7 @@ async function removeElementsWithAI(page: Page, types: string[], confidenceThres
   }
 }
 
-async function autoScroll(page: any) {
+async function autoScroll(page: Page) {
   await page.evaluate(async () => {
     await new Promise<void>((resolve) => {
       let totalHeight = 0;
@@ -237,7 +237,6 @@ async function autoScroll(page: any) {
 }
 
 export async function POST(request: NextRequest) {
-  const startTime = Date.now();
 
   try {
     // Get the client's IP for rate limiting

@@ -3,7 +3,7 @@ export interface MockupTemplate {
   name: string;
   description: string;
   imagePath: string;
-  category: 'browser' | 'mobile' | 'tablet' | 'laptop' | 'desktop' | 'smartwatch' | 'tv';
+  category: 'browser' | 'mobile' | 'tablet' | 'laptop' | 'desktop' | 'smartwatch' | 'tv' | 'multi-device';
   dimensions: {
     width: number;
     height: number;

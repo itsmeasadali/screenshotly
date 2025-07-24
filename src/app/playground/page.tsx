@@ -630,7 +630,7 @@ export default function PlaygroundPage() {
                     className="text-left p-2 rounded bg-gray-50 hover:bg-gray-100 text-sm"
                   >
                     <div className="font-medium">iPad Pro Showcase</div>
-                    <div className="text-gray-600">Tablet • iPad Pro 12.9"</div>
+                    <div className="text-gray-600">Tablet • iPad Pro 12.9&quot;</div>
                   </button>
                 </div>
               </div>
