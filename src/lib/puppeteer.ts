@@ -12,11 +12,12 @@ async function initializePuppeteer() {
     puppeteerInstance = puppeteerModule.default;
   }
   
-  // Only import chromium in production/serverless environments
-  if (process.env.NODE_ENV === 'production' && !chromiumInstance) {
+  // Try to import chromium package (useful for both dev and production)
+  if (!chromiumInstance) {
     try {
       const chromiumModule = await import('@sparticuz/chromium');
       chromiumInstance = chromiumModule.default;
+      console.log('Chromium package loaded successfully');
     } catch (error) {
       console.warn('Chromium package not available:', error);
     }
@@ -33,7 +34,7 @@ export async function createBrowser(): Promise<Browser> {
   let options: PuppeteerLaunchOptions;
   
   if (isDev) {
-    // Development: Use system Chrome
+    // Development: Use system Chrome or fallback to bundled Chromium
     options = {
       headless: true,
       args: [
@@ -46,6 +47,49 @@ export async function createBrowser(): Promise<Browser> {
         '--disable-gpu',
       ],
     };
+    
+    // Try to find system Chrome/Chromium executable
+    const possiblePaths = [
+      '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome', // macOS Chrome
+      '/Applications/Chromium.app/Contents/MacOS/Chromium', // macOS Chromium
+      '/usr/bin/google-chrome-stable', // Linux Chrome
+      '/usr/bin/google-chrome', // Linux Chrome
+      '/usr/bin/chromium-browser', // Linux Chromium
+      '/usr/bin/chromium', // Linux Chromium
+      'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe', // Windows Chrome
+      'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe', // Windows Chrome 32-bit
+    ];
+    
+    // Try to find an executable
+    let executablePath = null;
+    const fs = await import('fs');
+    for (const path of possiblePaths) {
+      try {
+        if (fs.existsSync(path)) {
+          executablePath = path;
+          break;
+        }
+      } catch {
+        // Continue to next path
+      }
+    }
+    
+    if (executablePath) {
+      options.executablePath = executablePath;
+      console.log('Using system browser:', executablePath);
+    } else if (chromiumInstance) {
+      // Fallback to Chromium package if available
+      try {
+        options.executablePath = await chromiumInstance.executablePath();
+        console.log('Using @sparticuz/chromium in development');
+      } catch (error) {
+        console.warn('Failed to get Chromium executable path:', error);
+      }
+    } else {
+      throw new Error(
+        'No Chrome/Chromium executable found. Please install Google Chrome or run: npm install puppeteer'
+      );
+    }
   } else if (isProduction && chromiumInstance && isVercel) {
     // Production on Vercel with Chromium package
     console.log('Using @sparticuz/chromium for serverless environment');

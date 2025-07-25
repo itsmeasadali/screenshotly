@@ -53,6 +53,12 @@ const screenshotSchema = z.object({
 });
 
 async function applyMockup(screenshot: Buffer, mockupType: string): Promise<Buffer> {
+  // Validate screenshot is a proper Buffer
+  if (!Buffer.isBuffer(screenshot)) {
+    console.error('Invalid screenshot buffer passed to applyMockup:', typeof screenshot);
+    throw new Error('Screenshot must be a Buffer');
+  }
+
   const template = mockupMap[mockupType];
   if (!template) {
     throw new Error(`Mockup template '${mockupType}' not found`);
@@ -145,6 +151,12 @@ async function applyMockup(screenshot: Buffer, mockupType: string): Promise<Buff
 
     // Load the mockup template
     const mockupImage = sharp(mockupPath);
+    
+    // Validate resizedScreenshot is a proper Buffer before compositing
+    if (!Buffer.isBuffer(resizedScreenshot)) {
+      console.error('Invalid resizedScreenshot buffer:', typeof resizedScreenshot);
+      throw new Error('Resized screenshot must be a Buffer for Sharp composite');
+    }
     
     // Composite the screenshot onto the mockup with proper blending
     return await mockupImage
@@ -361,7 +373,16 @@ export async function POST(request: NextRequest) {
           printBackground: true,
           margin: { top: '1cm', right: '1cm', bottom: '1cm', left: '1cm' },
         });
-        screenshot = Buffer.from(pdfBuffer);
+        
+        // Ensure we have a proper Buffer
+        if (pdfBuffer instanceof Uint8Array) {
+          screenshot = Buffer.from(pdfBuffer);
+        } else if (Buffer.isBuffer(pdfBuffer)) {
+          screenshot = pdfBuffer;
+        } else {
+          console.error('Invalid PDF buffer type:', typeof pdfBuffer);
+          throw new Error('Invalid PDF buffer received from Puppeteer');
+        }
       } else {
         const element = selector ? await page.$(selector) : page;
         if (!element) {
@@ -373,7 +394,16 @@ export async function POST(request: NextRequest) {
           quality: format === 'jpeg' ? quality : undefined,
           fullPage,
         });
-        screenshot = Buffer.from(screenshotBuffer);
+        
+        // Ensure we have a proper Buffer
+        if (screenshotBuffer instanceof Uint8Array) {
+          screenshot = Buffer.from(screenshotBuffer);
+        } else if (Buffer.isBuffer(screenshotBuffer)) {
+          screenshot = screenshotBuffer;
+        } else {
+          console.error('Invalid screenshot buffer type:', typeof screenshotBuffer);
+          throw new Error('Invalid screenshot buffer received from Puppeteer');
+        }
       }
 
       // Apply mockup if specified
