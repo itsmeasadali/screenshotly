@@ -52,7 +52,29 @@ const screenshotSchema = z.object({
   }).optional().default({}),
 });
 
+// Helper function to safely perform sharp operations
+async function safeSharpResize(screenshot: Buffer, width: number, height: number, options: object): Promise<Buffer> {
+  console.log('safeSharpResize - input type:', typeof screenshot, 'isBuffer:', Buffer.isBuffer(screenshot));
+  
+  if (!Buffer.isBuffer(screenshot)) {
+    throw new Error(`Sharp resize input must be Buffer, got ${typeof screenshot}`);
+  }
+  
+  const result = await sharp(screenshot)
+    .resize(width, height, options)
+    .toBuffer();
+    
+  console.log('safeSharpResize - output type:', typeof result, 'isBuffer:', Buffer.isBuffer(result));
+  return result;
+}
+
 async function applyMockup(screenshot: Buffer, mockupType: string): Promise<Buffer> {
+  console.log('=== applyMockup DEBUG START ===');
+  console.log('screenshot type:', typeof screenshot);
+  console.log('screenshot isBuffer:', Buffer.isBuffer(screenshot));
+  console.log('screenshot constructor:', screenshot?.constructor?.name);
+  console.log('mockupType:', mockupType);
+  
   // Validate screenshot is a proper Buffer
   if (!Buffer.isBuffer(screenshot)) {
     console.error('Invalid screenshot buffer passed to applyMockup:', typeof screenshot);
@@ -67,8 +89,10 @@ async function applyMockup(screenshot: Buffer, mockupType: string): Promise<Buff
   const mockupPath = process.cwd() + '/public' + template.path;
 
   try {
+    console.log('About to call sharp(screenshot).metadata()');
     // Get screenshot metadata
     const screenshotMeta = await sharp(screenshot).metadata();
+    console.log('screenshotMeta obtained:', screenshotMeta);
     const { width: origWidth = 1920, height: origHeight = 1080 } = screenshotMeta;
     
     // Calculate target dimensions
@@ -96,60 +120,53 @@ async function applyMockup(screenshot: Buffer, mockupType: string): Promise<Buff
       // If the screenshot is much wider than mobile, use contain with smart background
       if (origAspectRatio > 1.5 && targetAspectRatio < 1) {
         // Desktop screenshot on mobile - use contain with gradient background
-        resizedScreenshot = await sharp(screenshot)
-          .resize(targetWidth, targetHeight, { 
-            fit: 'contain',
-            background: { r: 240, g: 240, b: 240, alpha: 1 }
-          })
-          .toBuffer();
+        resizedScreenshot = await safeSharpResize(screenshot, targetWidth, targetHeight, { 
+          fit: 'contain',
+          background: { r: 240, g: 240, b: 240, alpha: 1 }
+        });
       } else {
         // Mobile-appropriate content - use cover for best fit
-        resizedScreenshot = await sharp(screenshot)
-          .resize(targetWidth, targetHeight, { 
-            fit: 'cover',
-            position: 'center'
-          })
-          .toBuffer();
+        resizedScreenshot = await safeSharpResize(screenshot, targetWidth, targetHeight, { 
+          fit: 'cover',
+          position: 'center'
+        });
       }
     } else if (mockupType.includes('macbook') || mockupType.includes('laptop')) {
       // For laptop mockups, maintain aspect ratio but allow some cropping
       if (Math.abs(origAspectRatio - targetAspectRatio) < 0.1) {
         // Similar aspect ratios - use cover for seamless fit
-        resizedScreenshot = await sharp(screenshot)
-          .resize(targetWidth, targetHeight, { 
-            fit: 'cover',
-            position: 'center'
-          })
-          .toBuffer();
+        resizedScreenshot = await safeSharpResize(screenshot, targetWidth, targetHeight, { 
+          fit: 'cover',
+          position: 'center'
+        });
       } else {
         // Different aspect ratios - use contain with subtle background
-        resizedScreenshot = await sharp(screenshot)
-          .resize(targetWidth, targetHeight, { 
-            fit: 'contain',
-            background: { r: 32, g: 32, b: 32, alpha: 1 }
-          })
-          .toBuffer();
+        resizedScreenshot = await safeSharpResize(screenshot, targetWidth, targetHeight, { 
+          fit: 'contain',
+          background: { r: 32, g: 32, b: 32, alpha: 1 }
+        });
       }
     } else if (mockupType.includes('ipad') || mockupType.includes('tablet')) {
       // For tablets, use a balanced approach
-      resizedScreenshot = await sharp(screenshot)
-        .resize(targetWidth, targetHeight, { 
-          fit: 'cover',
-          position: 'center'
-        })
-        .toBuffer();
+      resizedScreenshot = await safeSharpResize(screenshot, targetWidth, targetHeight, { 
+        fit: 'cover',
+        position: 'center'
+      });
     } else {
       // Default strategy for other mockups
       // Use cover for best fill, with center positioning
-      resizedScreenshot = await sharp(screenshot)
-        .resize(targetWidth, targetHeight, { 
-          fit: 'cover',
-          position: 'center'
-        })
-        .toBuffer();
+      resizedScreenshot = await safeSharpResize(screenshot, targetWidth, targetHeight, { 
+        fit: 'cover',
+        position: 'center'
+      });
     }
 
+    console.log('resizedScreenshot type:', typeof resizedScreenshot);
+    console.log('resizedScreenshot isBuffer:', Buffer.isBuffer(resizedScreenshot));
+    console.log('resizedScreenshot constructor:', resizedScreenshot?.constructor?.name);
+    
     // Load the mockup template
+    console.log('Loading mockup from path:', mockupPath);
     const mockupImage = sharp(mockupPath);
     
     // Validate resizedScreenshot is a proper Buffer before compositing
@@ -159,6 +176,9 @@ async function applyMockup(screenshot: Buffer, mockupType: string): Promise<Buff
     }
     
     // Composite the screenshot onto the mockup with proper blending
+    console.log('About to composite with placement:', template.screenshotPlacement);
+    console.log('Input for composite - type:', typeof resizedScreenshot, 'isBuffer:', Buffer.isBuffer(resizedScreenshot));
+    
     return await mockupImage
       .composite([
         {
@@ -174,13 +194,12 @@ async function applyMockup(screenshot: Buffer, mockupType: string): Promise<Buff
   } catch (error) {
     console.error('Error applying mockup:', error);
     // Fallback to original logic if there's an error
-    const resizedScreenshot = await sharp(screenshot)
-      .resize(
-        template.screenshotPlacement.width,
-        template.screenshotPlacement.height,
-        { fit: 'contain', background: { r: 255, g: 255, b: 255, alpha: 1 } }
-      )
-      .toBuffer();
+    const resizedScreenshot = await safeSharpResize(
+      screenshot,
+      template.screenshotPlacement.width,
+      template.screenshotPlacement.height,
+      { fit: 'contain', background: { r: 255, g: 255, b: 255, alpha: 1 } }
+    );
 
     return await sharp(mockupPath)
       .composite([
@@ -395,20 +414,40 @@ export async function POST(request: NextRequest) {
           fullPage,
         });
         
+        console.log('=== SCREENSHOT BUFFER DEBUG ===');
+        console.log('screenshotBuffer type:', typeof screenshotBuffer);
+        console.log('screenshotBuffer constructor:', screenshotBuffer?.constructor?.name);
+        console.log('screenshotBuffer instanceof Uint8Array:', screenshotBuffer instanceof Uint8Array);
+        console.log('Buffer.isBuffer(screenshotBuffer):', Buffer.isBuffer(screenshotBuffer));
+        
         // Ensure we have a proper Buffer
         if (screenshotBuffer instanceof Uint8Array) {
           screenshot = Buffer.from(screenshotBuffer);
+          console.log('Converted Uint8Array to Buffer');
         } else if (Buffer.isBuffer(screenshotBuffer)) {
           screenshot = screenshotBuffer;
+          console.log('Using existing Buffer');
         } else {
           console.error('Invalid screenshot buffer type:', typeof screenshotBuffer);
           throw new Error('Invalid screenshot buffer received from Puppeteer');
         }
+        
+        console.log('Final screenshot type:', typeof screenshot);
+        console.log('Final screenshot isBuffer:', Buffer.isBuffer(screenshot));
       }
 
       // Apply mockup if specified
       if (mockup && format !== 'pdf') {
+        console.log('=== BEFORE APPLY MOCKUP ===');
+        console.log('screenshot type:', typeof screenshot);
+        console.log('screenshot isBuffer:', Buffer.isBuffer(screenshot));
+        console.log('mockup:', mockup);
+        
         screenshot = await applyMockup(screenshot, mockup);
+        
+        console.log('=== AFTER APPLY MOCKUP ===');
+        console.log('screenshot type:', typeof screenshot);
+        console.log('screenshot isBuffer:', Buffer.isBuffer(screenshot));
       }
 
       return new NextResponse(screenshot, {
