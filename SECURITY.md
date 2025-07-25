@@ -144,7 +144,7 @@ If you encounter Content Security Policy violations:
 ### Common CSP Fixes
 ```typescript
 // For Clerk authentication and CAPTCHA
-"script-src": "... blob: https://clerk.*.com https://challenges.cloudflare.com https://*.hcaptcha.com"
+"script-src": "... blob: https://*.clerk.com https://challenges.cloudflare.com https://*.hcaptcha.com"
 "worker-src": "'self' blob:"
 "frame-src": "... https://www.google.com https://challenges.cloudflare.com"
 
@@ -154,6 +154,16 @@ If you encounter Content Security Policy violations:
 
 // For development (more permissive)
 "script-src": "... https: http: blob:"
+```
+
+### ⚠️ Invalid CSP Patterns
+**AVOID** these patterns (they will be ignored by browsers):
+```typescript
+// ❌ INVALID - wildcard in middle of domain
+"script-src": "https://clerk.*.com"  // Will be ignored!
+
+// ✅ VALID - subdomain wildcard
+"script-src": "https://*.clerk.com"  // Works correctly
 ```
 
 ### CAPTCHA Support
@@ -166,6 +176,15 @@ The application supports multiple CAPTCHA providers:
 - **`worker-src 'self' blob:`**: Required for Clerk's Web Workers
 - **`script-src blob:`**: Allows dynamic script loading from blob URLs
 - **`frame-src`**: For embedded CAPTCHA frames
+
+### Current Valid Clerk Domains
+Our CSP supports these Clerk domain patterns:
+- `https://*.clerk.com` - API and assets (api.clerk.com, js.clerk.com)
+- `https://*.clerk.accounts.dev` - Development accounts
+- `https://*.clerk.dev` - Development instances
+- `https://clerk.screenshotly.app` - Your specific Clerk instance
+
+**Note**: Patterns like `https://clerk.*.com` are invalid CSP syntax and will be ignored by browsers.
 
 ## Contact
 
