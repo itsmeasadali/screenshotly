@@ -1,6 +1,6 @@
 import { auth } from '@clerk/nextjs/server';
 import { NextResponse } from 'next/server';
-import { getUserData, getUserApiKeyStats, getUserMonthlyUsage } from '@/lib/user';
+import { getUserData, getUserApiKeyStats, getUserMonthlyUsage, createUserIfNotExists } from '@/lib/user';
 
 export async function GET() {
   try {
@@ -21,18 +21,19 @@ export async function GET() {
       );
     }
 
-    const [userData, apiStats, monthlyUsage] = await Promise.all([
-      getUserData(userId),
+    // Try to get user data, create user if doesn't exist
+    let userData = await getUserData(userId);
+    
+    if (!userData) {
+      console.log(`Creating new user in database for Clerk ID: ${userId}`);
+      // User doesn't exist in database, create them
+      userData = await createUserIfNotExists(userId);
+    }
+
+    const [apiStats, monthlyUsage] = await Promise.all([
       getUserApiKeyStats(userId),
       getUserMonthlyUsage(userId),
     ]);
-
-    if (!userData) {
-      return NextResponse.json(
-        { error: 'User not found' },
-        { status: 404 }
-      );
-    }
 
     return NextResponse.json({
       userData,
@@ -41,6 +42,15 @@ export async function GET() {
     });
   } catch (error) {
     console.error('Failed to fetch user data:', error);
+    
+    // More specific error handling
+    if (error instanceof Error && error.message.includes('Failed to create user')) {
+      return NextResponse.json(
+        { error: 'Failed to initialize user account' },
+        { status: 500 }
+      );
+    }
+    
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

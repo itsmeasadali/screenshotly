@@ -50,6 +50,64 @@ export async function getUserData(userId: string): Promise<UserData | null> {
   }
 }
 
+export async function createUserIfNotExists(userId: string): Promise<UserData> {
+  try {
+    // Generate a default email for the user (will be updated when we get real email)
+    const defaultEmail = `user_${userId}@example.com`;
+    
+    console.log(`Creating user with ID: ${userId}`);
+    
+    // Use upsert to handle race conditions where user might be created concurrently
+    const user = await prisma.user.upsert({
+      where: { id: userId },
+      update: {
+        // Update updatedAt timestamp if user already exists
+        updatedAt: new Date(),
+      },
+      create: {
+        id: userId,
+        email: defaultEmail,
+        plan: 'FREE',
+        subscriptionStatus: 'INACTIVE',
+        monthlyUsage: 0,
+        lastUsageReset: new Date(),
+      },
+      select: {
+        id: true,
+        email: true,
+        plan: true,
+        subscriptionStatus: true,
+        stripeCustomerId: true,
+        stripeSubscriptionId: true,
+        stripeCurrentPeriodEnd: true,
+        billingCycleStart: true,
+        billingCycleEnd: true,
+        monthlyUsage: true,
+        lastUsageReset: true,
+        createdAt: true,
+      },
+    });
+
+    console.log(`User created/found successfully: ${userId}`);
+    return user as UserData;
+  } catch (error) {
+    console.error('Failed to create user:', error);
+    
+    // Try to fetch the user again in case of a race condition
+    try {
+      const existingUser = await getUserData(userId);
+      if (existingUser) {
+        console.log(`User found on retry: ${userId}`);
+        return existingUser;
+      }
+    } catch (retryError) {
+      console.error('Retry fetch also failed:', retryError);
+    }
+    
+    throw new Error('Failed to create user account');
+  }
+}
+
 export async function getUserApiKeyStats(userId: string): Promise<UserApiKeyStats> {
   try {
     // Get all user's API keys with today's requests
