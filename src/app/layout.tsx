@@ -1,13 +1,15 @@
 import { Inter } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
+import { ThemeProvider } from "@/components/theme-provider";
 import Header from "@/components/Header";
+import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "Screenshotly - Capture and Share Screenshots",
-  description: "Capture, customize, and share screenshots with ease",
+  title: "Screenshotly - AI-Powered Screenshots",
+  description: "Capture clean, professional screenshots with AI-powered element removal and beautiful device mockups",
   icons: {
     icon: [
       {
@@ -37,10 +39,18 @@ export default function RootLayout({
           <link rel="apple-touch-icon" href="/logo.svg" />
         </head>
         <body className={inter.className}>
-          <Header />
-          <main className="min-h-screen bg-background">
-            {children}
-          </main>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <Header />
+            <main className="min-h-screen bg-background">
+              {children}
+            </main>
+            <Toaster />
+          </ThemeProvider>
         </body>
       </html>
     </ClerkProvider>

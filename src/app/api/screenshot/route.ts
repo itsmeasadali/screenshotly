@@ -280,10 +280,15 @@ export async function POST(request: NextRequest) {
     }
 
     const apiKey = authHeader.split(' ')[1];
-    console.log('Validating API key:', { apiKey: apiKey.substring(0, 10) + '...' });
+    // Only log in development mode, never log actual API key values
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Validating API key for user');
+    }
     
     const { isValid, key } = await validateApiKey(apiKey);
-    console.log('API key validation result:', { isValid, keyId: key?.id });
+    if (process.env.NODE_ENV === 'development') {
+      console.log('API key validation result:', { isValid, keyId: key?.id });
+    }
 
     if (!isValid || !key) {
       return NextResponse.json({ error: 'Invalid API key' }, { status: 401 });
@@ -292,9 +297,10 @@ export async function POST(request: NextRequest) {
     apiKeyId = key.id;
 
     // Check rate limit
-    console.log('Checking rate limit for:', { apiKeyId });
     const rateLimit = await getRateLimitInfo(key.id);
-    console.log('Rate limit info:', rateLimit);
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Rate limit info:', { remaining: rateLimit?.remaining, limit: rateLimit?.limit });
+    }
 
     if (!rateLimit) {
       await logApiRequest(key.id, 500, startTime, request);
@@ -311,7 +317,9 @@ export async function POST(request: NextRequest) {
 
     // Parse request body
     const body = await request.json();
-    console.log('Request body:', body);
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Request body:', { url: body.url, device: body.device, format: body.format });
+    }
     const parsedBody = screenshotSchema.safeParse(body);
 
     if (!parsedBody.success) {

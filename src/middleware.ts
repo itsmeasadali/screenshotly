@@ -19,17 +19,32 @@ const isPublicRoute = createRouteMatcher([
 ]);
 
 export default clerkMiddleware(async (auth, req) => {
+  // Security headers for all requests
+  const response = NextResponse.next();
+  
+  // Add security headers
+  response.headers.set('X-Content-Type-Options', 'nosniff');
+  response.headers.set('X-Frame-Options', 'DENY');
+  response.headers.set('X-XSS-Protection', '1; mode=block');
+  response.headers.set('Referrer-Policy', 'origin-when-cross-origin');
+
   if (isPublicRoute(req)) {
-    return NextResponse.next();
+    return response;
   }
 
-  // For protected routes, ensure user is authenticated
-  const session = await auth();
-  if (!session.userId) {
+  try {
+    // For protected routes, ensure user is authenticated
+    const session = await auth();
+    if (!session.userId) {
+      return NextResponse.redirect(new URL('/sign-in', req.url));
+    }
+
+    return response;
+  } catch (error) {
+    console.error('Middleware auth error:', error);
+    // Redirect to sign-in on any auth error
     return NextResponse.redirect(new URL('/sign-in', req.url));
   }
-
-  return NextResponse.next();
 });
 
 export const config = {

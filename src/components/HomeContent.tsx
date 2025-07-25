@@ -2,229 +2,269 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { 
   ArrowRight, Brain, Sparkles, Zap, 
-  ShieldCheck, Laptop, Target, Eye, 
-  Code, Wand2, Camera, Database
+  ShieldCheck, Target, Eye, 
+  Code, Wand2, Camera, Database,
+  Star, Users, TrendingUp,
+  Smartphone, Monitor, Globe, Lock, Clock
 } from 'lucide-react';
 
 interface HomeContentProps {
   userId?: string | null;
 }
 
+const features = [
+  {
+    icon: Brain,
+    title: "AI Element Removal",
+    description: "Automatically removes cookie banners, ads, and distracting elements",
+  },
+  {
+    icon: Smartphone,
+    title: "Device Mockups",
+    description: "Beautiful frames for phones, tablets, laptops, and browsers",
+  },
+  {
+    icon: Zap,
+    title: "Lightning Fast",
+    description: "Optimized for speed with global CDN and smart caching",
+  },
+  {
+    icon: Globe,
+    title: "Global Scale",
+    description: "99.9% uptime with servers across multiple regions",
+  },
+  {
+    icon: Lock,
+    title: "Enterprise Security",
+    description: "SOC 2 compliant with end-to-end encryption",
+  },
+  {
+    icon: Code,
+    title: "Developer First",
+    description: "RESTful API with comprehensive documentation and SDKs",
+  }
+];
+
+const useCases = [
+  {
+    icon: Database,
+    title: "Training Data",
+    description: "Clean screenshots for ML model training",
+    metric: "10M+",
+    metricLabel: "screenshots processed"
+  },
+  {
+    icon: Eye,
+    title: "Vision Models",
+    description: "Perfect input for GPT-4 Vision and similar AIs",
+    metric: "99.5%",
+    metricLabel: "accuracy improvement"
+  },
+  {
+    icon: Wand2,
+    title: "Automation",
+    description: "Automated documentation and testing",
+    metric: "75%",
+    metricLabel: "time saved"
+  },
+  {
+    icon: Target,
+    title: "Marketing",
+    description: "Professional assets for app stores",
+    metric: "3x",
+    metricLabel: "conversion boost"
+  }
+];
+
+const stats = [
+  { icon: Users, value: "50K+", label: "Developers" },
+  { icon: Camera, value: "100M+", label: "Screenshots" },
+  { icon: TrendingUp, value: "99.9%", label: "Uptime" },
+  { icon: Star, value: "4.9/5", label: "Rating" }
+];
+
 export default function HomeContent({ userId }: HomeContentProps) {
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col">
       {/* Hero Section */}
-      <section className="relative py-20 overflow-hidden bg-black">
-        {/* Gradient Background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-600/20 to-purple-600/20" />
-        
-        {/* Grid Pattern */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:14px_24px]" />
-        
-        {/* Glow Effect */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-blue-500/20 rounded-full blur-3xl" />
+      <section className="px-4 py-32 text-center">
+        <div className="container mx-auto max-w-5xl">
+          <Badge variant="secondary" className="mb-4">
+            <Sparkles className="w-4 h-4 mr-2" />
+            AI-Powered Screenshots
+          </Badge>
+          
+          <h1 className="mb-6 text-4xl font-bold tracking-tight sm:text-6xl">
+            Screenshot API for{" "}
+            <span className="text-primary">Modern Applications</span>
+          </h1>
+          
+          <p className="mb-8 text-xl text-muted-foreground max-w-3xl mx-auto">
+            Capture clean, professional screenshots with AI that automatically removes distracting elements. 
+            Perfect for AI training, documentation, and marketing.
+          </p>
 
-        <div className="container relative mx-auto px-4">
-          <div className="max-w-3xl mx-auto text-center space-y-8">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 mb-4">
-              <Sparkles className="w-4 h-4 text-blue-400" />
-              <span className="text-sm text-white/80">Powered by AI</span>
-            </div>
-
-            <h1 className="text-5xl sm:text-6xl font-bold text-white">
-              AI-Powered Screenshots
-              <span className="block mt-2 bg-gradient-to-r from-blue-400 to-purple-400 text-transparent bg-clip-text">
-                Made Simple
-              </span>
-            </h1>
-            
-            <p className="text-xl text-gray-300">
-              Capture clean, professional screenshots with AI that automatically removes distracting elements like cookie banners, ads, and popups.
-            </p>
-
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              {userId ? (
-                <Button size="lg" asChild className="min-w-[160px] bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600">
-                  <Link href="/dashboard">
-                    Go to Dashboard
-                    <ArrowRight className="w-4 h-4 ml-2" />
-                  </Link>
-                </Button>
-              ) : (
-                <Button size="lg" asChild className="min-w-[160px] bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600">
-                  <Link href="/sign-up">
-                    Start Free
-                    <ArrowRight className="w-4 h-4 ml-2" />
-                  </Link>
-                </Button>
-              )}
-              <Button 
-                size="lg" 
-                variant="secondary" 
-                asChild 
-                className="min-w-[160px] bg-white/10 hover:bg-white/20 text-white border-2 border-white/20 backdrop-blur-sm"
-              >
-                <Link href="/playground">Try Demo</Link>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
+            {userId ? (
+              <Button size="lg" asChild>
+                <Link href="/dashboard">
+                  Go to Dashboard
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </Link>
               </Button>
-            </div>
+            ) : (
+              <Button size="lg" asChild>
+                <Link href="/sign-up">
+                  Start Building Free
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </Link>
+              </Button>
+            )}
+            <Button size="lg" variant="outline" asChild>
+              <Link href="/playground">
+                <Camera className="w-4 h-4 mr-2" />
+                Try Demo
+              </Link>
+            </Button>
+          </div>
+
+          {/* Stats */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-8">
+            {stats.map((stat, index) => (
+              <div key={index} className="text-center">
+                <stat.icon className="w-8 h-8 mx-auto mb-2 text-primary" />
+                <div className="text-2xl font-bold">{stat.value}</div>
+                <div className="text-sm text-muted-foreground">{stat.label}</div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
       {/* Features Section */}
-      <section className="py-20 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto text-center mb-16">
-            <h2 className="text-3xl font-bold mb-4">AI-Powered Features</h2>
-            <p className="text-gray-600">
-              Our intelligent screenshot API uses advanced AI to deliver clean, professional results every time.
+      <section className="px-4 py-24 bg-muted/50">
+        <div className="container mx-auto max-w-6xl">
+          <div className="text-center mb-16">
+            <Badge variant="outline" className="mb-4">
+              <Zap className="w-4 h-4 mr-2" />
+              Features
+            </Badge>
+            <h2 className="text-3xl font-bold mb-4">
+              Everything you need for perfect screenshots
+            </h2>
+            <p className="text-xl text-muted-foreground">
+              Built for developers, designers, and AI engineers who demand quality.
             </p>
           </div>
           
-          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            <div className="p-6 rounded-xl border bg-gradient-to-br from-blue-50 to-white shadow-sm">
-              <Brain className="w-10 h-10 text-blue-500 mb-4" />
-              <h3 className="text-xl font-semibold mb-2">Smart Element Detection</h3>
-              <p className="text-gray-600">
-                AI automatically identifies and removes cookie banners, ads, chat widgets, and other distracting elements.
-              </p>
-            </div>
-
-            <div className="p-6 rounded-xl border bg-gradient-to-br from-purple-50 to-white shadow-sm">
-              <Target className="w-10 h-10 text-purple-500 mb-4" />
-              <h3 className="text-xl font-semibold mb-2">Confidence Controls</h3>
-              <p className="text-gray-600">
-                Fine-tune element removal with adjustable confidence thresholds for precise control over your screenshots.
-              </p>
-            </div>
-
-            <div className="p-6 rounded-xl border bg-gradient-to-br from-indigo-50 to-white shadow-sm">
-              <Laptop className="w-10 h-10 text-indigo-500 mb-4" />
-              <h3 className="text-xl font-semibold mb-2">Device Mockups</h3>
-              <p className="text-gray-600">
-                Present your screenshots in beautiful device frames - browsers, phones, and laptops.
-              </p>
-            </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {features.map((feature, index) => (
+              <Card key={index}>
+                <CardHeader>
+                  <feature.icon className="w-10 h-10 text-primary mb-2" />
+                  <CardTitle className="text-xl">{feature.title}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription className="text-base">
+                    {feature.description}
+                  </CardDescription>
+                </CardContent>
+              </Card>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* LLM Use Cases Section */}
-      <section className="py-20 bg-gradient-to-br from-gray-50 to-blue-50">
-        <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto text-center mb-16">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-100 text-blue-700 mb-4">
-              <Brain className="w-4 h-4" />
-              <span className="text-sm font-medium">Perfect for AI & LLMs</span>
-            </div>
-            <h2 className="text-3xl font-bold mb-4">Built for AI Applications</h2>
-            <p className="text-gray-600">
-              Screenshotly creates clean, distraction-free screenshots that are perfect for training and using with Large Language Models and AI systems.
+      {/* Use Cases Section */}
+      <section className="px-4 py-24">
+        <div className="container mx-auto max-w-6xl">
+          <div className="text-center mb-16">
+            <Badge className="mb-4">
+              <Brain className="w-4 h-4 mr-2" />
+              AI & Machine Learning
+            </Badge>
+            <h2 className="text-3xl font-bold mb-4">
+              Built for the AI-first world
+            </h2>
+            <p className="text-xl text-muted-foreground">
+              Clean, distraction-free screenshots perfect for training models and building intelligent applications.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
-            <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-              <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-4">
-                <Database className="w-6 h-6 text-blue-600" />
-              </div>
-              <h3 className="font-semibold text-gray-900 mb-2">Clean Training Data</h3>
-              <p className="text-sm text-gray-600">
-                AI-powered element removal ensures screenshots are free from ads, cookie banners, and distractions for better training datasets.
-              </p>
-            </div>
-
-            <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-              <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mb-4">
-                <Eye className="w-6 h-6 text-green-600" />
-              </div>
-              <h3 className="font-semibold text-gray-900 mb-2">Vision Model Input</h3>
-              <p className="text-sm text-gray-600">
-                Standardized mockups provide consistent context for vision-language models like GPT-4 Vision to analyze interfaces.
-              </p>
-            </div>
-
-            <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-              <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
-                <Code className="w-6 h-6 text-purple-600" />
-              </div>
-              <h3 className="font-semibold text-gray-900 mb-2">Automated Documentation</h3>
-              <p className="text-sm text-gray-600">
-                Generate professional API docs, tutorials, and presentations automatically with consistent visual formatting.
-              </p>
-            </div>
-
-            <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-              <div className="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center mb-4">
-                <Wand2 className="w-6 h-6 text-orange-600" />
-              </div>
-              <h3 className="font-semibold text-gray-900 mb-2">Design Systems</h3>
-              <p className="text-sm text-gray-600">
-                Consistent component showcases across different devices and screen sizes for comprehensive design documentation.
-              </p>
-            </div>
-          </div>
-
-          {/* Additional Use Cases */}
-          <div className="mt-12 bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
-            <h3 className="text-xl font-semibold text-center mb-8">Real-World Applications</h3>
-            <div className="grid md:grid-cols-3 gap-6 text-center">
-              <div>
-                <div className="w-10 h-10 bg-indigo-100 rounded-xl flex items-center justify-center mx-auto mb-3">
-                  <Brain className="w-5 h-5 text-indigo-600" />
-                </div>
-                <h4 className="font-medium mb-2">Computer Vision Training</h4>
-                <p className="text-sm text-gray-600">Train models on clean UI elements without visual noise</p>
-              </div>
-              <div>
-                <div className="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center mx-auto mb-3">
-                  <Target className="w-5 h-5 text-green-600" />
-                </div>
-                <h4 className="font-medium mb-2">Automated Testing</h4>
-                <p className="text-sm text-gray-600">Visual regression testing with consistent screenshots</p>
-              </div>
-              <div>
-                <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center mx-auto mb-3">
-                  <Camera className="w-5 h-5 text-purple-600" />
-                </div>
-                <h4 className="font-medium mb-2">Marketing Assets</h4>
-                <p className="text-sm text-gray-600">Professional app store screenshots at scale</p>
-              </div>
-            </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {useCases.map((useCase, index) => (
+              <Card key={index} className="text-center">
+                <CardHeader>
+                  <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4">
+                    <useCase.icon className="w-6 h-6 text-primary" />
+                  </div>
+                  <CardTitle className="text-lg">{useCase.title}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription className="mb-4">{useCase.description}</CardDescription>
+                  <div className="text-2xl font-bold text-primary">{useCase.metric}</div>
+                  <div className="text-xs text-muted-foreground">{useCase.metricLabel}</div>
+                </CardContent>
+              </Card>
+            ))}
           </div>
         </div>
       </section>
 
       {/* Code Example Section */}
-      <section className="py-20 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="max-w-5xl mx-auto">
-            <div className="grid md:grid-cols-2 gap-12 items-center">
-              <div>
-                <h2 className="text-3xl font-bold mb-6">Simple to Integrate</h2>
-                <p className="text-gray-600 mb-8">
-                  Clean up any webpage with just a few lines of code. Our AI handles the rest.
-                </p>
-                <div className="space-y-4">
-                  <div className="flex items-center gap-3">
-                    <ShieldCheck className="w-5 h-5 text-green-500" />
-                    <span>Secure API with token authentication</span>
+      <section className="px-4 py-24 bg-muted/50">
+        <div className="container mx-auto max-w-6xl">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <Badge variant="outline" className="mb-4">
+                <Code className="w-4 h-4 mr-2" />
+                Developer Experience
+              </Badge>
+              <h2 className="text-3xl font-bold mb-6">
+                Simple integration, powerful results
+              </h2>
+              <p className="text-xl text-muted-foreground mb-8">
+                Get started in minutes with our RESTful API. Clean documentation, comprehensive SDKs, and responsive support.
+              </p>
+              
+              <div className="space-y-4 mb-8">
+                {[
+                  { icon: ShieldCheck, text: "Secure API with token authentication" },
+                  { icon: Clock, text: "Sub-second response times globally" },
+                  { icon: Brain, text: "AI-powered element removal" },
+                  { icon: Monitor, text: "Multiple device mockups included" }
+                ].map((item, index) => (
+                  <div key={index} className="flex items-center space-x-3">
+                    <item.icon className="w-5 h-5 text-primary" />
+                    <span>{item.text}</span>
                   </div>
-                  <div className="flex items-center gap-3">
-                    <Zap className="w-5 h-5 text-yellow-500" />
-                    <span>Fast response times</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <Brain className="w-5 h-5 text-blue-500" />
-                    <span>AI-powered element removal</span>
-                  </div>
-                </div>
+                ))}
               </div>
-              <div className="bg-black rounded-xl p-6 shadow-xl">
-                <pre className="text-sm text-gray-300 overflow-x-auto">
-                  <code>{`const response = await fetch('https://api.screenshotly.app/screenshot', {
+
+              <Button asChild>
+                <Link href="/docs">
+                  View Documentation
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </Link>
+              </Button>
+            </div>
+            
+            <Card>
+              <CardHeader>
+                <div className="flex items-center space-x-2">
+                  <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                  <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                  <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                  <span className="text-sm text-muted-foreground ml-2">API Example</span>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <pre className="text-sm overflow-x-auto">
+                  <code>{`const response = await fetch('/api/screenshot', {
   method: 'POST',
   headers: {
     'Authorization': 'Bearer YOUR_API_TOKEN',
@@ -232,43 +272,54 @@ export default function HomeContent({ userId }: HomeContentProps) {
   },
   body: JSON.stringify({
     url: 'https://example.com',
+    device: 'iphone-14',
     aiRemoval: {
       enabled: true,
-      types: ['cookie-banner', 'ad', 'chat-widget'],
       confidence: 0.8
-    }
+    },
+    format: 'png',
+    quality: 95
   })
-});`}</code>
+});
+
+const screenshot = await response.blob();`}</code>
                 </pre>
-              </div>
-            </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-br from-blue-600 to-purple-600 text-white">
-        <div className="container mx-auto px-4 text-center">
-          <div className="max-w-3xl mx-auto">
-            <h2 className="text-3xl font-bold mb-4">Ready to get started?</h2>
-            <p className="text-xl text-white/80 mb-8">
-              Start capturing clean, professional screenshots in minutes.
-            </p>
+      <section className="px-4 py-24 bg-primary text-primary-foreground">
+        <div className="container mx-auto max-w-4xl text-center">
+          <h2 className="text-3xl font-bold mb-6">
+            Ready to capture perfect screenshots?
+          </h2>
+          <p className="text-xl mb-8 opacity-90">
+            Join thousands of developers building amazing applications with our AI-powered screenshot API.
+          </p>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             {userId ? (
-              <Button size="lg" asChild className="bg-white text-blue-600 hover:bg-white/90">
+              <Button size="lg" variant="secondary" asChild>
                 <Link href="/dashboard">
                   Go to Dashboard
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </Link>
               </Button>
             ) : (
-              <Button size="lg" asChild className="bg-white text-blue-600 hover:bg-white/90">
+              <Button size="lg" variant="secondary" asChild>
                 <Link href="/sign-up">
-                  Get Started Free
+                  Start Building Free
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </Link>
               </Button>
             )}
+            <Button size="lg" variant="outline" asChild className="border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/10">
+              <Link href="/pricing">
+                View Pricing
+              </Link>
+            </Button>
           </div>
         </div>
       </section>
