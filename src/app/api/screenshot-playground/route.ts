@@ -179,27 +179,28 @@ async function applyMockup(screenshot: Buffer, mockupType: string): Promise<Buff
     
     console.log('About to composite - screenshot size:', resizedScreenshot.length, 'placement:', template.screenshotPlacement);
     
-    // Create composite input object explicitly
-    const compositeInput = {
-      input: resizedScreenshot,
-      top: template.screenshotPlacement.y,
-      left: template.screenshotPlacement.x,
-      blend: 'over' as const
-    };
+    // Ensure we have a clean Buffer for compositing
+    const cleanBuffer = Buffer.from(resizedScreenshot);
     
-    console.log('Composite input object:', JSON.stringify({
-      inputType: typeof compositeInput.input,
-      inputIsBuffer: Buffer.isBuffer(compositeInput.input),
-      top: compositeInput.top,
-      left: compositeInput.left,
-      blend: compositeInput.blend
-    }));
+    // Double-check the buffer is valid
+    if (!Buffer.isBuffer(cleanBuffer) || cleanBuffer.length === 0) {
+      throw new Error('Invalid buffer for composite operation');
+    }
     
-    // Composite the screenshot onto the mockup with proper blending
-    return await mockupImage
-      .composite([compositeInput])
+    console.log('Final composite validation - buffer size:', cleanBuffer.length, 'type:', typeof cleanBuffer);
+    
+    // Use a direct approach without intermediate objects
+    const result = await sharp(mockupPath)
+      .composite([{
+        input: cleanBuffer,
+        top: Math.floor(template.screenshotPlacement.y),
+        left: Math.floor(template.screenshotPlacement.x),
+        blend: 'over'
+      }])
       .png({ quality: 100, compressionLevel: 6 })
       .toBuffer();
+      
+    return Buffer.from(result);
       
   } catch (error) {
     console.error('Error applying mockup:', error);
@@ -435,7 +436,14 @@ export async function POST(request: NextRequest) {
 
       // Apply mockup if specified
       if (mockup && format !== 'pdf') {
-        screenshot = await applyMockup(screenshot, mockup);
+        try {
+          screenshot = await applyMockup(screenshot, mockup);
+          console.log('Mockup applied successfully');
+        } catch (mockupError) {
+          console.error('Mockup application failed, returning original screenshot:', mockupError);
+          // Return original screenshot without mockup if mockup fails
+          // This prevents the entire request from failing due to mockup issues
+        }
       }
 
       return new NextResponse(screenshot, {
