@@ -54,8 +54,6 @@ const screenshotSchema = z.object({
 
 // Helper function to safely perform sharp operations
 async function safeSharpResize(screenshot: Buffer, width: number, height: number, options: object): Promise<Buffer> {
-  console.log('safeSharpResize - input type:', typeof screenshot, 'isBuffer:', Buffer.isBuffer(screenshot));
-  
   if (!Buffer.isBuffer(screenshot)) {
     throw new Error(`Sharp resize input must be Buffer, got ${typeof screenshot}`);
   }
@@ -64,20 +62,13 @@ async function safeSharpResize(screenshot: Buffer, width: number, height: number
     .resize(width, height, options)
     .toBuffer();
     
-  console.log('safeSharpResize - output type:', typeof result, 'isBuffer:', Buffer.isBuffer(result));
-  return result;
+  return Buffer.from(result);
 }
 
 async function applyMockup(screenshot: Buffer, mockupType: string): Promise<Buffer> {
-  console.log('=== applyMockup DEBUG START ===');
-  console.log('screenshot type:', typeof screenshot);
-  console.log('screenshot isBuffer:', Buffer.isBuffer(screenshot));
-  console.log('screenshot constructor:', screenshot?.constructor?.name);
-  console.log('mockupType:', mockupType);
-  
   // Validate screenshot is a proper Buffer
   if (!Buffer.isBuffer(screenshot)) {
-    console.error('Invalid screenshot buffer passed to applyMockup:', typeof screenshot);
+    console.error('applyMockup received invalid input:', typeof screenshot);
     throw new Error('Screenshot must be a Buffer');
   }
 
@@ -89,10 +80,8 @@ async function applyMockup(screenshot: Buffer, mockupType: string): Promise<Buff
   const mockupPath = process.cwd() + '/public' + template.path;
 
   try {
-    console.log('About to call sharp(screenshot).metadata()');
     // Get screenshot metadata
     const screenshotMeta = await sharp(screenshot).metadata();
-    console.log('screenshotMeta obtained:', screenshotMeta);
     const { width: origWidth = 1920, height: origHeight = 1080 } = screenshotMeta;
     
     // Calculate target dimensions
@@ -161,24 +150,16 @@ async function applyMockup(screenshot: Buffer, mockupType: string): Promise<Buff
       });
     }
 
-    console.log('resizedScreenshot type:', typeof resizedScreenshot);
-    console.log('resizedScreenshot isBuffer:', Buffer.isBuffer(resizedScreenshot));
-    console.log('resizedScreenshot constructor:', resizedScreenshot?.constructor?.name);
-    
     // Load the mockup template
-    console.log('Loading mockup from path:', mockupPath);
     const mockupImage = sharp(mockupPath);
     
-    // Validate resizedScreenshot is a proper Buffer before compositing
+    // Final validation before composite
     if (!Buffer.isBuffer(resizedScreenshot)) {
-      console.error('Invalid resizedScreenshot buffer:', typeof resizedScreenshot);
-      throw new Error('Resized screenshot must be a Buffer for Sharp composite');
+      console.error('Composite input validation failed:', typeof resizedScreenshot);
+      throw new Error(`Composite input must be Buffer, got ${typeof resizedScreenshot}`);
     }
     
     // Composite the screenshot onto the mockup with proper blending
-    console.log('About to composite with placement:', template.screenshotPlacement);
-    console.log('Input for composite - type:', typeof resizedScreenshot, 'isBuffer:', Buffer.isBuffer(resizedScreenshot));
-    
     return await mockupImage
       .composite([
         {
@@ -393,14 +374,13 @@ export async function POST(request: NextRequest) {
           margin: { top: '1cm', right: '1cm', bottom: '1cm', left: '1cm' },
         });
         
-        // Ensure we have a proper Buffer
-        if (pdfBuffer instanceof Uint8Array) {
-          screenshot = Buffer.from(pdfBuffer);
-        } else if (Buffer.isBuffer(pdfBuffer)) {
-          screenshot = pdfBuffer;
-        } else {
-          console.error('Invalid PDF buffer type:', typeof pdfBuffer);
-          throw new Error('Invalid PDF buffer received from Puppeteer');
+        // Ensure we have a proper Buffer - always convert to Buffer
+        screenshot = Buffer.from(pdfBuffer);
+        
+        // Validate the conversion worked
+        if (!Buffer.isBuffer(screenshot) || screenshot.length === 0) {
+          console.error('PDF Buffer conversion failed:', typeof pdfBuffer, 'length:', pdfBuffer?.length);
+          throw new Error('Failed to convert PDF to Buffer');
         }
       } else {
         const element = selector ? await page.$(selector) : page;
@@ -414,40 +394,19 @@ export async function POST(request: NextRequest) {
           fullPage,
         });
         
-        console.log('=== SCREENSHOT BUFFER DEBUG ===');
-        console.log('screenshotBuffer type:', typeof screenshotBuffer);
-        console.log('screenshotBuffer constructor:', screenshotBuffer?.constructor?.name);
-        console.log('screenshotBuffer instanceof Uint8Array:', screenshotBuffer instanceof Uint8Array);
-        console.log('Buffer.isBuffer(screenshotBuffer):', Buffer.isBuffer(screenshotBuffer));
+        // Ensure we have a proper Buffer - always convert to Buffer
+        screenshot = Buffer.from(screenshotBuffer);
         
-        // Ensure we have a proper Buffer
-        if (screenshotBuffer instanceof Uint8Array) {
-          screenshot = Buffer.from(screenshotBuffer);
-          console.log('Converted Uint8Array to Buffer');
-        } else if (Buffer.isBuffer(screenshotBuffer)) {
-          screenshot = screenshotBuffer;
-          console.log('Using existing Buffer');
-        } else {
-          console.error('Invalid screenshot buffer type:', typeof screenshotBuffer);
-          throw new Error('Invalid screenshot buffer received from Puppeteer');
+        // Validate the conversion worked
+        if (!Buffer.isBuffer(screenshot) || screenshot.length === 0) {
+          console.error('Buffer conversion failed:', typeof screenshotBuffer, 'length:', screenshotBuffer?.length);
+          throw new Error('Failed to convert screenshot to Buffer');
         }
-        
-        console.log('Final screenshot type:', typeof screenshot);
-        console.log('Final screenshot isBuffer:', Buffer.isBuffer(screenshot));
       }
 
       // Apply mockup if specified
       if (mockup && format !== 'pdf') {
-        console.log('=== BEFORE APPLY MOCKUP ===');
-        console.log('screenshot type:', typeof screenshot);
-        console.log('screenshot isBuffer:', Buffer.isBuffer(screenshot));
-        console.log('mockup:', mockup);
-        
         screenshot = await applyMockup(screenshot, mockup);
-        
-        console.log('=== AFTER APPLY MOCKUP ===');
-        console.log('screenshot type:', typeof screenshot);
-        console.log('screenshot isBuffer:', Buffer.isBuffer(screenshot));
       }
 
       return new NextResponse(screenshot, {
