@@ -1,4 +1,4 @@
-import puppeteer from 'puppeteer';
+import { createBrowser } from '@/lib/puppeteer';
 
 interface CaptureScreenshotOptions {
   url: string;
@@ -13,9 +13,7 @@ export async function captureScreenshot({
   height = 1080,
   fullPage = false,
 }: CaptureScreenshotOptions): Promise<string> {
-  const browser = await puppeteer.launch({
-    headless: 'new',
-  });
+  const browser = await createBrowser();
 
   try {
     const page = await browser.newPage();

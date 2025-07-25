@@ -44,14 +44,15 @@ Screenshotly is an AI-powered screenshot API that automatically removes unwanted
 
 ## Tech Stack
 
-- **Frontend**: Next.js 14, React, TypeScript, Tailwind CSS
+- **Frontend**: Next.js 15, React, TypeScript, Tailwind CSS
 - **Backend**: Next.js API Routes
 - **AI**: OpenAI GPT-4 Vision API
 - **Authentication**: Clerk
 - **Database**: PostgreSQL with Prisma
 - **Rate Limiting**: Upstash Redis
-- **Screenshot Engine**: Puppeteer
+- **Screenshot Engine**: Puppeteer (Serverless-compatible)
 - **Image Processing**: Sharp
+- **Deployment**: Vercel-optimized
 
 ## Getting Started
 
@@ -218,6 +219,33 @@ npm run build
 3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
+
+## Deployment
+
+This project is optimized for **Vercel serverless deployment** with Chrome/Chromium support:
+
+### Vercel Deployment
+1. Connect your GitHub repository to Vercel
+2. Set environment variables in Vercel dashboard
+3. Deploy with automatic Chromium provisioning
+
+### Environment Configuration
+```bash
+# Required for production
+PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+NODE_ENV=production
+
+# Your other environment variables...
+DATABASE_URL=your_postgresql_url
+OPENAI_API_KEY=your_openai_key
+# ... etc
+```
+
+### Serverless Compatibility
+- Uses `puppeteer-core` + `@sparticuz/chromium`
+- Automatic environment detection (dev vs production)
+- Optimized for Vercel's 30-second function timeout
+- Built-in error handling and retries
 
 ## License
 

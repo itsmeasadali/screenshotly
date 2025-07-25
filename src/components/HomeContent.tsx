@@ -97,7 +97,7 @@ export default function HomeContent({ userId }: HomeContentProps) {
             <Sparkles className="w-4 h-4 mr-2" />
             AI-Powered Screenshots
           </Badge>
-          
+
           <h1 className="mb-6 text-4xl font-bold tracking-tight sm:text-6xl">
             Screenshot API for{" "}
             <span className="text-primary">Modern Applications</span>
@@ -229,7 +229,7 @@ export default function HomeContent({ userId }: HomeContentProps) {
               </h2>
               <p className="text-xl text-muted-foreground mb-8">
                 Get started in minutes with our RESTful API. Clean documentation, comprehensive SDKs, and responsive support.
-              </p>
+                </p>
               
               <div className="space-y-4 mb-8">
                 {[

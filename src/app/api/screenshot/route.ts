@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import puppeteer, { PuppeteerLaunchOptions, Viewport, Page } from 'puppeteer';
+import { createBrowser, type Viewport, type Page } from '@/lib/puppeteer';
 import sharp from 'sharp';
 import { z } from 'zod';
 import { validateApiKey, trackApiRequest, getRateLimitInfo } from '@/lib/api-keys';
@@ -367,12 +367,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Launch browser with appropriate settings
-    const options: PuppeteerLaunchOptions = {
-      headless: 'new',
-      args: ['--no-sandbox', '--disable-setuid-sandbox'],
-    };
-
-    const browser = await puppeteer.launch(options);
+    const browser = await createBrowser();
     const page = await browser.newPage();
 
     try {
