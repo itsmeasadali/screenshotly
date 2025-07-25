@@ -66,6 +66,10 @@ async function safeSharpResize(screenshot: Buffer, width: number, height: number
 }
 
 async function applyMockup(screenshot: Buffer, mockupType: string): Promise<Buffer> {
+  console.log('=== applyMockup called ===');
+  console.log('mockupType:', mockupType);
+  console.log('screenshot buffer size:', screenshot?.length);
+  
   // Validate screenshot is a proper Buffer
   if (!Buffer.isBuffer(screenshot)) {
     console.error('applyMockup received invalid input:', typeof screenshot);
@@ -73,11 +77,15 @@ async function applyMockup(screenshot: Buffer, mockupType: string): Promise<Buff
   }
 
   const template = mockupMap[mockupType];
+  console.log('Template found:', !!template);
+  console.log('Available mockups:', Object.keys(mockupMap));
+  
   if (!template) {
     throw new Error(`Mockup template '${mockupType}' not found`);
   }
   
   const mockupPath = process.cwd() + '/public' + template.path;
+  console.log('Template data:', JSON.stringify(template, null, 2));
 
   try {
     // Get screenshot metadata
@@ -151,7 +159,17 @@ async function applyMockup(screenshot: Buffer, mockupType: string): Promise<Buff
     }
 
     // Load the mockup template
+    console.log('Loading mockup from:', mockupPath);
     const mockupImage = sharp(mockupPath);
+    
+    // Validate mockup file exists
+    try {
+      const mockupMeta = await mockupImage.metadata();
+      console.log('Mockup metadata:', mockupMeta.width, 'x', mockupMeta.height);
+    } catch (error) {
+      console.error('Mockup file error:', error);
+      throw new Error(`Invalid mockup file: ${mockupPath}`);
+    }
     
     // Final validation before composite
     if (!Buffer.isBuffer(resizedScreenshot)) {
@@ -159,16 +177,27 @@ async function applyMockup(screenshot: Buffer, mockupType: string): Promise<Buff
       throw new Error(`Composite input must be Buffer, got ${typeof resizedScreenshot}`);
     }
     
+    console.log('About to composite - screenshot size:', resizedScreenshot.length, 'placement:', template.screenshotPlacement);
+    
+    // Create composite input object explicitly
+    const compositeInput = {
+      input: resizedScreenshot,
+      top: template.screenshotPlacement.y,
+      left: template.screenshotPlacement.x,
+      blend: 'over' as const
+    };
+    
+    console.log('Composite input object:', JSON.stringify({
+      inputType: typeof compositeInput.input,
+      inputIsBuffer: Buffer.isBuffer(compositeInput.input),
+      top: compositeInput.top,
+      left: compositeInput.left,
+      blend: compositeInput.blend
+    }));
+    
     // Composite the screenshot onto the mockup with proper blending
     return await mockupImage
-      .composite([
-        {
-          input: resizedScreenshot,
-          top: template.screenshotPlacement.y,
-          left: template.screenshotPlacement.x,
-          blend: 'over' // Ensure proper layering
-        },
-      ])
+      .composite([compositeInput])
       .png({ quality: 100, compressionLevel: 6 })
       .toBuffer();
       
