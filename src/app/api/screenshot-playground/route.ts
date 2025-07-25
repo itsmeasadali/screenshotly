@@ -356,22 +356,24 @@ export async function POST(request: NextRequest) {
 
       let screenshot: Buffer;
       if (format === 'pdf') {
-        screenshot = await page.pdf({
+        const pdfBuffer = await page.pdf({
           format: 'A4',
           printBackground: true,
           margin: { top: '1cm', right: '1cm', bottom: '1cm', left: '1cm' },
         });
+        screenshot = Buffer.from(pdfBuffer);
       } else {
         const element = selector ? await page.$(selector) : page;
         if (!element) {
           throw new Error('Element not found');
         }
 
-        screenshot = await element.screenshot({
+        const screenshotBuffer = await element.screenshot({
           type: format,
           quality: format === 'jpeg' ? quality : undefined,
           fullPage,
-        }) as Buffer;
+        });
+        screenshot = Buffer.from(screenshotBuffer);
       }
 
       // Apply mockup if specified

@@ -32,13 +32,14 @@ export async function captureScreenshot({
     });
 
     // Take screenshot
-    const screenshot = await page.screenshot({
+    const screenshotBuffer = await page.screenshot({
       fullPage,
       type: 'jpeg',
       quality: 90,
     });
 
     // Convert to base64
+    const screenshot = Buffer.from(screenshotBuffer);
     return `data:image/jpeg;base64,${screenshot.toString('base64')}`;
   } finally {
     await browser.close();
