@@ -17,13 +17,14 @@ const nextConfig: NextConfig = {
     const cspDirectives = [
       "default-src 'self'",
       isDev 
-        ? "script-src 'self' 'unsafe-eval' 'unsafe-inline' https: http:" 
-        : "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://*.clerk.com https://*.clerk.accounts.dev https://clerk.*.com https://clerk.*.app https://*.clerk.dev https://clerk.screenshotly.app",
-      "style-src 'self' 'unsafe-inline' https://*.clerk.com https://clerk.*.com https://clerk.screenshotly.app",
+        ? "script-src 'self' 'unsafe-eval' 'unsafe-inline' https: http: blob:" 
+        : "script-src 'self' 'unsafe-eval' 'unsafe-inline' blob: https://*.clerk.com https://*.clerk.accounts.dev https://clerk.*.com https://clerk.*.app https://*.clerk.dev https://clerk.screenshotly.app https://challenges.cloudflare.com https://static.cloudflareinsights.com https://*.hcaptcha.com https://hcaptcha.com https://js.hcaptcha.com https://www.gstatic.com https://www.google.com",
+      "worker-src 'self' blob:",
+      "style-src 'self' 'unsafe-inline' https://*.clerk.com https://clerk.*.com https://clerk.screenshotly.app https://*.hcaptcha.com https://hcaptcha.com https://www.gstatic.com",
       "img-src 'self' blob: data: https:",
-      "font-src 'self' https://*.clerk.com https://clerk.*.com",
-      "connect-src 'self' https://*.clerk.com https://clerk.*.com https://clerk.screenshotly.app https://*.stripe.com",
-      "frame-src 'self' https://*.clerk.com https://clerk.*.com",
+      "font-src 'self' https://*.clerk.com https://clerk.*.com https://fonts.gstatic.com",
+      "connect-src 'self' https://*.clerk.com https://clerk.*.com https://clerk.screenshotly.app https://*.stripe.com https://*.hcaptcha.com https://hcaptcha.com https://challenges.cloudflare.com https://www.google.com https://www.gstatic.com",
+      "frame-src 'self' https://*.clerk.com https://clerk.*.com https://*.hcaptcha.com https://hcaptcha.com https://newassets.hcaptcha.com https://www.google.com https://challenges.cloudflare.com",
       "object-src 'none'",
       "base-uri 'self'",
       "form-action 'self'",

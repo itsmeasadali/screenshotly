@@ -133,6 +133,40 @@ Our security measures align with:
 - **GDPR** data protection requirements
 - **Industry best practices** for SaaS applications
 
+## Debugging CSP Issues
+
+If you encounter Content Security Policy violations:
+
+1. **Check Browser Console**: Look for CSP error messages starting with "Content Security Policy"
+2. **Identify Blocked Resource**: Note the exact URL being blocked
+3. **Update CSP**: Add the domain to appropriate directive in `next.config.ts`
+
+### Common CSP Fixes
+```typescript
+// For Clerk authentication and CAPTCHA
+"script-src": "... blob: https://clerk.*.com https://challenges.cloudflare.com https://*.hcaptcha.com"
+"worker-src": "'self' blob:"
+"frame-src": "... https://www.google.com https://challenges.cloudflare.com"
+
+// For Stripe payments  
+"script-src": "... https://js.stripe.com"
+"frame-src": "... https://checkout.stripe.com"
+
+// For development (more permissive)
+"script-src": "... https: http: blob:"
+```
+
+### CAPTCHA Support
+The application supports multiple CAPTCHA providers:
+- **Cloudflare Turnstile**: `challenges.cloudflare.com`
+- **hCaptcha**: `*.hcaptcha.com`, `hcaptcha.com`
+- **Google reCAPTCHA**: `www.google.com`, `www.gstatic.com`
+
+### Key CSP Directives for Clerk
+- **`worker-src 'self' blob:`**: Required for Clerk's Web Workers
+- **`script-src blob:`**: Allows dynamic script loading from blob URLs
+- **`frame-src`**: For embedded CAPTCHA frames
+
 ## Contact
 
 For security-related questions or concerns:

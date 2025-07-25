@@ -101,36 +101,36 @@ export default function HomeContent({ userId }: HomeContentProps) {
           <h1 className="mb-6 text-4xl font-bold tracking-tight sm:text-6xl">
             Screenshot API for{" "}
             <span className="text-primary">Modern Applications</span>
-          </h1>
-          
+            </h1>
+            
           <p className="mb-8 text-xl text-muted-foreground max-w-3xl mx-auto">
             Capture clean, professional screenshots with AI that automatically removes distracting elements. 
             Perfect for AI training, documentation, and marketing.
-          </p>
+            </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
-            {userId ? (
+              {userId ? (
               <Button size="lg" asChild>
-                <Link href="/dashboard">
-                  Go to Dashboard
-                  <ArrowRight className="w-4 h-4 ml-2" />
-                </Link>
-              </Button>
-            ) : (
+                  <Link href="/dashboard">
+                    Go to Dashboard
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Link>
+                </Button>
+              ) : (
               <Button size="lg" asChild>
-                <Link href="/sign-up">
+                  <Link href="/sign-up">
                   Start Building Free
-                  <ArrowRight className="w-4 h-4 ml-2" />
-                </Link>
-              </Button>
-            )}
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Link>
+                </Button>
+              )}
             <Button size="lg" variant="outline" asChild>
               <Link href="/playground">
                 <Camera className="w-4 h-4 mr-2" />
                 Try Demo
               </Link>
-            </Button>
-          </div>
+              </Button>
+            </div>
 
           {/* Stats */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-8">
@@ -201,7 +201,7 @@ export default function HomeContent({ userId }: HomeContentProps) {
                 <CardHeader>
                   <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4">
                     <useCase.icon className="w-6 h-6 text-primary" />
-                  </div>
+              </div>
                   <CardTitle className="text-lg">{useCase.title}</CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -219,7 +219,7 @@ export default function HomeContent({ userId }: HomeContentProps) {
       <section className="px-4 py-24 bg-muted/50">
         <div className="container mx-auto max-w-6xl">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div>
+              <div>
               <Badge variant="outline" className="mb-4">
                 <Code className="w-4 h-4 mr-2" />
                 Developer Experience
@@ -243,7 +243,7 @@ export default function HomeContent({ userId }: HomeContentProps) {
                     <span>{item.text}</span>
                   </div>
                 ))}
-              </div>
+                  </div>
 
               <Button asChild>
                 <Link href="/docs">
@@ -251,7 +251,7 @@ export default function HomeContent({ userId }: HomeContentProps) {
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </Link>
               </Button>
-            </div>
+                  </div>
             
             <Card>
               <CardHeader>
