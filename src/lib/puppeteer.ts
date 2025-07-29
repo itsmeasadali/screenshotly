@@ -94,10 +94,8 @@ export async function createBrowser(): Promise<Browser> {
     // Production on Vercel with Chromium package
     console.log('Using @sparticuz/chromium for serverless environment');
     
-    // Get the executable path
-    const executablePath = await chromiumInstance.executablePath({
-      path: '/tmp/chromium'
-    });
+    // Get the executable path (no arguments for default serverless environment)
+    const executablePath = await chromiumInstance.executablePath();
     
     options = {
       args: [

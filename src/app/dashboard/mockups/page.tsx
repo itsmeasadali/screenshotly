@@ -2,6 +2,7 @@ import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import MockupManager from "@/components/MockupManager";
+import AuthenticatedLayout from "@/components/layouts/AuthenticatedLayout";
 import { ArrowLeft, Laptop, Smartphone, Monitor, Layout, Eye, Target } from "lucide-react";
 
 export default async function MockupsPage() {
@@ -12,7 +13,7 @@ export default async function MockupsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+    <AuthenticatedLayout>
       <div className="container mx-auto py-8 px-4">
         {/* Breadcrumb */}
         <nav className="flex items-center space-x-2 text-sm mb-8">
@@ -226,6 +227,6 @@ export default async function MockupsPage() {
           </section>
         </div>
       </div>
-    </div>
+    </AuthenticatedLayout>
   );
 } 

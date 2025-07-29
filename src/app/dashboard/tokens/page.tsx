@@ -2,6 +2,7 @@ import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import ApiKeyManager from "@/components/ApiKeyManager";
+import AuthenticatedLayout from "@/components/layouts/AuthenticatedLayout";
 
 export default async function TokensPage() {
   const { userId } = await auth();
@@ -11,18 +12,19 @@ export default async function TokensPage() {
   }
 
   return (
-    <div className="container mx-auto py-8 px-4">
-      <nav className="flex mb-4 text-sm text-gray-500">
-        <Link href="/dashboard" className="hover:text-gray-900">Dashboard</Link>
+    <AuthenticatedLayout>
+      <div className="container mx-auto py-8 px-4">
+      <nav className="flex mb-4 text-sm text-muted-foreground">
+        <Link href="/dashboard" className="hover:text-foreground">Dashboard</Link>
         <span className="mx-2">/</span>
-        <span className="text-gray-900">API Tokens</span>
+        <span className="text-foreground">API Tokens</span>
       </nav>
       
       <div className="flex items-center justify-between mb-8">
-        <h1 className="text-3xl font-bold">API Tokens</h1>
+        <h1 className="text-3xl font-bold text-foreground">API Tokens</h1>
         <Link
           href="/dashboard"
-          className="px-4 py-2 text-gray-600 hover:text-gray-900 flex items-center gap-2"
+          className="px-4 py-2 text-muted-foreground hover:text-foreground flex items-center gap-2"
         >
           ← Back to Dashboard
         </Link>
@@ -30,8 +32,8 @@ export default async function TokensPage() {
       
       <div className="grid gap-8">
         <section>
-          <h2 className="text-2xl font-semibold mb-4">Manage API Tokens</h2>
-          <p className="text-gray-600 mb-6">
+          <h2 className="text-2xl font-semibold mb-4 text-foreground">Manage API Tokens</h2>
+          <p className="text-muted-foreground mb-6">
             Create and manage your API tokens to authenticate requests to the Screenshotly API.
             Each token has its own rate limits and permissions.
           </p>
@@ -83,7 +85,8 @@ export default async function TokensPage() {
             </div>
           </div>
         </section>
+        </div>
       </div>
-    </div>
+    </AuthenticatedLayout>
   );
 } 

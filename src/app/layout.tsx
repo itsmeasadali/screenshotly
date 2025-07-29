@@ -1,7 +1,6 @@
 import { Inter } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import { ThemeProvider } from "@/components/theme-provider";
-import Header from "@/components/Header";
 import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 
@@ -45,10 +44,7 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <Header />
-            <main className="min-h-screen bg-background">
-              {children}
-            </main>
+            {children}
             <Toaster />
           </ThemeProvider>
         </body>

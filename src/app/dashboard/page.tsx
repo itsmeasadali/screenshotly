@@ -1,6 +1,7 @@
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import DashboardContent from "@/components/DashboardContent";
+import AuthenticatedLayout from "@/components/layouts/AuthenticatedLayout";
 
 export default async function DashboardPage() {
   const { userId } = await auth();
@@ -9,5 +10,9 @@ export default async function DashboardPage() {
     redirect("/sign-in");
   }
 
-  return <DashboardContent />;
+  return (
+    <AuthenticatedLayout>
+      <DashboardContent />
+    </AuthenticatedLayout>
+  );
 } 

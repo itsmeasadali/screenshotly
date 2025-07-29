@@ -59,48 +59,37 @@ async function safeSharpResize(screenshot: Buffer, width: number, height: number
     throw new Error(`Sharp resize input must be Buffer, got ${typeof screenshot}`);
   }
   
-  const result = await sharp(screenshot)
-    .resize(width, height, options)
-    .toBuffer();
+  try {
+    // Create a fresh Sharp instance from the buffer
+    const sharpInstance = sharp(Buffer.from(screenshot));
     
-  return Buffer.from(result);
+    // Apply resize with explicit options
+    const resizedInstance = sharpInstance.resize(width, height, options);
+    
+    // Convert to buffer
+    const result = await resizedInstance.toBuffer();
+    
+    return Buffer.from(result);
+  } catch (error) {
+    console.error('Sharp resize operation failed:', error);
+    throw new Error(`Sharp resize failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+  }
 }
 
-// Re-enabled with better debugging
 async function applyMockup(screenshot: Buffer, mockupType: string): Promise<Buffer> {
-  console.log('=== applyMockup called ===');
-  console.log('mockupType:', mockupType);
-  console.log('screenshot buffer size:', screenshot?.length);
-  
   // Validate screenshot is a proper Buffer
   if (!Buffer.isBuffer(screenshot)) {
-    console.error('applyMockup received invalid input:', typeof screenshot);
     throw new Error('Screenshot must be a Buffer');
   }
 
   const template = mockupMap[mockupType];
-  console.log('Template found:', !!template);
-  console.log('Available mockups:', Object.keys(mockupMap));
   
   if (!template) {
     throw new Error(`Mockup template '${mockupType}' not found`);
   }
   
   // Handle path differences between local and production
-  const nodeEnv = process.env.NODE_ENV;
-  const vercelEnv = process.env.VERCEL_ENV;
-  const isVercel = process.env.VERCEL === '1';
-  const isProduction = nodeEnv === 'production';
-  const isLocalDev = nodeEnv === 'development';
-  
-  console.log('Environment variables:', {
-    NODE_ENV: nodeEnv,
-    VERCEL: process.env.VERCEL,
-    VERCEL_ENV: vercelEnv,
-    isProduction,
-    isLocalDev,
-    isVercel
-  });
+  const isProduction = process.env.NODE_ENV === 'production';
   
   let mockupPath: string;
   
@@ -123,13 +112,12 @@ async function applyMockup(screenshot: Buffer, mockupType: string): Promise<Buff
       }
     }) || possiblePaths[0];
     
-    console.log('Production path search:', { possiblePaths, foundPath: mockupPath });
+
   } else {
     mockupPath = path.join(process.cwd(), 'public', template.path);
   }
   
-  console.log('Environment:', { isProduction, mockupPath });
-  console.log('Template data:', JSON.stringify(template, null, 2));
+
 
   try {
     // Get screenshot metadata
@@ -239,20 +227,33 @@ async function applyMockup(screenshot: Buffer, mockupType: string): Promise<Buff
       throw new Error('Invalid buffer for composite operation');
     }
     
-    console.log('Final composite validation - buffer size:', cleanBuffer.length, 'type:', typeof cleanBuffer);
-    
-    // Use a direct approach without intermediate objects
-    const result = await sharp(mockupPath)
-      .composite([{
-        input: cleanBuffer,
+    try {
+      // Load mockup image as buffer first
+      const mockupBuffer = await sharp(mockupPath).png().toBuffer();
+      
+      // Create fresh Sharp instance from mockup buffer
+      const mockupSharp = sharp(Buffer.from(mockupBuffer));
+      
+      // Create the composite input object with explicit types
+      const compositeOptions = [{
+        input: Buffer.from(cleanBuffer),
         top: Math.floor(template.screenshotPlacement.y),
         left: Math.floor(template.screenshotPlacement.x),
-        blend: 'over'
-      }])
-      .png({ quality: 100, compressionLevel: 6 })
-      .toBuffer();
+        blend: 'over' as const
+      }];
       
-    return Buffer.from(result);
+      // Apply composite
+      const result = await mockupSharp
+        .composite(compositeOptions)
+        .png({ quality: 100, compressionLevel: 6 })
+        .toBuffer();
+        
+      return Buffer.from(result);
+      
+    } catch (compositeError) {
+      console.error('Composite operation failed:', compositeError);
+      throw new Error(`Composite failed: ${compositeError instanceof Error ? compositeError.message : 'Unknown error'}`);
+    }
       
   } catch (error) {
     console.error('Error applying mockup:', error);
@@ -331,7 +332,6 @@ async function autoScroll(page: Page) {
 }
 
 export async function POST(request: NextRequest) {
-
   try {
     // Get the client's IP for rate limiting
     const ip = request.headers.get('x-forwarded-for') || 
@@ -486,16 +486,12 @@ export async function POST(request: NextRequest) {
         }
       }
 
-      // Apply mockup if specified - RE-ENABLED WITH BETTER DEBUGGING
-      if (mockup && format !== 'pdf') {
-        console.log('Mockup requested:', mockup);
+      // Apply mockup if specified
+      if (mockup && mockup !== 'none' && format !== 'pdf') {
         try {
-          console.log('About to call applyMockup with screenshot size:', screenshot.length);
           screenshot = await applyMockup(screenshot, mockup);
-          console.log('Mockup applied successfully, new size:', screenshot.length);
         } catch (mockupError) {
           console.error('Mockup application failed:', mockupError);
-          console.error('Error stack:', mockupError instanceof Error ? mockupError.stack : 'No stack');
           // Return original screenshot without mockup if mockup fails
           console.log('Returning original screenshot due to mockup error');
         }
@@ -512,7 +508,7 @@ export async function POST(request: NextRequest) {
     } finally {
       await browser.close();
     }
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('Playground screenshot error:', error);
 
     return NextResponse.json(

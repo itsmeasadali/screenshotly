@@ -12,6 +12,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Loader2, Download, Smartphone, Laptop, Monitor, Tablet, Lock, CheckCircle2, ScanSearch, ArrowRight, RefreshCw, ExternalLink } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import GuestLayout from '@/components/layouts/GuestLayout';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -207,25 +208,26 @@ export default function PlaygroundPage() {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white py-8">
-      <div className="container mx-auto px-4">
-        <div className="max-w-7xl mx-auto">
+    <GuestLayout>
+      <div className="py-8">
+        <div className="container mx-auto px-4">
+          <div className="max-w-7xl mx-auto">
           {/* Header */}
           <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">Screenshot Playground</h1>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            <h1 className="text-4xl font-bold text-foreground mb-4">Screenshot Playground</h1>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               Try out our AI-powered screenshot API with various options and device mockups. 
               Perfect for testing before integrating into your workflow.
             </p>
           </div>
 
           {/* Status Card */}
-          <Card className="mb-8 bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200">
+          <Card className="mb-8 bg-primary/5 border-primary/20">
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
                   <div>
-                    <h3 className="font-semibold text-blue-900">
+                    <h3 className="font-semibold text-foreground">
                       {isSignedIn ? (
                         <span className="flex items-center gap-2">
                           <CheckCircle2 className="w-5 h-5 text-green-600" />
@@ -235,7 +237,7 @@ export default function PlaygroundPage() {
                         'Anonymous User'
                       )}
                     </h3>
-                    <p className="text-sm text-blue-700 mt-1">
+                    <p className="text-sm text-muted-foreground mt-1">
                       {isSignedIn 
                         ? 'You have access to 500 requests per day and AI features'
                         : 'Anonymous users: 50 requests per hour. Sign in for higher limits and AI features'
@@ -308,7 +310,7 @@ export default function PlaygroundPage() {
                             <div className="flex items-center gap-2">
                               <option.icon className="w-4 h-4" />
                               <span>{option.name}</span>
-                              <span className="text-gray-500 text-sm">({option.dimensions})</span>
+                              <span className="text-muted-foreground text-sm">({option.dimensions})</span>
                             </div>
                           </SelectItem>
                         ))}
@@ -329,7 +331,7 @@ export default function PlaygroundPage() {
                             <div className="flex items-center gap-2">
                               <option.icon className="w-4 h-4" />
                               <span>{option.name}</span>
-                              <span className="text-gray-500 text-sm">({option.dimensions})</span>
+                              <span className="text-muted-foreground text-sm">({option.dimensions})</span>
                             </div>
                           </SelectItem>
                         ))}
@@ -338,17 +340,17 @@ export default function PlaygroundPage() {
                     
                     {/* Smart suggestions */}
                     {mockup !== 'none' && device !== getSuggestedDevice(mockup) && (
-                      <div className="flex items-start gap-2 p-3 bg-amber-50 border border-amber-200 rounded-lg">
-                        <div className="w-4 h-4 text-amber-600 mt-0.5">💡</div>
+                      <div className="flex items-start gap-2 p-3 bg-yellow-50 dark:bg-yellow-950/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
+                        <div className="w-4 h-4 text-yellow-600 dark:text-yellow-400 mt-0.5">💡</div>
                         <div className="text-sm">
-                          <p className="text-amber-800 font-medium">Viewport Suggestion</p>
-                          <p className="text-amber-700 mt-1">
+                          <p className="text-yellow-800 dark:text-yellow-200 font-medium">Viewport Suggestion</p>
+                          <p className="text-yellow-700 dark:text-yellow-300 mt-1">
                             For best results with {mockupOptions.find(m => m.id === mockup)?.name}, 
                             consider using <strong>{getSuggestedDevice(mockup)}</strong> viewport.
                           </p>
                           <button
                             onClick={() => setDevice(getSuggestedDevice(mockup))}
-                            className="text-amber-600 hover:text-amber-800 underline text-sm mt-1"
+                            className="text-yellow-600 dark:text-yellow-400 hover:text-yellow-800 dark:hover:text-yellow-200 underline text-sm mt-1"
                           >
                             Apply suggestion
                           </button>
@@ -377,9 +379,9 @@ export default function PlaygroundPage() {
                     </Select>
                   </div>
 
-                  {/* Advanced Options */}
+                                      {/* Advanced Options */}
                   <div className="space-y-4 border-t pt-4">
-                    <h4 className="font-medium text-sm text-gray-900">Advanced Options</h4>
+                    <h4 className="font-medium text-sm text-foreground">Advanced Options</h4>
                     
                     {/* JPEG Quality */}
                     {format === 'jpeg' && (
@@ -408,7 +410,7 @@ export default function PlaygroundPage() {
                         onChange={(e) => setDelay(Number(e.target.value))}
                         className="w-full"
                       />
-                      <p className="text-xs text-gray-500">
+                      <p className="text-xs text-muted-foreground">
                         Wait for dynamic content and animations to load
                       </p>
                     </div>
@@ -417,7 +419,7 @@ export default function PlaygroundPage() {
                     <div className="flex items-center justify-between">
                       <div>
                         <Label htmlFor="full-page">Capture full page</Label>
-                        <p className="text-xs text-gray-500">Capture entire scrollable content</p>
+                        <p className="text-xs text-muted-foreground">Capture entire scrollable content</p>
                       </div>
                       <Switch
                         id="full-page"
@@ -431,7 +433,7 @@ export default function PlaygroundPage() {
                       <div className="flex items-center justify-between">
                         <div>
                           <Label>AI Element Removal</Label>
-                          <p className="text-xs text-gray-500">
+                          <p className="text-xs text-muted-foreground">
                             {isSignedIn ? 'Remove ads, banners, and popups' : 'Requires authentication'}
                           </p>
                         </div>
@@ -455,7 +457,7 @@ export default function PlaygroundPage() {
                     <Button
                       onClick={captureScreenshot}
                       disabled={loading || !url}
-                      className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700"
+                      className="w-full"
                       size="lg"
                     >
                       {loading ? (
@@ -510,14 +512,14 @@ export default function PlaygroundPage() {
                   {loading && (
                     <div className="flex flex-col items-center justify-center py-16 space-y-4">
                       <div className="relative">
-                        <Monitor className="w-16 h-16 text-gray-300" />
+                        <Monitor className="w-16 h-16 text-muted-foreground" />
                         <div className="absolute inset-0 flex items-center justify-center">
-                          <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+                          <Loader2 className="w-8 h-8 animate-spin text-primary" />
                         </div>
                       </div>
                       <div className="text-center">
-                        <p className="font-medium text-gray-900">Processing your screenshot...</p>
-                        <p className="text-sm text-gray-500 mt-1">This usually takes a few seconds</p>
+                        <p className="font-medium text-foreground">Processing your screenshot...</p>
+                        <p className="text-sm text-muted-foreground mt-1">This usually takes a few seconds</p>
                       </div>
                     </div>
                   )}
@@ -534,14 +536,14 @@ export default function PlaygroundPage() {
                   {result && (
                     <div className="space-y-4">
                       {successMessage && (
-                        <Alert className="bg-green-50 border-green-200">
-                          <CheckCircle2 className="h-4 w-4 text-green-600" />
-                          <AlertTitle className="text-green-800">Success!</AlertTitle>
-                          <AlertDescription className="text-green-700">{successMessage}</AlertDescription>
+                        <Alert className="bg-green-50 dark:bg-green-950/20 border-green-200 dark:border-green-800">
+                          <CheckCircle2 className="h-4 w-4 text-green-600 dark:text-green-400" />
+                          <AlertTitle className="text-green-800 dark:text-green-200">Success!</AlertTitle>
+                          <AlertDescription className="text-green-700 dark:text-green-300">{successMessage}</AlertDescription>
                         </Alert>
                       )}
                       
-                      <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg overflow-hidden border-2 border-dashed border-gray-200">
+                      <div className="bg-muted/50 rounded-lg overflow-hidden border-2 border-dashed border-border">
                         <Image
                           src={result}
                           alt="Screenshot"
@@ -568,10 +570,10 @@ export default function PlaygroundPage() {
 
                   {!result && !loading && !hasAttempted && (
                     <div className="flex flex-col items-center justify-center py-16 space-y-4 text-center">
-                      <Monitor className="w-16 h-16 text-gray-300" />
+                      <Monitor className="w-16 h-16 text-muted-foreground" />
                       <div>
-                        <p className="font-medium text-gray-900">Ready to capture</p>
-                        <p className="text-sm text-gray-500 mt-1">
+                        <p className="font-medium text-foreground">Ready to capture</p>
+                        <p className="text-sm text-muted-foreground mt-1">
                           Your screenshot will appear here once captured
                         </p>
                       </div>
@@ -581,8 +583,8 @@ export default function PlaygroundPage() {
               </Card>
 
               {/* Quick Examples */}
-              <div className="bg-white border border-gray-200 rounded-lg p-4">
-                <h3 className="font-medium text-gray-900 mb-3">Quick Start Examples</h3>
+              <Card className="p-4">
+                <h3 className="font-medium text-foreground mb-3">Quick Start Examples</h3>
                 <div className="grid grid-cols-1 gap-2">
                   <button
                     onClick={() => {
@@ -591,10 +593,10 @@ export default function PlaygroundPage() {
                       setDevice('desktop');
                       setQuality(90);
                     }}
-                    className="text-left p-2 rounded bg-gray-50 hover:bg-gray-100 text-sm"
+                    className="text-left p-2 rounded bg-muted hover:bg-muted/80 text-sm"
                   >
                     <div className="font-medium">GitHub Homepage</div>
-                    <div className="text-gray-600">Desktop • Browser Light</div>
+                    <div className="text-muted-foreground">Desktop • Browser Light</div>
                   </button>
                   <button
                     onClick={() => {
@@ -603,10 +605,10 @@ export default function PlaygroundPage() {
                       setDevice('laptop');
                       setQuality(95);
                     }}
-                    className="text-left p-2 rounded bg-gray-50 hover:bg-gray-100 text-sm"
+                    className="text-left p-2 rounded bg-muted hover:bg-muted/80 text-sm"
                   >
                     <div className="font-medium">Tailwind CSS</div>
-                    <div className="text-gray-600">Laptop • MacBook Pro</div>
+                    <div className="text-muted-foreground">Laptop • MacBook Pro</div>
                   </button>
                   <button
                     onClick={() => {
@@ -615,10 +617,10 @@ export default function PlaygroundPage() {
                       setDevice('mobile');
                       setQuality(90);
                     }}
-                    className="text-left p-2 rounded bg-gray-50 hover:bg-gray-100 text-sm"
+                    className="text-left p-2 rounded bg-muted hover:bg-muted/80 text-sm"
                   >
                     <div className="font-medium">Stripe Mobile</div>
-                    <div className="text-gray-600">Mobile • iPhone 14 Pro</div>
+                    <div className="text-muted-foreground">Mobile • iPhone 14 Pro</div>
                   </button>
                   <button
                     onClick={() => {
@@ -627,17 +629,18 @@ export default function PlaygroundPage() {
                       setDevice('tablet');
                       setQuality(95);
                     }}
-                    className="text-left p-2 rounded bg-gray-50 hover:bg-gray-100 text-sm"
+                    className="text-left p-2 rounded bg-muted hover:bg-muted/80 text-sm"
                   >
                     <div className="font-medium">iPad Pro Showcase</div>
-                    <div className="text-gray-600">Tablet • iPad Pro 12.9&quot;</div>
+                    <div className="text-muted-foreground">Tablet • iPad Pro 12.9&quot;</div>
                   </button>
                 </div>
-              </div>
+              </Card>
             </div>
+          </div>
           </div>
         </div>
       </div>
-    </div>
+    </GuestLayout>
   );
-} 
+}
