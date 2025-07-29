@@ -6,6 +6,7 @@ import { z } from 'zod';
 import { checkRateLimit } from '@/utils/rateLimit';
 import { detectElements } from '@/lib/ai/element-detection';
 import { mockupTemplates } from '@/data/mockupTemplates';
+import path from 'path';
 
 // Predefined device viewports
 const deviceViewports = {
@@ -65,6 +66,7 @@ async function safeSharpResize(screenshot: Buffer, width: number, height: number
   return Buffer.from(result);
 }
 
+// Re-enabled with better debugging
 async function applyMockup(screenshot: Buffer, mockupType: string): Promise<Buffer> {
   console.log('=== applyMockup called ===');
   console.log('mockupType:', mockupType);
@@ -84,7 +86,49 @@ async function applyMockup(screenshot: Buffer, mockupType: string): Promise<Buff
     throw new Error(`Mockup template '${mockupType}' not found`);
   }
   
-  const mockupPath = process.cwd() + '/public' + template.path;
+  // Handle path differences between local and production
+  const nodeEnv = process.env.NODE_ENV;
+  const vercelEnv = process.env.VERCEL_ENV;
+  const isVercel = process.env.VERCEL === '1';
+  const isProduction = nodeEnv === 'production';
+  const isLocalDev = nodeEnv === 'development';
+  
+  console.log('Environment variables:', {
+    NODE_ENV: nodeEnv,
+    VERCEL: process.env.VERCEL,
+    VERCEL_ENV: vercelEnv,
+    isProduction,
+    isLocalDev,
+    isVercel
+  });
+  
+  let mockupPath: string;
+  
+  if (isProduction) {
+    // In production, try multiple possible paths
+    const possiblePaths = [
+      path.join(process.cwd(), 'public', template.path),
+      path.join(process.cwd(), '.next', 'static', template.path),
+      path.join(process.cwd(), 'build', 'public', template.path),
+      path.join('.', 'public', template.path),
+      path.join('.', template.path)
+    ];
+    
+    const fs = await import('fs');
+    mockupPath = possiblePaths.find(filePath => {
+      try {
+        return fs.existsSync(filePath);
+      } catch {
+        return false;
+      }
+    }) || possiblePaths[0];
+    
+    console.log('Production path search:', { possiblePaths, foundPath: mockupPath });
+  } else {
+    mockupPath = path.join(process.cwd(), 'public', template.path);
+  }
+  
+  console.log('Environment:', { isProduction, mockupPath });
   console.log('Template data:', JSON.stringify(template, null, 2));
 
   try {
@@ -167,7 +211,15 @@ async function applyMockup(screenshot: Buffer, mockupType: string): Promise<Buff
       const mockupMeta = await mockupImage.metadata();
       console.log('Mockup metadata:', mockupMeta.width, 'x', mockupMeta.height);
     } catch (error) {
-      console.error('Mockup file error:', error);
+      console.error('Mockup file not accessible:', error);
+      console.log('Attempted path:', mockupPath);
+      
+      // In production, if mockup files aren't accessible, return original screenshot
+      if (isProduction) {
+        console.log('Returning original screenshot due to mockup file access issue');
+        return screenshot;
+      }
+      
       throw new Error(`Invalid mockup file: ${mockupPath}`);
     }
     
@@ -434,15 +486,18 @@ export async function POST(request: NextRequest) {
         }
       }
 
-      // Apply mockup if specified
+      // Apply mockup if specified - RE-ENABLED WITH BETTER DEBUGGING
       if (mockup && format !== 'pdf') {
+        console.log('Mockup requested:', mockup);
         try {
+          console.log('About to call applyMockup with screenshot size:', screenshot.length);
           screenshot = await applyMockup(screenshot, mockup);
-          console.log('Mockup applied successfully');
+          console.log('Mockup applied successfully, new size:', screenshot.length);
         } catch (mockupError) {
-          console.error('Mockup application failed, returning original screenshot:', mockupError);
+          console.error('Mockup application failed:', mockupError);
+          console.error('Error stack:', mockupError instanceof Error ? mockupError.stack : 'No stack');
           // Return original screenshot without mockup if mockup fails
-          // This prevents the entire request from failing due to mockup issues
+          console.log('Returning original screenshot due to mockup error');
         }
       }
 
