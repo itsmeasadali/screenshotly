@@ -1,21 +1,76 @@
+import { Metadata } from 'next';
 import GuestLayout from '@/components/layouts/GuestLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { JsonLd } from "@/components/seo";
+import { getBreadcrumbSchema, getFAQSchema } from "@/lib/seo/structured-data";
 import Link from 'next/link';
-import { 
-  MessageCircle, 
-  FileText, 
-  Code, 
-  Zap, 
-  Shield, 
+import {
+  MessageCircle,
+  FileText,
+  Code,
+  Zap,
+  Shield,
   HelpCircle,
   ExternalLink,
   Mail,
   BookOpen
 } from 'lucide-react';
 
+const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://screenshotly.app';
+
+export const metadata: Metadata = {
+  title: "Help Center - Screenshot API Documentation & Support",
+  description: "Get help with Screenshotly's screenshot API. Find answers to common questions, explore documentation, API reference, and contact our support team.",
+  keywords: [
+    "screenshot API help",
+    "screenshot API documentation",
+    "Screenshotly support",
+    "API troubleshooting",
+    "screenshot API FAQ",
+  ],
+  alternates: {
+    canonical: "/help",
+  },
+};
+
+const faqs = [
+  {
+    question: "How do I get started with the Screenshotly API?",
+    answer: "Sign up for a free account, generate your API key from the dashboard, and make your first request to our screenshot endpoint. Check our Getting Started guide for detailed instructions."
+  },
+  {
+    question: "What are the rate limits for different plans?",
+    answer: "Free plans include 100 requests per hour, Pro plans get 1,000 requests per hour, and Enterprise plans have custom limits. View your current usage in the dashboard."
+  },
+  {
+    question: "Can I capture screenshots of password-protected sites?",
+    answer: "Yes, you can include authentication headers or use our login flow parameters to capture screenshots of protected content. See our authentication documentation for details."
+  },
+  {
+    question: "What image formats are supported?",
+    answer: "We support PNG, JPEG, and PDF formats. PNG is recommended for screenshots with transparency, JPEG for smaller file sizes, and PDF for document captures."
+  },
+  {
+    question: "How do I apply device mockups to my screenshots?",
+    answer: "Use the mockup parameter in your API request. We offer various device frames including phones, tablets, laptops, and browsers. Check our mockup gallery for available options."
+  },
+  {
+    question: "What happens if a screenshot capture fails?",
+    answer: "Failed captures return an error response with a detailed message. Common causes include JavaScript errors, network timeouts, or blocked resources. We recommend implementing retry logic with exponential backoff."
+  },
+  {
+    question: "How do I remove cookie banners and popups?",
+    answer: "Enable our AI-powered removal feature by setting aiRemoval.enabled to true in your request. You can specify which element types to remove including cookie banners, chat widgets, and newsletter popups."
+  }
+];
+
 export default function HelpPage() {
+  const breadcrumbs = [
+    { name: "Home", url: BASE_URL },
+    { name: "Help Center", url: `${BASE_URL}/help` },
+  ];
   const helpCategories = [
     {
       icon: Zap,
@@ -89,6 +144,9 @@ export default function HelpPage() {
 
   return (
     <GuestLayout>
+      <JsonLd data={getBreadcrumbSchema(breadcrumbs)} />
+      <JsonLd data={getFAQSchema(faqs)} />
+
       <div className="container mx-auto px-4 py-12 max-w-6xl">
         {/* Header */}
         <div className="text-center mb-16">
@@ -111,9 +169,9 @@ export default function HelpPage() {
                 <CardDescription>{link.description}</CardDescription>
               </CardHeader>
               <CardContent>
-                <Button 
-                  asChild 
-                  variant="outline" 
+                <Button
+                  asChild
+                  variant="outline"
                   className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-colors"
                 >
                   {link.external ? (
@@ -161,28 +219,7 @@ export default function HelpPage() {
         <div className="mb-16">
           <h2 className="text-3xl font-bold text-foreground mb-8 text-center">Frequently Asked Questions</h2>
           <div className="grid gap-6 max-w-4xl mx-auto">
-            {[
-              {
-                question: "How do I get started with the Screenshotly API?",
-                answer: "Sign up for a free account, generate your API key from the dashboard, and make your first request to our screenshot endpoint. Check our Getting Started guide for detailed instructions."
-              },
-              {
-                question: "What are the rate limits for different plans?",
-                answer: "Free plans include 100 requests per hour, Pro plans get 1,000 requests per hour, and Enterprise plans have custom limits. View your current usage in the dashboard."
-              },
-              {
-                question: "Can I capture screenshots of password-protected sites?",
-                answer: "Yes, you can include authentication headers or use our login flow parameters to capture screenshots of protected content. See our authentication documentation for details."
-              },
-              {
-                question: "What image formats are supported?",
-                answer: "We support PNG, JPEG, and PDF formats. PNG is recommended for screenshots with transparency, JPEG for smaller file sizes, and PDF for document captures."
-              },
-              {
-                question: "How do I apply device mockups to my screenshots?",
-                answer: "Use the mockup parameter in your API request. We offer various device frames including phones, tablets, laptops, and browsers. Check our mockup gallery for available options."
-              }
-            ].map((faq, index) => (
+            {faqs.map((faq, index) => (
               <Card key={index} className="group hover:shadow-md transition-all duration-300">
                 <CardHeader>
                   <CardTitle className="text-lg flex items-center gap-2">
@@ -220,7 +257,7 @@ export default function HelpPage() {
           </div>
           <div className="mt-6 flex flex-wrap gap-2 justify-center">
             <Badge variant="outline">24/7 Support</Badge>
-                         <Badge variant="outline">&lt; 2 Hour Response</Badge>
+            <Badge variant="outline">&lt; 2 Hour Response</Badge>
             <Badge variant="outline">Expert Team</Badge>
           </div>
         </div>

@@ -44,9 +44,37 @@ export default function CompareIndexPage() {
                         <h1 className="text-4xl font-bold mb-4">
                             Screenshot API Comparisons
                         </h1>
-                        <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+                        <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
                             See how Screenshotly compares to other screenshot tools and why developers are making the switch
                         </p>
+                    </div>
+
+                    {/* Intro Content */}
+                    <div className="prose prose-gray dark:prose-invert max-w-3xl mx-auto mb-12 text-center">
+                        <p className="text-muted-foreground leading-relaxed">
+                            Choosing the right screenshot API matters. The wrong choice means battling with unreliable captures, missing features, or unexpected costs.
+                            We&apos;ve created detailed, honest comparisons between Screenshotly and every major alternative—from self-hosted solutions like Puppeteer to commercial APIs like ScreenshotAPI and Urlbox.
+                        </p>
+                        <p className="text-muted-foreground leading-relaxed">
+                            Each comparison breaks down features, pricing, ease of use, and real-world performance.
+                            Whether you&apos;re evaluating options for the first time or considering a switch, these guides help you make an informed decision.
+                        </p>
+                    </div>
+
+                    {/* Highlights */}
+                    <div className="grid md:grid-cols-3 gap-6 mb-16">
+                        <div className="text-center p-6 bg-muted/50 rounded-xl">
+                            <div className="text-3xl font-bold text-primary mb-2">8</div>
+                            <div className="text-sm text-muted-foreground">Competitor comparisons</div>
+                        </div>
+                        <div className="text-center p-6 bg-muted/50 rounded-xl">
+                            <div className="text-3xl font-bold text-primary mb-2">50%+</div>
+                            <div className="text-sm text-muted-foreground">Typical cost savings</div>
+                        </div>
+                        <div className="text-center p-6 bg-muted/50 rounded-xl">
+                            <div className="text-3xl font-bold text-primary mb-2">&lt; 1 hr</div>
+                            <div className="text-sm text-muted-foreground">Average migration time</div>
+                        </div>
                     </div>
 
                     {/* Comparisons Grid */}

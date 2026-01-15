@@ -56,16 +56,44 @@ export default function BlogIndexPage() {
             <div className="py-16">
                 <div className="container mx-auto px-4 max-w-6xl">
                     {/* Header */}
-                    <div className="text-center mb-16">
+                    <div className="text-center mb-12">
                         <Badge variant="secondary" className="mb-4">
                             Blog
                         </Badge>
                         <h1 className="text-4xl font-bold mb-4">
                             Screenshot API Blog
                         </h1>
-                        <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+                        <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
                             Tutorials, guides, and best practices for capturing perfect screenshots
                         </p>
+                    </div>
+
+                    {/* Intro Content */}
+                    <div className="prose prose-gray dark:prose-invert max-w-3xl mx-auto mb-12 text-center">
+                        <p className="text-muted-foreground leading-relaxed">
+                            Learn how to build powerful screenshot automation from developers who&apos;ve done it at scale.
+                            Our blog covers everything from basic API integration to advanced workflows like visual testing, competitive monitoring, and real-time OG image generation.
+                        </p>
+                        <p className="text-muted-foreground leading-relaxed">
+                            Each article includes working code examples, performance benchmarks, and practical tips you can implement immediately.
+                            Whether you&apos;re just getting started or optimizing an existing system, you&apos;ll find actionable insights here.
+                        </p>
+                    </div>
+
+                    {/* Highlights */}
+                    <div className="grid md:grid-cols-3 gap-6 mb-16">
+                        <div className="text-center p-6 bg-muted/50 rounded-xl">
+                            <div className="text-3xl font-bold text-primary mb-2">{blogPosts.length}+</div>
+                            <div className="text-sm text-muted-foreground">In-depth articles</div>
+                        </div>
+                        <div className="text-center p-6 bg-muted/50 rounded-xl">
+                            <div className="text-3xl font-bold text-primary mb-2">Weekly</div>
+                            <div className="text-sm text-muted-foreground">New content published</div>
+                        </div>
+                        <div className="text-center p-6 bg-muted/50 rounded-xl">
+                            <div className="text-3xl font-bold text-primary mb-2">5 min</div>
+                            <div className="text-sm text-muted-foreground">Average read time</div>
+                        </div>
                     </div>
 
                     {/* Featured Posts */}

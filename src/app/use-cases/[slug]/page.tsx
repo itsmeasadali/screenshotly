@@ -131,6 +131,18 @@ export default async function UseCasePage({ params }: Props) {
                         </p>
                     </header>
 
+                    {/* Long Description */}
+                    {'longDescription' in useCase && useCase.longDescription && (
+                        <section className="mb-12 prose prose-gray dark:prose-invert max-w-none">
+                            <h2 className="text-2xl font-semibold mb-4">Overview</h2>
+                            {useCase.longDescription.split('\n\n').map((paragraph, index) => (
+                                <p key={index} className="text-muted-foreground mb-4 leading-relaxed">
+                                    {paragraph}
+                                </p>
+                            ))}
+                        </section>
+                    )}
+
                     {/* Benefits */}
                     <section className="mb-12">
                         <h2 className="text-2xl font-semibold mb-6">Key Benefits</h2>
@@ -143,6 +155,40 @@ export default async function UseCasePage({ params }: Props) {
                             ))}
                         </div>
                     </section>
+
+                    {/* Metrics */}
+                    {'metrics' in useCase && useCase.metrics && (
+                        <section className="mb-12">
+                            <h2 className="text-2xl font-semibold mb-6">Results You Can Expect</h2>
+                            <div className="grid md:grid-cols-3 gap-6">
+                                {useCase.metrics.map((metric, index) => (
+                                    <div key={index} className="text-center p-6 bg-primary/5 rounded-xl border border-primary/10">
+                                        <div className="text-3xl font-bold text-primary mb-2">{metric.stat}</div>
+                                        <div className="text-sm text-muted-foreground">{metric.label}</div>
+                                    </div>
+                                ))}
+                            </div>
+                        </section>
+                    )}
+
+                    {/* How It Works */}
+                    {'steps' in useCase && useCase.steps && (
+                        <section className="mb-12">
+                            <h2 className="text-2xl font-semibold mb-6">How It Works</h2>
+                            <div className="space-y-4">
+                                {useCase.steps.map((step, index) => (
+                                    <div key={index} className="flex gap-4">
+                                        <div className="flex-shrink-0 w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-medium text-sm">
+                                            {index + 1}
+                                        </div>
+                                        <div className="flex-1 pt-1">
+                                            <p className="text-foreground">{step}</p>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </section>
+                    )}
 
                     {/* Code Example */}
                     <section className="mb-12">

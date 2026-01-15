@@ -37,16 +37,43 @@ export default function IntegrationsIndexPage() {
             <div className="py-16">
                 <div className="container mx-auto px-4 max-w-6xl">
                     {/* Header */}
-                    <div className="text-center mb-16">
+                    <div className="text-center mb-12">
                         <Badge variant="secondary" className="mb-4">
                             Integrations
                         </Badge>
                         <h1 className="text-4xl font-bold mb-4">
                             Screenshot API Integrations
                         </h1>
-                        <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+                        <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
                             Native code examples for every major language and no-code platform integrations
                         </p>
+                    </div>
+
+                    {/* Intro Content */}
+                    <div className="prose prose-gray dark:prose-invert max-w-3xl mx-auto mb-12 text-center">
+                        <p className="text-muted-foreground leading-relaxed">
+                            Screenshotly&apos;s REST API works with any HTTP client, but we know developers prefer copy-paste code examples in their language of choice.
+                            That&apos;s why we&apos;ve created detailed integration guides for JavaScript, Python, PHP, Ruby, Go, and more—each with production-ready code you can use immediately.
+                        </p>
+                        <p className="text-muted-foreground leading-relaxed">
+                            Not a coder? No problem. Our no-code platform integrations let you connect Screenshotly with Zapier, Make, and n8n to build automated screenshot workflows without writing a single line of code.
+                        </p>
+                    </div>
+
+                    {/* Highlights */}
+                    <div className="grid md:grid-cols-3 gap-6 mb-16">
+                        <div className="text-center p-6 bg-muted/50 rounded-xl">
+                            <div className="text-3xl font-bold text-primary mb-2">7+</div>
+                            <div className="text-sm text-muted-foreground">Programming languages</div>
+                        </div>
+                        <div className="text-center p-6 bg-muted/50 rounded-xl">
+                            <div className="text-3xl font-bold text-primary mb-2">3</div>
+                            <div className="text-sm text-muted-foreground">No-code platforms</div>
+                        </div>
+                        <div className="text-center p-6 bg-muted/50 rounded-xl">
+                            <div className="text-3xl font-bold text-primary mb-2">100%</div>
+                            <div className="text-sm text-muted-foreground">Copy-paste ready code</div>
+                        </div>
                     </div>
 
                     {/* Languages Section */}
