@@ -9,6 +9,7 @@ const isPublicRoute = createRouteMatcher([
   "/privacy",
   "/terms",
   "/help",
+  "/help/(.*)",
   "/status",
   "/cookies",
   "/gdpr",
@@ -21,13 +22,22 @@ const isPublicRoute = createRouteMatcher([
   "/api/screenshot-playground",
   "/api/mockups(.*)",
   "/api/webhook/clerk",
-  "/api/webhook/stripe"
+  "/api/webhook/stripe",
+  // pSEO pages - must be public for Google to crawl
+  "/use-cases",
+  "/use-cases/(.*)",
+  "/integrations",
+  "/integrations/(.*)",
+  "/compare",
+  "/compare/(.*)",
+  "/blog",
+  "/blog/(.*)",
 ]);
 
 export default clerkMiddleware(async (auth, req) => {
   // Security headers for all requests
   const response = NextResponse.next();
-  
+
   // Add security headers
   response.headers.set('X-Content-Type-Options', 'nosniff');
   response.headers.set('X-Frame-Options', 'DENY');
