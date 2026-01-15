@@ -31,7 +31,7 @@ export default function Footer() {
               <Link href="/pricing" className="block text-sm text-muted-foreground hover:text-foreground transition-colors">
                 Pricing
               </Link>
-              <Link href="https://help.screenshotly.app" className="block text-sm text-muted-foreground hover:text-foreground transition-colors" target="_blank" rel="noopener noreferrer">
+              <Link href="https://docs.screenshotly.app" className="block text-sm text-muted-foreground hover:text-foreground transition-colors" target="_blank" rel="noopener noreferrer">
                 Documentation
               </Link>
             </nav>
@@ -53,11 +53,11 @@ export default function Footer() {
 
         <div className="border-t pt-8 mt-8 flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
           <p className="text-sm text-muted-foreground">
-            © 2024 Screenshotly. All rights reserved.
+            © 2025 Screenshotly. All rights reserved.
           </p>
           <div className="flex items-center space-x-1 text-sm text-muted-foreground">
             <span>Made with</span>
-            <Heart className="w-4 h-4 text-red-500 fill-current" />
+            <Heart className="w-4 h-4 text-foreground fill-current" />
             <span>for developers</span>
           </div>
         </div>

@@ -67,7 +67,7 @@ export default function HelpPage() {
     {
       title: "Full Documentation",
       description: "Complete guides and API reference",
-      href: "https://help.screenshotly.app",
+      href: "https://docs.screenshotly.app",
       icon: BookOpen,
       external: true
     },

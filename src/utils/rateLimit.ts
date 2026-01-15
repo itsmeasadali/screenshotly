@@ -1,14 +1,27 @@
-import { Redis } from '@upstash/redis';
+import { createClient, RedisClientType } from 'redis';
 
-if (!process.env.UPSTASH_REDIS_REST_URL || !process.env.UPSTASH_REDIS_REST_TOKEN) {
-  throw new Error('Redis configuration is missing. Please set UPSTASH_REDIS_REST_URL and UPSTASH_REDIS_REST_TOKEN environment variables.');
+// Initialize Redis with environment variables (only if available)
+let redis: RedisClientType | null = null;
+
+if (process.env.REDIS_URL) {
+  try {
+    // Clean the URL by removing any extra quotes
+    const cleanUrl = process.env.REDIS_URL.replace(/^["']|["']$/g, '');
+    
+    redis = createClient({
+      url: cleanUrl,
+    });
+    
+    // Connect to Redis
+    redis.connect().catch((error) => {
+      console.warn('Failed to connect to Redis:', error);
+      redis = null;
+    });
+  } catch (error) {
+    console.warn('Failed to initialize Redis:', error);
+    redis = null;
+  }
 }
-
-// Initialize Redis with environment variables
-const redis = new Redis({
-  url: process.env.UPSTASH_REDIS_REST_URL,
-  token: process.env.UPSTASH_REDIS_REST_TOKEN,
-});
 
 interface RateLimitEntry {
   count: number;
@@ -43,13 +56,25 @@ export const RATE_LIMITS: Record<string, RateLimitTier> = {
 };
 
 export async function checkRateLimit(identifier: string, tier: string = 'free'): Promise<RateLimitResult> {
+  // If Redis is not available, allow all requests (for build time)
+  if (!redis) {
+    const limits = RATE_LIMITS[tier] || RATE_LIMITS.free;
+    return {
+      success: true,
+      limit: limits.requestsPerWindow,
+      remaining: limits.requestsPerWindow,
+      reset: Date.now() + (limits.windowInHours * 3600000)
+    };
+  }
+
   const now = Date.now();
   const limits = RATE_LIMITS[tier] || RATE_LIMITS.free;
   const windowInMs = limits.windowInHours * 3600000;
   const key = `ratelimit:${identifier}`;
 
   // Get current count and reset time from Redis
-  const entry = await redis.get<RateLimitEntry>(key);
+  const entryString = await redis!.get(key);
+  const entry: RateLimitEntry | null = entryString ? JSON.parse(entryString) : null;
   
   // If no entry exists or it's expired, create a new one
   if (!entry || entry.reset <= now) {
@@ -57,7 +82,7 @@ export async function checkRateLimit(identifier: string, tier: string = 'free'):
       count: 1,
       reset: now + windowInMs,
     };
-    await redis.set(key, newEntry, { ex: Math.ceil(windowInMs / 1000) });
+    await redis!.setEx(key, Math.ceil(windowInMs / 1000), JSON.stringify(newEntry));
     return {
       success: true,
       limit: limits.requestsPerWindow,
@@ -72,10 +97,10 @@ export async function checkRateLimit(identifier: string, tier: string = 'free'):
 
   // Increment count if successful
   if (success) {
-    await redis.set(key, {
+    await redis!.setEx(key, Math.ceil((entry.reset - now) / 1000), JSON.stringify({
       ...entry,
       count: entry.count + 1,
-    }, { ex: Math.ceil((entry.reset - now) / 1000) });
+    }));
   }
 
   return {

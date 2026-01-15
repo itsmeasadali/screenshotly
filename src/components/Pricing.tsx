@@ -196,22 +196,22 @@ export default function Pricing() {
       {/* Pricing Cards */}
       <div className="grid lg:grid-cols-2 gap-8 max-w-5xl mx-auto mb-20">
         {plans.map((plan) => (
-          <Card 
-            key={plan.id}
-            className={`relative ${
-              plan.popular 
-                ? 'border-primary shadow-lg' 
-                : ''
-            }`}
-          >
+          <div key={plan.id} className="relative">
             {plan.badge && (
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                <Badge>
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-10">
+                <Badge className="bg-primary text-primary-foreground border-0 px-3 py-1">
                   <Star className="w-3 h-3 mr-1" />
                   {plan.badge}
                 </Badge>
               </div>
             )}
+            <Card 
+              className={`${
+                plan.popular 
+                  ? 'border-primary shadow-lg' 
+                  : ''
+              }`}
+            >
             
             <CardHeader>
               <div className="flex items-center space-x-3 mb-4">
@@ -236,7 +236,7 @@ export default function Pricing() {
                 {yearly && plan.price.monthly > 0 && (
                   <div className="text-sm text-muted-foreground">
                     <span className="line-through">${plan.price.monthly * 12}/year</span>
-                    <span className="text-green-600 font-medium ml-2">
+                    <span className="text-foreground font-medium ml-2">
                       Save ${(plan.price.monthly * 12) - plan.price.yearly}!
                     </span>
                   </div>
@@ -272,7 +272,7 @@ export default function Pricing() {
                 <ul className="space-y-3">
                   {plan.features.map((feature, index) => (
                     <li key={index} className="flex items-start space-x-3">
-                      <Check className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+                      <Check className="w-5 h-5 text-foreground flex-shrink-0 mt-0.5" />
                       <span className="text-sm leading-relaxed">{feature}</span>
                     </li>
                   ))}
@@ -325,6 +325,7 @@ export default function Pricing() {
               </Button>
             </CardFooter>
           </Card>
+          </div>
         ))}
       </div>
 

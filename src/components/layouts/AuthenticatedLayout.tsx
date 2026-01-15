@@ -37,7 +37,7 @@ export default function AuthenticatedLayout({ children }: AuthenticatedLayoutPro
               <Link href="/support" className="text-muted-foreground hover:text-foreground transition-colors">
                 Support
               </Link>
-              <span className="text-muted-foreground">© 2024 Screenshotly</span>
+              <span className="text-muted-foreground">© 2025 Screenshotly</span>
             </div>
           </div>
         </div>

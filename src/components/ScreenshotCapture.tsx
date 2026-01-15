@@ -143,15 +143,15 @@ export default function ScreenshotCapture() {
                   <h3 className="font-medium mb-2">What happens next?</h3>
                   <ul className="space-y-2 text-sm text-muted-foreground">
                     <li className="flex items-center">
-                      <div className="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center mr-2">1</div>
+                      <div className="w-6 h-6 rounded-full bg-muted text-foreground flex items-center justify-center mr-2">1</div>
                       We capture a high-quality screenshot of your website
                     </li>
                     <li className="flex items-center">
-                      <div className="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center mr-2">2</div>
+                      <div className="w-6 h-6 rounded-full bg-muted text-foreground flex items-center justify-center mr-2">2</div>
                       Apply a professional browser mockup template
                     </li>
                     <li className="flex items-center">
-                      <div className="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center mr-2">3</div>
+                      <div className="w-6 h-6 rounded-full bg-muted text-foreground flex items-center justify-center mr-2">3</div>
                       Generate a beautiful final image ready to use
                     </li>
                   </ul>

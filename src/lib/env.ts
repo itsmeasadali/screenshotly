@@ -12,8 +12,7 @@ const envSchema = z.object({
   OPENAI_API_KEY: z.string().min(1),
   
   // Redis (Rate Limiting)
-  UPSTASH_REDIS_REST_URL: z.string().url(),
-  UPSTASH_REDIS_REST_TOKEN: z.string().min(1),
+  REDIS_URL: z.string().url().optional(),
   
   // Stripe (Payments)
   STRIPE_SECRET_KEY: z.string().min(1),
@@ -55,8 +54,7 @@ export const {
   CLERK_SECRET_KEY,
   NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
   OPENAI_API_KEY,
-  UPSTASH_REDIS_REST_URL,
-  UPSTASH_REDIS_REST_TOKEN,
+  REDIS_URL,
   STRIPE_SECRET_KEY,
   NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
   STRIPE_WEBHOOK_SECRET,

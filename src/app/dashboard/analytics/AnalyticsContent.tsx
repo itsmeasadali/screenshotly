@@ -54,7 +54,7 @@ export default function AnalyticsContent() {
           <CardContent>
             <div className="text-2xl font-bold">{mockData.totalRequests.toLocaleString()}</div>
             <div className="flex items-center mt-1">
-              <span className={`text-xs ${mockData.requestsChange >= 0 ? 'text-green-600' : 'text-red-600'} flex items-center`}>
+              <span className={`text-xs ${mockData.requestsChange >= 0 ? 'text-foreground' : 'text-destructive'} flex items-center`}>
                 {mockData.requestsChange >= 0 ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
                 {Math.abs(mockData.requestsChange)}%
               </span>
@@ -72,7 +72,7 @@ export default function AnalyticsContent() {
           <CardContent>
             <div className="text-2xl font-bold">{mockData.activeUsers}</div>
             <div className="flex items-center mt-1">
-              <span className={`text-xs ${mockData.usersChange >= 0 ? 'text-green-600' : 'text-red-600'} flex items-center`}>
+              <span className={`text-xs ${mockData.usersChange >= 0 ? 'text-foreground' : 'text-destructive'} flex items-center`}>
                 {mockData.usersChange >= 0 ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
                 {Math.abs(mockData.usersChange)}%
               </span>
@@ -90,7 +90,7 @@ export default function AnalyticsContent() {
           <CardContent>
             <div className="text-2xl font-bold">{mockData.avgResponseTime}</div>
             <div className="flex items-center mt-1">
-              <span className={`text-xs ${mockData.responseTimeChange <= 0 ? 'text-green-600' : 'text-red-600'} flex items-center`}>
+              <span className={`text-xs ${mockData.responseTimeChange <= 0 ? 'text-foreground' : 'text-destructive'} flex items-center`}>
                 {mockData.responseTimeChange <= 0 ? <ArrowDownRight className="w-3 h-3" /> : <ArrowUpRight className="w-3 h-3" />}
                 {Math.abs(mockData.responseTimeChange)}%
               </span>
@@ -108,7 +108,7 @@ export default function AnalyticsContent() {
           <CardContent>
             <div className="text-2xl font-bold">{mockData.storageUsed}</div>
             <div className="flex items-center mt-1">
-              <span className={`text-xs ${mockData.storageChange >= 0 ? 'text-green-600' : 'text-red-600'} flex items-center`}>
+              <span className={`text-xs ${mockData.storageChange >= 0 ? 'text-foreground' : 'text-destructive'} flex items-center`}>
                 {mockData.storageChange >= 0 ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
                 {Math.abs(mockData.storageChange)}%
               </span>

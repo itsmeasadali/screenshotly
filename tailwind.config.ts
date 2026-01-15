@@ -51,6 +51,11 @@ export default {
   				'5': 'hsl(var(--chart-5))'
   			}
   		},
+  		fontFamily: {
+  			sans: ['var(--font-sans)', 'Geist Mono', 'monospace'],
+  			serif: ['var(--font-serif)', 'Geist Mono', 'monospace'],
+  			mono: ['var(--font-mono)', 'Geist Mono', 'monospace']
+  		},
   		borderRadius: {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',

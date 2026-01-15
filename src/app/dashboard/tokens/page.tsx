@@ -70,7 +70,7 @@ export default async function TokensPage() {
                     <td className="px-6 py-4">100</td>
                     <td className="px-6 py-4">2</td>
                   </tr>
-                  <tr className="bg-blue-50">
+                  <tr className="bg-muted/50">
                     <td className="px-6 py-4 font-medium">Pro</td>
                     <td className="px-6 py-4 font-medium">1,000</td>
                     <td className="px-6 py-4 font-medium">5</td>

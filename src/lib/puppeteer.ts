@@ -45,6 +45,13 @@ export async function createBrowser(): Promise<Browser> {
         '--no-first-run',
         '--no-zygote',
         '--disable-gpu',
+        '--disable-extensions',
+        '--disable-plugins',
+        '--disable-web-security',
+        '--disable-features=VizDisplayCompositor',
+        '--disable-background-timer-throttling',
+        '--disable-backgrounding-occluded-windows',
+        '--disable-renderer-backgrounding',
       ],
     };
     

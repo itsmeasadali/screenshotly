@@ -105,13 +105,13 @@ export default function ApiKeyManager() {
   const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
       case 'active':
-        return 'bg-green-500';
+        return 'bg-foreground';
       case 'expired':
-        return 'bg-yellow-500';
+        return 'bg-muted-foreground';
       case 'revoked':
-        return 'bg-red-500';
+        return 'bg-destructive';
       default:
-        return 'bg-gray-500';
+        return 'bg-muted-foreground';
     }
   };
 
@@ -124,8 +124,8 @@ export default function ApiKeyManager() {
         </CardHeader>
         <CardContent>
           <div className="flex items-center justify-center py-8">
-            <RefreshCwIcon className="w-6 h-6 animate-spin text-blue-500" />
-            <span className="ml-2 text-gray-600">Loading API keys...</span>
+            <RefreshCwIcon className="w-6 h-6 animate-spin text-foreground" />
+            <span className="ml-2 text-muted-foreground">Loading API keys...</span>
           </div>
         </CardContent>
       </Card>
@@ -140,15 +140,15 @@ export default function ApiKeyManager() {
         <AlertDescription className="mt-2">
           {error}
           {error.includes('Database connection') && (
-            <div className="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-              <h4 className="font-medium text-yellow-800 mb-2">Database Setup Required</h4>
-              <p className="text-yellow-700 text-sm mb-3">
+            <div className="mt-4 p-4 bg-muted border rounded-lg">
+              <h4 className="font-medium text-foreground mb-2">Database Setup Required</h4>
+              <p className="text-muted-foreground text-sm mb-3">
                 To use API keys, you need to set up your database. Please follow these steps:
               </p>
-              <ol className="text-yellow-700 text-sm space-y-1 list-decimal list-inside">
+              <ol className="text-muted-foreground text-sm space-y-1 list-decimal list-inside">
                 <li>Set up your DATABASE_URL environment variable</li>
-                <li>Run <code className="bg-yellow-100 px-1 rounded">npx prisma generate</code></li>
-                <li>Run <code className="bg-yellow-100 px-1 rounded">npx prisma db push</code></li>
+                <li>Run <code className="bg-muted px-1 rounded">npx prisma generate</code></li>
+                <li>Run <code className="bg-muted px-1 rounded">npx prisma db push</code></li>
                 <li>Refresh this page</li>
               </ol>
               <Button 
@@ -215,12 +215,12 @@ export default function ApiKeyManager() {
               </div>
 
               {showNewKey && (
-                <Alert className="bg-green-50 border-green-200">
-                  <CheckCircle2 className="h-4 w-4 text-green-600" />
-                  <AlertTitle className="text-green-600">New API Key Generated</AlertTitle>
+                <Alert className="bg-muted border">
+                  <CheckCircle2 className="h-4 w-4 text-foreground" />
+                  <AlertTitle className="text-foreground">New API Key Generated</AlertTitle>
                   <AlertDescription>
                     <div className="mt-2 flex items-center gap-2">
-                      <code className="flex-1 bg-white p-2 rounded font-mono text-sm border">
+                      <code className="flex-1 bg-background p-2 rounded font-mono text-sm border">
                         {showNewKey}
                       </code>
                       <Button
@@ -231,7 +231,7 @@ export default function ApiKeyManager() {
                         <CopyIcon className="h-4 w-4" />
                       </Button>
                     </div>
-                    <p className="mt-2 text-sm text-red-600 flex items-center gap-2">
+                    <p className="mt-2 text-sm text-destructive flex items-center gap-2">
                       <AlertTriangle className="h-4 w-4" />
                       Make sure to copy your API key now. You won&apos;t be able to see it again!
                     </p>
@@ -268,7 +268,7 @@ export default function ApiKeyManager() {
                         size="icon"
                         variant="ghost"
                         onClick={() => revokeApiKey(key.id)}
-                        className="text-red-500 hover:text-red-600 hover:bg-red-50"
+                        className="text-destructive hover:text-destructive-foreground hover:bg-destructive/10"
                       >
                         <TrashIcon className="h-4 w-4" />
                       </Button>

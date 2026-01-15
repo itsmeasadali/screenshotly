@@ -55,9 +55,9 @@ export default function DashboardContent() {
 
   const getPlanColor = (plan: string) => {
     switch (plan.toLowerCase()) {
-      case 'pro': return 'bg-blue-500';
-      case 'enterprise': return 'bg-purple-500';
-      default: return 'bg-gray-500';
+      case 'pro': return 'bg-primary';
+      case 'enterprise': return 'bg-muted-foreground';
+      default: return 'bg-muted-foreground';
     }
   };
 
@@ -163,21 +163,21 @@ export default function DashboardContent() {
 
       {/* Subscription Status Card */}
       {userData.plan !== 'FREE' && (
-        <Card className="mb-6 border-blue-200 bg-blue-50 dark:bg-blue-950/20 dark:border-blue-800">
+        <Card className="mb-6 border bg-muted/50">
           <CardHeader className="pb-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Crown className="w-5 h-5 text-blue-600" />
-                <CardTitle className="text-blue-900 dark:text-blue-100">{planDisplayName} Subscription</CardTitle>
+                <Crown className="w-5 h-5 text-foreground" />
+                <CardTitle className="text-foreground">{planDisplayName} Subscription</CardTitle>
               </div>
               <Badge 
                 variant="outline" 
                 className={`${
                   userData.subscriptionStatus === 'ACTIVE' 
-                    ? 'bg-green-100 text-green-800 border-green-200 dark:bg-green-900/20 dark:text-green-400 dark:border-green-800' 
+                    ? 'bg-muted text-foreground border' 
                     : userData.subscriptionStatus === 'PAST_DUE'
-                    ? 'bg-yellow-100 text-yellow-800 border-yellow-200 dark:bg-yellow-900/20 dark:text-yellow-400 dark:border-yellow-800'
-                    : 'bg-red-100 text-red-800 border-red-200 dark:bg-red-900/20 dark:text-red-400 dark:border-red-800'
+                    ? 'bg-muted text-muted-foreground border'
+                    : 'bg-destructive/10 text-destructive border-destructive/20'
                 }`}
               >
                 {statusDisplay}
@@ -187,8 +187,8 @@ export default function DashboardContent() {
           <CardContent>
             <div className="grid md:grid-cols-2 gap-4">
               <div>
-                <p className="text-sm text-blue-700 dark:text-blue-300">Next Billing Date</p>
-                <p className="font-medium text-blue-900 dark:text-blue-100">
+                <p className="text-sm text-muted-foreground">Next Billing Date</p>
+                <p className="font-medium text-foreground">
                   {nextBilling}
                 </p>
               </div>
@@ -248,8 +248,8 @@ export default function DashboardContent() {
         <Card className="group h-full hover:border-primary/50 transition-colors cursor-pointer relative">
           <CardHeader>
             <div className="flex items-center justify-between">
-              <div className="p-2 rounded-lg bg-blue-50 dark:bg-blue-950/20">
-                <KeyRound className="w-5 h-5 text-blue-500" />
+              <div className="p-2 rounded-lg bg-muted">
+                <KeyRound className="w-5 h-5 text-foreground" />
               </div>
               <a 
                 href="https://docs.screenshotly.app/guides/managing-tokens" 

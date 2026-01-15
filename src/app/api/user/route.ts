@@ -30,9 +30,19 @@ export async function GET() {
       userData = await createUserIfNotExists(userId);
     }
 
-    const [apiStats, monthlyUsage] = await Promise.all([
-      getUserApiKeyStats(userId),
-      getUserMonthlyUsage(userId),
+    // Optimize by running queries in parallel and with timeout
+    const [apiStats, monthlyUsage] = await Promise.allSettled([
+      Promise.race([
+        getUserApiKeyStats(userId),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 3000))
+      ]),
+      Promise.race([
+        getUserMonthlyUsage(userId),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 3000))
+      ])
+    ]).then(results => [
+      results[0].status === 'fulfilled' ? results[0].value : { totalKeys: 0, activeKeys: 0, monthlyLimit: 100 },
+      results[1].status === 'fulfilled' ? results[1].value : 0
     ]);
 
     return NextResponse.json({

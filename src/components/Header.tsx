@@ -24,7 +24,7 @@ import {
 const features = [
   {
     title: "AI Screenshot API",
-    href: "/docs/api",
+    href: "https://docs.screenshotly.app/api",
     description: "Clean screenshots with smart element removal",
     icon: Camera,
   },
@@ -66,7 +66,7 @@ export default function Header() {
               <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
                 <Camera className="w-5 h-5 text-primary-foreground" />
               </div>
-              <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full animate-pulse" />
+              <div className="absolute -top-1 -right-1 w-3 h-3 bg-foreground rounded-full animate-pulse" />
             </div>
             <span className="text-xl font-bold text-foreground">Screenshotly</span>
           </Link>
@@ -117,7 +117,7 @@ export default function Header() {
                 <NavigationMenuItem>
                   <Link href="/playground" legacyBehavior passHref>
                     <NavigationMenuLink className="group inline-flex h-10 w-max items-center justify-center rounded-md bg-transparent px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50">
-                      <Zap className="w-4 h-4 mr-2 text-green-500" />
+                      <Zap className="w-4 h-4 mr-2 text-foreground" />
                       Try Demo
                     </NavigationMenuLink>
                   </Link>
@@ -137,9 +137,9 @@ export default function Header() {
                 className="w-9 h-9 p-0 hover:bg-accent/50"
               >
                 {theme === 'dark' ? (
-                  <Sun className="w-4 h-4 text-amber-500 transition-transform hover:rotate-12" />
+                  <Sun className="w-4 h-4 text-foreground transition-transform hover:rotate-12" />
                 ) : (
-                  <Moon className="w-4 h-4 text-blue-500 transition-transform hover:-rotate-12" />
+                  <Moon className="w-4 h-4 text-foreground transition-transform hover:-rotate-12" />
                 )}
                 <span className="sr-only">Toggle theme</span>
               </Button>
@@ -196,7 +196,7 @@ export default function Header() {
                 <DropdownMenuContent align="end" className="w-56">
                   <DropdownMenuItem asChild>
                     <Link href="/playground" className="flex items-center">
-                      <Zap className="w-4 h-4 mr-2 text-green-500" />
+                      <Zap className="w-4 h-4 mr-2 text-foreground" />
                       Try Demo
                     </Link>
                   </DropdownMenuItem>

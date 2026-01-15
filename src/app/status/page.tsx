@@ -34,9 +34,9 @@ export default function StatusPage() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'operational': return 'text-green-600';
-      case 'degraded': return 'text-yellow-600';
-      case 'outage': return 'text-red-600';
+      case 'operational': return 'text-foreground';
+      case 'degraded': return 'text-muted-foreground';
+      case 'outage': return 'text-destructive';
       default: return 'text-gray-600';
     }
   };
@@ -52,9 +52,9 @@ export default function StatusPage() {
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'operational': return 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400';
-      case 'degraded': return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400';
-      case 'outage': return 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400';
+      case 'operational': return 'bg-muted text-foreground';
+      case 'degraded': return 'bg-muted text-muted-foreground';
+      case 'outage': return 'bg-destructive/10 text-destructive';
       default: return 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400';
     }
   };
@@ -71,13 +71,13 @@ export default function StatusPage() {
         </div>
 
         {/* Overall Status */}
-        <Card className="mb-8 border-green-200 bg-green-50/50 dark:border-green-800 dark:bg-green-950/20">
+        <Card className="mb-8 border bg-muted/50">
           <CardHeader>
             <div className="flex items-center gap-3">
-              <CheckCircle className="w-8 h-8 text-green-600" />
+              <CheckCircle className="w-8 h-8 text-foreground" />
               <div>
-                <CardTitle className="text-green-800 dark:text-green-200">All Systems Operational</CardTitle>
-                <CardDescription className="text-green-700 dark:text-green-300">
+                <CardTitle className="text-foreground">All Systems Operational</CardTitle>
+                <CardDescription className="text-muted-foreground">
                   All services are running normally
                 </CardDescription>
               </div>
@@ -169,7 +169,7 @@ export default function StatusPage() {
           <CardContent>
             <div className="space-y-4">
               <div className="flex items-start gap-3">
-                <div className="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
+                <div className="w-2 h-2 bg-foreground rounded-full mt-2"></div>
                 <div>
                   <p className="font-medium text-foreground">API Performance Optimization</p>
                   <p className="text-sm text-muted-foreground">
@@ -179,7 +179,7 @@ export default function StatusPage() {
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <div className="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
+                <div className="w-2 h-2 bg-foreground rounded-full mt-2"></div>
                 <div>
                   <p className="font-medium text-foreground">Security Update</p>
                   <p className="text-sm text-muted-foreground">

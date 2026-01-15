@@ -47,21 +47,21 @@ export default async function MockupsPage() {
         {/* Enhanced Feature Highlights */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
           <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-lg transition-shadow">
-            <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-4">
-              <Monitor className="w-6 h-6 text-blue-600" />
+            <div className="w-12 h-12 bg-muted rounded-xl flex items-center justify-center mb-4">
+              <Monitor className="w-6 h-6 text-foreground" />
             </div>
             <h3 className="font-semibold text-gray-900 mb-2">Browser Mockups</h3>
             <p className="text-sm text-gray-600 mb-3">Professional browser windows with clean interfaces</p>
-            <div className="text-xs text-blue-600 font-medium">3 Templates</div>
+            <div className="text-xs text-foreground font-medium">3 Templates</div>
           </div>
           
           <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-lg transition-shadow">
-            <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mb-4">
-              <Smartphone className="w-6 h-6 text-green-600" />
+            <div className="w-12 h-12 bg-muted rounded-xl flex items-center justify-center mb-4">
+              <Smartphone className="w-6 h-6 text-foreground" />
             </div>
             <h3 className="font-semibold text-gray-900 mb-2">Mobile Devices</h3>
             <p className="text-sm text-gray-600 mb-3">Modern smartphones and mobile device frames</p>
-            <div className="text-xs text-green-600 font-medium">2 Templates</div>
+            <div className="text-xs text-foreground font-medium">2 Templates</div>
           </div>
           
           <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-lg transition-shadow">
@@ -110,8 +110,8 @@ export default async function MockupsPage() {
                     <tr className="hover:bg-gray-50/50 transition-colors">
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-                            <Monitor className="w-4 h-4 text-blue-600" />
+                          <div className="w-8 h-8 bg-muted rounded-lg flex items-center justify-center">
+                            <Monitor className="w-4 h-4 text-foreground" />
                           </div>
                           <span className="font-medium text-gray-900">Browser</span>
                         </div>
@@ -121,8 +121,8 @@ export default async function MockupsPage() {
                       <td className="px-6 py-4 text-sm text-gray-600">Web apps, SaaS platforms, landing pages</td>
                       <td className="px-6 py-4">
                         <div className="flex gap-1">
-                          <span className="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded-full">Clean UI</span>
-                          <span className="px-2 py-1 bg-green-100 text-green-700 text-xs rounded-full">Light/Dark</span>
+                          <span className="px-2 py-1 bg-muted text-foreground text-xs rounded-full">Clean UI</span>
+                          <span className="px-2 py-1 bg-muted text-foreground text-xs rounded-full">Light/Dark</span>
                         </div>
                       </td>
                     </tr>
@@ -130,8 +130,8 @@ export default async function MockupsPage() {
                     <tr className="hover:bg-gray-50/50 transition-colors">
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
-                            <Smartphone className="w-4 h-4 text-green-600" />
+                          <div className="w-8 h-8 bg-muted rounded-lg flex items-center justify-center">
+                            <Smartphone className="w-4 h-4 text-foreground" />
                           </div>
                           <span className="font-medium text-gray-900">Mobile</span>
                         </div>
@@ -182,7 +182,7 @@ export default async function MockupsPage() {
                       <td className="px-6 py-4">
                         <div className="flex gap-1">
                           <span className="px-2 py-1 bg-pink-100 text-pink-700 text-xs rounded-full">Responsive</span>
-                          <span className="px-2 py-1 bg-yellow-100 text-yellow-700 text-xs rounded-full">Showcase</span>
+                          <span className="px-2 py-1 bg-muted text-foreground text-xs rounded-full">Showcase</span>
                         </div>
                       </td>
                     </tr>
@@ -198,8 +198,8 @@ export default async function MockupsPage() {
               <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">Best Practices & Tips</h2>
               <div className="grid md:grid-cols-2 gap-8">
                 <div className="bg-white p-6 rounded-2xl shadow-sm">
-                  <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center mb-4">
-                    <Eye className="w-5 h-5 text-blue-600" />
+                  <div className="w-10 h-10 bg-muted rounded-xl flex items-center justify-center mb-4">
+                    <Eye className="w-5 h-5 text-foreground" />
                   </div>
                   <h3 className="font-semibold text-gray-900 mb-3">Image Quality</h3>
                   <ul className="space-y-2 text-sm text-gray-600">
@@ -211,8 +211,8 @@ export default async function MockupsPage() {
                 </div>
                 
                 <div className="bg-white p-6 rounded-2xl shadow-sm">
-                  <div className="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center mb-4">
-                    <Target className="w-5 h-5 text-green-600" />
+                  <div className="w-10 h-10 bg-muted rounded-xl flex items-center justify-center mb-4">
+                    <Target className="w-5 h-5 text-foreground" />
                   </div>
                   <h3 className="font-semibold text-gray-900 mb-3">Template Selection</h3>
                   <ul className="space-y-2 text-sm text-gray-600">

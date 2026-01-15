@@ -35,10 +35,10 @@ function PreviewModal({ mockup, isOpen, onClose }: PreviewModalProps) {
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
       <div className="bg-white rounded-3xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-100">
+        <div className="flex items-center justify-between p-6 border-b border">
           <div>
-            <h3 className="text-xl font-semibold text-gray-900">{mockup.name}</h3>
-            <p className="text-sm text-gray-600 mt-1">{mockup.description}</p>
+            <h3 className="text-xl font-semibold text-foreground">{mockup.name}</h3>
+            <p className="text-sm text-muted-foreground mt-1">{mockup.description}</p>
           </div>
           <Button variant="ghost" size="sm" onClick={onClose}>
             <X className="w-5 h-5" />
@@ -50,7 +50,7 @@ function PreviewModal({ mockup, isOpen, onClose }: PreviewModalProps) {
           <div className="grid md:grid-cols-2 gap-8">
             {/* Preview */}
             <div className="space-y-4">
-              <h4 className="font-medium text-gray-900">Template Preview</h4>
+              <h4 className="font-medium text-foreground">Template Preview</h4>
               <div className="relative bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-4">
                 <Image
                   src={mockup.imagePath}
@@ -67,7 +67,7 @@ function PreviewModal({ mockup, isOpen, onClose }: PreviewModalProps) {
               {/* Features */}
               {mockup.features && mockup.features.length > 0 && (
                 <div>
-                  <h4 className="font-medium text-gray-900 mb-3">Features</h4>
+                  <h4 className="font-medium text-foreground mb-3">Features</h4>
                   <div className="flex flex-wrap gap-2">
                     {mockup.features.map((feature, index) => (
                       <Badge key={index} variant="outline" className="text-xs">
@@ -80,22 +80,22 @@ function PreviewModal({ mockup, isOpen, onClose }: PreviewModalProps) {
 
               {/* Technical Details */}
               <div>
-                <h4 className="font-medium text-gray-900 mb-3">Specifications</h4>
+                <h4 className="font-medium text-foreground mb-3">Specifications</h4>
                 <div className="space-y-3 bg-gray-50 rounded-xl p-4">
                   <div className="flex justify-between">
-                    <span className="text-sm text-gray-600">Template Size</span>
-                    <span className="text-sm font-mono text-gray-900">
+                    <span className="text-sm text-muted-foreground">Template Size</span>
+                    <span className="text-sm font-mono text-foreground">
                       {mockup.dimensions.width}×{mockup.dimensions.height}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-sm text-gray-600">Screenshot Area</span>
-                    <span className="text-sm font-mono text-gray-900">
+                    <span className="text-sm text-muted-foreground">Screenshot Area</span>
+                    <span className="text-sm font-mono text-foreground">
                       {mockup.screenshotPlacement.width}×{mockup.screenshotPlacement.height}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-sm text-gray-600">Category</span>
+                    <span className="text-sm text-muted-foreground">Category</span>
                     <Badge variant="secondary" className="text-xs">
                       {mockup.category}
                     </Badge>
@@ -105,10 +105,10 @@ function PreviewModal({ mockup, isOpen, onClose }: PreviewModalProps) {
 
               {/* API Usage */}
               <div>
-                <h4 className="font-medium text-gray-900 mb-3">API Usage</h4>
+                <h4 className="font-medium text-foreground mb-3">API Usage</h4>
                 <div className="bg-gray-900 rounded-xl p-4 text-sm">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-green-400 font-mono">JSON</span>
+                    <span className="text-foreground font-mono">JSON</span>
                     <Button
                       variant="ghost"
                       size="sm"
@@ -183,15 +183,15 @@ export default function MockupManager() {
 
   const getCategoryColor = (category: string) => {
     switch (category) {
-      case 'browser': return 'text-blue-500 bg-blue-50 border-blue-200';
-      case 'mobile': return 'text-green-500 bg-green-50 border-green-200';
-      case 'tablet': return 'text-purple-500 bg-purple-50 border-purple-200';
-      case 'laptop': return 'text-indigo-500 bg-indigo-50 border-indigo-200';
-      case 'desktop': return 'text-orange-500 bg-orange-50 border-orange-200';
-      case 'multi-device': return 'text-pink-500 bg-pink-50 border-pink-200';
-      case 'smartwatch': return 'text-teal-500 bg-teal-50 border-teal-200';
-      case 'tv': return 'text-red-500 bg-red-50 border-red-200';
-      default: return 'text-gray-500 bg-gray-50 border-gray-200';
+      case 'browser': return 'text-foreground bg-muted border';
+      case 'mobile': return 'text-foreground bg-muted border';
+      case 'tablet': return 'text-foreground bg-muted border';
+      case 'laptop': return 'text-foreground bg-muted border';
+      case 'desktop': return 'text-foreground bg-muted border';
+      case 'multi-device': return 'text-foreground bg-muted border';
+      case 'smartwatch': return 'text-foreground bg-muted border';
+      case 'tv': return 'text-foreground bg-muted border';
+      default: return 'text-muted-foreground bg-muted border';
     }
   };
 
@@ -234,8 +234,8 @@ export default function MockupManager() {
         {/* Category Filters */}
         <div className="space-y-4">
           <div className="flex items-center gap-2">
-            <Filter className="w-5 h-5 text-gray-600" />
-            <h3 className="font-medium text-gray-900">Filter by Category</h3>
+            <Filter className="w-5 h-5 text-muted-foreground" />
+            <h3 className="font-medium text-foreground">Filter by Category</h3>
           </div>
           
           <div className="flex gap-2 overflow-x-auto pb-2">
@@ -250,7 +250,7 @@ export default function MockupManager() {
                   size="sm"
                   onClick={() => setSelectedCategory(category.id)}
                   className={`flex items-center gap-2 whitespace-nowrap ${
-                    isActive ? 'bg-blue-600 hover:bg-blue-700' : 'hover:bg-gray-50'
+                    isActive ? 'bg-primary hover:bg-primary/90' : 'hover:bg-muted'
                   }`}
                 >
                   <Icon className="w-4 h-4" />
@@ -269,7 +269,7 @@ export default function MockupManager() {
         {/* Mockup Grid */}
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {filteredMockups.map((mockup) => (
-            <Card key={mockup.id} className="group overflow-hidden rounded-2xl border-gray-100 hover:border-blue-200 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+            <Card key={mockup.id} className="group overflow-hidden rounded-2xl border hover:border-primary/50 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
               <div className="relative aspect-video bg-gradient-to-br from-gray-50 to-gray-100">
                 <div className="absolute inset-0 bg-gradient-to-t from-black/5 via-transparent to-transparent group-hover:from-black/10 transition-all duration-300" />
                 
@@ -282,7 +282,7 @@ export default function MockupManager() {
                 {/* Features Badge */}
                 {mockup.features && mockup.features.length > 0 && (
                   <div className="absolute top-3 right-3">
-                    <Badge variant="secondary" className="bg-white/90 text-gray-700 border-none">
+                    <Badge variant="secondary" className="bg-background/90 text-foreground border-none">
                       <Sparkles className="w-3 h-3 mr-1" />
                       {mockup.features.length} features
                     </Badge>
@@ -293,8 +293,8 @@ export default function MockupManager() {
                 <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                   <Button
                     onClick={() => openPreview(mockup)}
-                    className="bg-white/90 backdrop-blur-sm text-gray-900 hover:bg-white shadow-lg"
                     size="sm"
+                    className="bg-background/90 backdrop-blur-sm text-foreground hover:bg-background shadow-lg"
                   >
                     <Maximize2 className="w-4 h-4 mr-2" />
                     Preview
@@ -312,10 +312,10 @@ export default function MockupManager() {
               
               <div className="p-6 space-y-4">
                 <div className="space-y-2">
-                  <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
+                  <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors">
                     {mockup.name}
                   </h3>
-                  <p className="text-sm text-gray-600 line-clamp-2">{mockup.description}</p>
+                  <p className="text-sm text-muted-foreground line-clamp-2">{mockup.description}</p>
                 </div>
 
                 {/* Features */}
@@ -338,13 +338,13 @@ export default function MockupManager() {
                 <div className="space-y-2 pt-2 border-t border-gray-100">
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-gray-500">Template Size</span>
-                    <span className="font-mono text-gray-700 text-xs bg-gray-50 px-2 py-1 rounded">
+                    <span className="font-mono text-foreground text-xs bg-muted px-2 py-1 rounded">
                       {mockup.dimensions.width}×{mockup.dimensions.height}
                     </span>
                   </div>
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-gray-500">Screenshot Area</span>
-                    <span className="font-mono text-gray-700 text-xs bg-gray-50 px-2 py-1 rounded">
+                    <span className="font-mono text-foreground text-xs bg-muted px-2 py-1 rounded">
                       {mockup.screenshotPlacement.width}×{mockup.screenshotPlacement.height}
                     </span>
                   </div>
@@ -356,7 +356,7 @@ export default function MockupManager() {
 
         {/* Error State */}
         {error && (
-          <div className="col-span-full p-6 bg-red-50 text-red-600 rounded-xl text-sm border border-red-200">
+          <div className="col-span-full p-6 bg-destructive/10 text-destructive rounded-xl text-sm border border-destructive/20">
             <div className="flex items-center gap-2">
               <span className="font-medium">Error:</span>
               {error}
@@ -369,7 +369,7 @@ export default function MockupManager() {
           <div className="col-span-full text-center py-16">
             <div className="bg-gray-50 rounded-2xl p-12 border-2 border-dashed border-gray-200">
               <Monitor className="w-16 h-16 text-gray-400 mx-auto mb-6" />
-              <h3 className="text-xl font-medium text-gray-900 mb-2">
+              <h3 className="text-xl font-medium text-foreground mb-2">
                 No templates found
               </h3>
               <p className="text-gray-500 mb-6">
@@ -381,7 +381,7 @@ export default function MockupManager() {
               <Button 
                 variant="outline" 
                 onClick={() => setSelectedCategory('all')}
-                className="text-blue-600 border-blue-200 hover:bg-blue-50"
+                className="text-primary border-primary/20 hover:bg-primary/10"
               >
                 View All Templates
               </Button>

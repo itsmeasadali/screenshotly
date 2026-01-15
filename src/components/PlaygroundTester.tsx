@@ -53,14 +53,14 @@ export default function PlaygroundTester({
       <div className="grid md:grid-cols-2 gap-4">
         {/* Request Payload */}
         <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-700">
+          <label className="block text-sm font-medium text-foreground">
             Request Payload
           </label>
           <div className="relative">
             <textarea
               value={payload}
               onChange={(e) => setPayload(e.target.value)}
-              className="w-full h-[300px] font-mono text-sm p-4 bg-gray-50 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+              className="w-full h-[300px] font-mono text-sm p-4 bg-muted rounded-lg border focus:border-ring focus:ring-1 focus:ring-ring"
               placeholder="Enter JSON payload..."
             />
           </div>
@@ -68,16 +68,16 @@ export default function PlaygroundTester({
 
         {/* Response */}
         <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-700">
+          <label className="block text-sm font-medium text-foreground">
             Response
           </label>
-          <div className="relative h-[300px] bg-gray-50 rounded-lg border border-gray-200 overflow-auto">
+          <div className="relative h-[300px] bg-muted rounded-lg border overflow-auto">
             {loading ? (
               <div className="flex items-center justify-center h-full">
-                <Loader2 className="w-6 h-6 text-gray-400 animate-spin" />
+                <Loader2 className="w-6 h-6 text-muted-foreground animate-spin" />
               </div>
             ) : error ? (
-              <div className="p-4 text-red-600 font-mono text-sm whitespace-pre-wrap">
+              <div className="p-4 text-destructive font-mono text-sm whitespace-pre-wrap">
                 Error: {error}
               </div>
             ) : response ? (
@@ -97,7 +97,7 @@ export default function PlaygroundTester({
         <Button
           onClick={handleSubmit}
           disabled={loading}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-6"
+          className="bg-primary hover:bg-primary/90 text-primary-foreground px-6"
         >
           {loading ? (
             <Loader2 className="w-4 h-4 mr-2 animate-spin" />
