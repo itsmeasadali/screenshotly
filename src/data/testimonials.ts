@@ -106,3 +106,34 @@ export function getAverageRating(): number {
 export function getTotalReviews(): number {
     return testimonials.length;
 }
+
+// Generate Review schema for structured data
+export function getReviewSchema() {
+    const reviews = testimonials.map((t) => ({
+        '@type': 'Review',
+        reviewRating: {
+            '@type': 'Rating',
+            ratingValue: t.rating,
+            bestRating: 5,
+        },
+        author: {
+            '@type': 'Person',
+            name: t.name,
+        },
+        reviewBody: t.quote,
+    }));
+
+    return {
+        '@context': 'https://schema.org',
+        '@type': 'Product',
+        name: 'Screenshotly',
+        description: 'Screenshot API for Developers',
+        aggregateRating: {
+            '@type': 'AggregateRating',
+            ratingValue: getAverageRating(),
+            reviewCount: getTotalReviews(),
+            bestRating: 5,
+        },
+        review: reviews.slice(0, 5), // Limit to 5 for schema
+    };
+}
