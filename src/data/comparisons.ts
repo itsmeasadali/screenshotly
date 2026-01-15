@@ -212,6 +212,132 @@ export const comparisons = [
             { feature: 'Resource Usage', screenshotly: '✅ Cloud-based', competitor: '❌ Resource heavy' },
         ],
     },
+    {
+        slug: 'browserstack',
+        name: 'BrowserStack Screenshots',
+        description: 'Screenshotly vs BrowserStack Screenshots. Compare pricing, features, and ease of use for screenshot automation.',
+        keywords: [
+            'browserstack alternative',
+            'browserstack screenshots vs',
+            'cross browser screenshot API',
+            'browserstack screenshot comparison',
+        ],
+        competitor: {
+            name: 'BrowserStack Screenshots',
+            website: 'browserstack.com',
+            pros: [
+                'Cross-browser testing',
+                'Real device testing',
+                'Enterprise trusted',
+            ],
+            cons: [
+                'Expensive for screenshots only',
+                'Complex feature set',
+                'No AI cleanup',
+                'Focus on testing, not screenshots',
+            ],
+        },
+        screenshotly: {
+            advantages: [
+                'Purpose-built for screenshots',
+                'AI element removal',
+                'Device mockups included',
+                'Simpler pricing',
+                'Faster API responses',
+            ],
+        },
+        comparisonTable: [
+            { feature: 'Primary Focus', screenshotly: '✅ Screenshots', competitor: '⚠️ Testing platform' },
+            { feature: 'Pricing', screenshotly: '✅ From Free', competitor: '❌ $29+/mo' },
+            { feature: 'AI Features', screenshotly: '✅ Yes', competitor: '❌ No' },
+            { feature: 'Device Mockups', screenshotly: '✅ Included', competitor: '❌ No' },
+            { feature: 'API Simplicity', screenshotly: '✅ Simple REST', competitor: '⚠️ Complex' },
+            { feature: 'Setup Time', screenshotly: '✅ Minutes', competitor: '⚠️ Hours' },
+        ],
+    },
+    {
+        slug: 'apiflash',
+        name: 'ApiFlash',
+        description: 'Screenshotly vs ApiFlash comparison. See why developers choose Screenshotly for AI-powered screenshot capture.',
+        keywords: [
+            'apiflash alternative',
+            'apiflash vs',
+            'screenshot api comparison',
+            'best screenshot api service',
+        ],
+        competitor: {
+            name: 'ApiFlash',
+            website: 'apiflash.com',
+            pros: [
+                'Simple API',
+                'Good documentation',
+            ],
+            cons: [
+                'No AI features',
+                'No device mockups',
+                'Limited customization',
+            ],
+        },
+        screenshotly: {
+            advantages: [
+                'AI-powered element removal',
+                'Beautiful device mockups',
+                'Better free tier',
+                'Modern tech stack',
+                'Faster performance',
+            ],
+        },
+        comparisonTable: [
+            { feature: 'AI Element Removal', screenshotly: '✅ Yes', competitor: '❌ No' },
+            { feature: 'Device Mockups', screenshotly: '✅ Yes', competitor: '❌ No' },
+            { feature: 'Free Tier', screenshotly: '✅ 500/day', competitor: '✅ 100/month' },
+            { feature: 'Full Page', screenshotly: '✅ Yes', competitor: '✅ Yes' },
+            { feature: 'Delay Control', screenshotly: '✅ Yes', competitor: '✅ Yes' },
+            { feature: 'Cookie Injection', screenshotly: '✅ Yes', competitor: '⚠️ Limited' },
+        ],
+    },
+    {
+        slug: 'htmlcsstoimage',
+        name: 'HTML/CSS to Image',
+        description: 'Compare Screenshotly with HTML/CSS to Image. Choose the right tool for your screenshot needs.',
+        keywords: [
+            'htmlcsstoimage alternative',
+            'html to image api',
+            'css to image api',
+            'html screenshot api',
+        ],
+        competitor: {
+            name: 'HTML/CSS to Image',
+            website: 'htmlcsstoimage.com',
+            pros: [
+                'HTML/CSS templates',
+                'Good for dynamic images',
+                'Template support',
+            ],
+            cons: [
+                'Not for URL screenshots',
+                'Requires HTML input',
+                'No website capture',
+            ],
+        },
+        screenshotly: {
+            advantages: [
+                'Captures any URL directly',
+                'No HTML coding required',
+                'AI cleanup built-in',
+                'Device mockups included',
+                'Full website capture',
+            ],
+        },
+        comparisonTable: [
+            { feature: 'URL Screenshots', screenshotly: '✅ Yes', competitor: '❌ No' },
+            { feature: 'HTML Templates', screenshotly: '❌ No', competitor: '✅ Yes' },
+            { feature: 'AI Features', screenshotly: '✅ Yes', competitor: '❌ No' },
+            { feature: 'Device Mockups', screenshotly: '✅ Yes', competitor: '❌ No' },
+            { feature: 'Use Case', screenshotly: '✅ URL capture', competitor: '✅ Dynamic images' },
+            { feature: 'Learning Curve', screenshotly: '✅ Low', competitor: '⚠️ Medium (HTML required)' },
+        ],
+    },
 ];
 
 export type Comparison = (typeof comparisons)[number];

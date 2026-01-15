@@ -3,6 +3,8 @@ import { Metadata, Viewport } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
+import { GoogleAnalytics } from "@/components/analytics";
+import { WebVitalsReporter } from "@/components/performance";
 import "./globals.css";
 
 const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://screenshotly.app';
@@ -40,7 +42,7 @@ export const metadata: Metadata = {
       { url: "/favicon.svg", type: "image/svg+xml" },
     ],
     apple: [
-      { url: "/logo.svg", type: "image/svg+xml" },
+      { url: "/icon-512.png", sizes: "512x512", type: "image/png" },
     ],
   },
   manifest: "/manifest.json",
@@ -108,11 +110,15 @@ export default function RootLayout({
       <html lang="en" suppressHydrationWarning>
         <head>
           <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-          <link rel="apple-touch-icon" href="/logo.svg" />
+          <link rel="apple-touch-icon" href="/icon-512.png" />
           <link rel="preconnect" href="https://fonts.googleapis.com" />
+          <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
           <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+          <link rel="dns-prefetch" href="https://api.screenshotly.app" />
         </head>
         <body className={GeistMono.className}>
+          <GoogleAnalytics />
+          <WebVitalsReporter />
           <ThemeProvider
             attribute="class"
             defaultTheme="system"

@@ -4,6 +4,7 @@ import HomeContent from "@/components/HomeContent";
 import GuestLayout from "@/components/layouts/GuestLayout";
 import { JsonLd } from "@/components/seo";
 import { getHomepageSchemas, getFAQSchema } from "@/lib/seo/structured-data";
+import { getReviewSchema } from "@/components/Testimonials";
 
 export const metadata: Metadata = {
   title: "Screenshotly - Screenshot API for Developers | Automated Website Captures",
@@ -43,6 +44,7 @@ export default async function HomePage() {
     <GuestLayout>
       <JsonLd data={getHomepageSchemas()} />
       <JsonLd data={getFAQSchema(homepageFAQs)} />
+      <JsonLd data={getReviewSchema()} />
       <HomeContent userId={userId} />
     </GuestLayout>
   );
