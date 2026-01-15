@@ -1,3 +1,5 @@
+'use client';
+
 import Link from 'next/link';
 import { getFooterLinks } from '@/lib/seo/internal-links';
 
