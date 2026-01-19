@@ -1,13 +1,14 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowLeft, Calendar, Clock, Tag, User } from "lucide-react";
 import GuestLayout from "@/components/layouts/GuestLayout";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { JsonLd } from "@/components/seo";
 import { getBreadcrumbSchema, getArticleSchema } from "@/lib/seo/structured-data";
-import { blogPosts, getBlogPost, getRelatedPosts } from "@/data/blog-posts";
+import { getBlogPost, getRelatedBlogPosts, getAllBlogSlugs, getAuthor } from "@/lib/markdown";
 
 const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://screenshotly.app';
 
@@ -16,14 +17,15 @@ interface Props {
 }
 
 export async function generateStaticParams() {
-    return blogPosts.map((post) => ({
-        slug: post.slug,
+    const slugs = getAllBlogSlugs();
+    return slugs.map((slug) => ({
+        slug,
     }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const { slug } = await params;
-    const post = getBlogPost(slug);
+    const post = await getBlogPost(slug);
 
     if (!post) {
         return {
@@ -35,7 +37,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         title: post.title,
         description: post.excerpt,
         keywords: post.keywords,
-        authors: [{ name: post.author.name }],
+        authors: [{ name: post.author }],
         alternates: {
             canonical: `/blog/${slug}`,
         },
@@ -46,7 +48,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
             url: `${BASE_URL}/blog/${slug}`,
             publishedTime: post.publishedAt,
             modifiedTime: post.updatedAt || post.publishedAt,
-            authors: [post.author.name],
+            authors: [post.author],
             tags: post.tags,
         },
     };
@@ -62,13 +64,14 @@ const categoryLabels = {
 
 export default async function BlogPostPage({ params }: Props) {
     const { slug } = await params;
-    const post = getBlogPost(slug);
+    const post = await getBlogPost(slug);
 
     if (!post) {
         notFound();
     }
 
-    const relatedPosts = getRelatedPosts(slug);
+    const relatedPosts = await getRelatedBlogPosts(slug);
+    const author = await getAuthor(post.author);
 
     const breadcrumbs = [
         { name: "Home", url: BASE_URL },
@@ -94,7 +97,13 @@ export default async function BlogPostPage({ params }: Props) {
                 image: post.image || `${BASE_URL}/og-blog-default.png`,
                 datePublished: post.publishedAt,
                 dateModified: post.updatedAt,
-                author: post.author.name,
+                author: author ? {
+                    name: author.name,
+                    bio: author.bio,
+                    credentials: author.credentials,
+                    social: author.social
+                } : { name: post.author },
+                faqs: post.faqs,
             })} />
 
             <article className="py-16">
@@ -130,7 +139,7 @@ export default async function BlogPostPage({ params }: Props) {
                         <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground border-t border-b py-4">
                             <span className="flex items-center gap-2">
                                 <User className="w-4 h-4" />
-                                {post.author.name}
+                                {author?.name || post.author}
                             </span>
                             <span className="flex items-center gap-2">
                                 <Calendar className="w-4 h-4" />
@@ -144,30 +153,10 @@ export default async function BlogPostPage({ params }: Props) {
                     </header>
 
                     {/* Content */}
-                    <div className="prose prose-lg dark:prose-invert max-w-none mb-12">
-                        {/* Simple markdown-like rendering */}
-                        {post.content.split('\n').map((line, index) => {
-                            if (line.startsWith('# ')) {
-                                return <h1 key={index} className="text-3xl font-bold mt-8 mb-4">{line.slice(2)}</h1>;
-                            }
-                            if (line.startsWith('## ')) {
-                                return <h2 key={index} className="text-2xl font-semibold mt-8 mb-4">{line.slice(3)}</h2>;
-                            }
-                            if (line.startsWith('### ')) {
-                                return <h3 key={index} className="text-xl font-semibold mt-6 mb-3">{line.slice(4)}</h3>;
-                            }
-                            if (line.startsWith('- ')) {
-                                return <li key={index} className="ml-6">{line.slice(2)}</li>;
-                            }
-                            if (line.startsWith('```')) {
-                                return null; // Code blocks handled differently in real implementation
-                            }
-                            if (line.trim() === '') {
-                                return <br key={index} />;
-                            }
-                            return <p key={index} className="mb-4">{line}</p>;
-                        })}
-                    </div>
+                    <div 
+                        className="prose prose-lg dark:prose-invert max-w-none mb-12"
+                        dangerouslySetInnerHTML={{ __html: post.htmlContent }}
+                    />
 
                     {/* Tags */}
                     <div className="flex items-center gap-2 mb-12 flex-wrap">
@@ -178,6 +167,82 @@ export default async function BlogPostPage({ params }: Props) {
                             </Badge>
                         ))}
                     </div>
+
+                    {/* Author Bio */}
+                    {author && (
+                        <section className="mb-12 p-6 bg-muted/50 rounded-lg">
+                            <h3 className="text-lg font-semibold mb-4">About the Author</h3>
+                            <div className="flex items-start gap-4">
+                                {author.avatar && (
+                                    <Image 
+                                        src={author.avatar} 
+                                        alt={author.name}
+                                        width={64}
+                                        height={64}
+                                        className="w-16 h-16 rounded-full"
+                                    />
+                                )}
+                                <div className="flex-1">
+                                    <h4 className="font-medium text-lg mb-2">{author.name}</h4>
+                                    <p className="text-muted-foreground mb-2">{author.bio}</p>
+                                    {author.credentials && (
+                                        <p className="text-sm text-muted-foreground mb-3">
+                                            <strong>Credentials:</strong> {author.credentials}
+                                        </p>
+                                    )}
+                                    {author.social && (
+                                        <div className="flex gap-3">
+                                            {author.social.twitter && (
+                                                <a 
+                                                    href={author.social.twitter}
+                                                    className="text-blue-500 hover:text-blue-600 text-sm"
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                >
+                                                    Twitter
+                                                </a>
+                                            )}
+                                            {author.social.linkedin && (
+                                                <a 
+                                                    href={author.social.linkedin}
+                                                    className="text-blue-700 hover:text-blue-800 text-sm"
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                >
+                                                    LinkedIn
+                                                </a>
+                                            )}
+                                            {author.social.github && (
+                                                <a 
+                                                    href={author.social.github}
+                                                    className="text-gray-700 hover:text-gray-800 text-sm"
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                >
+                                                    GitHub
+                                                </a>
+                                            )}
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        </section>
+                    )}
+
+                    {/* FAQ Section */}
+                    {post.faqs && post.faqs.length > 0 && (
+                        <section className="mb-12">
+                            <h2 className="text-2xl font-semibold mb-6">Frequently Asked Questions</h2>
+                            <div className="space-y-6">
+                                {post.faqs.map((faq, index) => (
+                                    <div key={index} className="border-l-4 border-primary/20 pl-4">
+                                        <h3 className="text-lg font-medium mb-2">{faq.question}</h3>
+                                        <p className="text-muted-foreground">{faq.answer}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        </section>
+                    )}
 
                     {/* CTA */}
                     <section className="bg-primary/10 rounded-xl p-8 text-center mb-12">

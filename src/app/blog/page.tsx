@@ -5,7 +5,7 @@ import GuestLayout from "@/components/layouts/GuestLayout";
 import { Badge } from "@/components/ui/badge";
 import { JsonLd } from "@/components/seo";
 import { getBreadcrumbSchema } from "@/lib/seo/structured-data";
-import { blogPosts, getFeaturedPosts } from "@/data/blog-posts";
+import { getAllBlogPosts, getFeaturedBlogPosts } from "@/lib/markdown";
 
 const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://screenshotly.app';
 
@@ -32,14 +32,15 @@ const categoryLabels = {
     tips: 'Tips & Tricks',
 };
 
-export default function BlogIndexPage() {
+export default async function BlogIndexPage() {
     const breadcrumbs = [
         { name: "Home", url: BASE_URL },
         { name: "Blog", url: `${BASE_URL}/blog` },
     ];
 
-    const featuredPosts = getFeaturedPosts();
-    const recentPosts = blogPosts.slice(0, 6);
+    const featuredPosts = await getFeaturedBlogPosts();
+    const allPosts = await getAllBlogPosts();
+    const recentPosts = allPosts.slice(0, 6);
 
     const formatDate = (dateString: string) => {
         return new Date(dateString).toLocaleDateString('en-US', {
@@ -83,7 +84,7 @@ export default function BlogIndexPage() {
                     {/* Highlights */}
                     <div className="grid md:grid-cols-3 gap-6 mb-16">
                         <div className="text-center p-6 bg-muted/50 rounded-xl">
-                            <div className="text-3xl font-bold text-primary mb-2">{blogPosts.length}+</div>
+                            <div className="text-3xl font-bold text-primary mb-2">{allPosts.length}+</div>
                             <div className="text-sm text-muted-foreground">In-depth articles</div>
                         </div>
                         <div className="text-center p-6 bg-muted/50 rounded-xl">

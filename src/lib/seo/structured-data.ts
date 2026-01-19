@@ -10,15 +10,30 @@ export function getOrganizationSchema() {
         logo: `${BASE_URL}/logo.svg`,
         description: 'Screenshot API for developers - automated website captures with AI-powered element removal',
         foundingDate: '2024',
+        founder: {
+            '@type': 'Person',
+            name: 'Asad Ali',
+            sameAs: 'https://www.linkedin.com/in/itsmeasadali/'
+        },
+        address: {
+            '@type': 'PostalAddress',
+            streetAddress: '10685-B Hazelhurst Dr. # 21148',
+            addressLocality: 'Houston',
+            addressRegion: 'TX',
+            postalCode: '77043',
+            addressCountry: 'US'
+        },
         contactPoint: {
             '@type': 'ContactPoint',
             email: 'support@screenshotly.app',
+            telephone: '+1-281-506-0216',
             contactType: 'customer service',
             availableLanguage: ['English'],
         },
         sameAs: [
             'https://twitter.com/screenshotly',
             'https://github.com/screenshotly',
+            'https://www.linkedin.com/in/itsmeasadali/'
         ],
     };
 }
@@ -171,11 +186,24 @@ export interface ArticleData {
     image: string;
     datePublished: string;
     dateModified?: string;
-    author: string;
+    author: {
+        name: string;
+        bio?: string;
+        credentials?: string;
+        social?: {
+            twitter?: string;
+            linkedin?: string;
+            github?: string;
+        };
+    };
+    faqs?: Array<{
+        question: string;
+        answer: string;
+    }>;
 }
 
 export function getArticleSchema(article: ArticleData) {
-    return {
+    const schema: Record<string, unknown> = {
         '@context': 'https://schema.org',
         '@type': 'Article',
         headline: article.title,
@@ -186,7 +214,11 @@ export function getArticleSchema(article: ArticleData) {
         dateModified: article.dateModified || article.datePublished,
         author: {
             '@type': 'Person',
-            name: article.author,
+            name: article.author.name,
+            ...(article.author.bio && { description: article.author.bio }),
+            ...(article.author.social && {
+                sameAs: Object.values(article.author.social).filter(Boolean)
+            }),
         },
         publisher: {
             '@type': 'Organization',
@@ -201,6 +233,20 @@ export function getArticleSchema(article: ArticleData) {
             '@id': article.url,
         },
     };
+
+    // Add FAQ schema if FAQs exist
+    if (article.faqs && article.faqs.length > 0) {
+        schema.mainEntity = article.faqs.map((faq) => ({
+            '@type': 'Question',
+            name: faq.question,
+            acceptedAnswer: {
+                '@type': 'Answer',
+                text: faq.answer,
+            },
+        }));
+    }
+
+    return schema;
 }
 
 // HowTo Schema for tutorials

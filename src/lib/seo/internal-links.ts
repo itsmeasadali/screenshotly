@@ -4,7 +4,6 @@
 import { useCases } from '@/data/use-cases';
 import { integrations } from '@/data/integrations';
 import { comparisons } from '@/data/comparisons';
-import { blogPosts } from '@/data/blog-posts';
 
 export interface InternalLink {
     href: string;
@@ -47,30 +46,8 @@ export function getComparisonLinks(limit = 3): InternalLink[] {
     }));
 }
 
-// Get recent blog posts
-export function getRecentBlogPosts(limit = 3): InternalLink[] {
-    return blogPosts
-        .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
-        .slice(0, limit)
-        .map(post => ({
-            href: `/blog/${post.slug}`,
-            title: post.title,
-            description: post.excerpt,
-            type: 'blog',
-        }));
-}
-
-// Get featured blog posts
-export function getFeaturedBlogLinks(): InternalLink[] {
-    return blogPosts
-        .filter(post => post.featured)
-        .map(post => ({
-            href: `/blog/${post.slug}`,
-            title: post.title,
-            description: post.excerpt,
-            type: 'blog',
-        }));
-}
+// Note: Blog-related functions have been moved to blog-links.ts
+// to avoid fs module conflicts in client components
 
 // Get main navigation links
 export function getNavigationLinks(): InternalLink[] {
@@ -113,7 +90,8 @@ export function getFooterLinks() {
     };
 }
 
-// Suggest related content based on current page type
+// Suggest related content based on current page type (non-blog content only)
+// For blog-related suggestions, use blog-links.ts functions directly in server components
 export function getSuggestedContent(
     pageType: 'use-case' | 'integration' | 'comparison' | 'blog' | 'home'
 ): InternalLink[] {
@@ -121,7 +99,7 @@ export function getSuggestedContent(
         case 'use-case':
             return [
                 ...getRelatedIntegrations(undefined, 2),
-                ...getRecentBlogPosts(1),
+                // Blog links should be added separately using blog-links.ts
             ];
         case 'integration':
             return [
@@ -131,7 +109,7 @@ export function getSuggestedContent(
         case 'comparison':
             return [
                 ...getRelatedUseCases(2),
-                ...getFeaturedBlogLinks().slice(0, 1),
+                // Blog links should be added separately using blog-links.ts
             ];
         case 'blog':
             return [
@@ -142,7 +120,7 @@ export function getSuggestedContent(
         default:
             return [
                 ...getRelatedUseCases(2),
-                ...getFeaturedBlogLinks().slice(0, 2),
+                // Blog links should be added separately using blog-links.ts
             ];
     }
 }

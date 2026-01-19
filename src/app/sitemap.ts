@@ -2,11 +2,11 @@ import { MetadataRoute } from 'next';
 import { useCases } from '@/data/use-cases';
 import { integrations } from '@/data/integrations';
 import { comparisons } from '@/data/comparisons';
-import { blogPosts } from '@/data/blog-posts';
+import { getAllBlogPosts } from '@/lib/markdown';
 
 const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://screenshotly.app';
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
 
   // Static pages
@@ -120,7 +120,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   }));
 
-  // Blog pages - from data
+  // Blog pages - from markdown files
+  const blogPosts = await getAllBlogPosts();
   const blogPagesList: MetadataRoute.Sitemap = blogPosts.map((post) => ({
     url: `${BASE_URL}/blog/${post.slug}`,
     lastModified: new Date(post.updatedAt || post.publishedAt),

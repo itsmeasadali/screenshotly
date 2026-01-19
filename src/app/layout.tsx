@@ -88,6 +88,10 @@ export const metadata: Metadata = {
   verification: {
     google: process.env.GOOGLE_SITE_VERIFICATION,
   },
+  other: {
+    'contact:phone_number': '+1-281-506-0216',
+    'contact:postal_address': '10685-B Hazelhurst Dr. # 21148, Houston, TX 77043, USA',
+  },
 };
 
 export const viewport: Viewport = {
