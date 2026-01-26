@@ -61,7 +61,8 @@ export default async function UseCasePage({ params }: Props) {
         { name: useCase.title, url: `${BASE_URL}/use-cases/${slug}` },
     ];
 
-    const faqs = [
+    // Use specific FAQs from use case data, or fall back to generic ones
+    const faqs = 'faqs' in useCase && useCase.faqs ? useCase.faqs : [
         {
             question: `How can I use Screenshotly for ${useCase.shortTitle.toLowerCase()}?`,
             answer: useCase.description,

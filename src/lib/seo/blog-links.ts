@@ -33,3 +33,4 @@ export async function getFeaturedBlogLinks(): Promise<InternalLink[]> {
         type: 'blog' as const,
     }));
 }
+

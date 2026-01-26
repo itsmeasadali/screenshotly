@@ -53,6 +53,24 @@ const response = await fetch('https://api.screenshotly.app/screenshot', {
     },
   }),
 });`,
+    faqs: [
+      {
+        question: "How do I integrate screenshot capture into my CI/CD pipeline?",
+        answer: "You can add Screenshotly to any CI/CD pipeline using our REST API. Popular integrations include GitHub Actions, GitLab CI, Jenkins, and CircleCI. Simply add an API call step after your deployment to capture updated screenshots."
+      },
+      {
+        question: "Can I capture screenshots of authenticated pages for documentation?",
+        answer: "Yes! You can pass authentication cookies or headers with your API request to capture screenshots of logged-in states. This is perfect for documenting admin panels, user dashboards, and private features."
+      },
+      {
+        question: "What's the best image format for documentation screenshots?",
+        answer: "PNG is recommended for documentation as it provides lossless compression and supports transparency. For web documentation, consider WebP for smaller file sizes with excellent quality."
+      },
+      {
+        question: "How do I ensure consistent styling across documentation screenshots?",
+        answer: "Use our AI-powered element removal to hide dynamic elements like timestamps, user-specific data, and promotional banners. Set consistent viewport sizes and use the same device settings for all captures."
+      }
+    ],
   },
   {
     slug: 'social-media-previews',
@@ -105,6 +123,24 @@ const response = await fetch('https://api.screenshotly.app/screenshot', {
     mockup: 'browser-light',
   }),
 });`,
+    faqs: [
+      {
+        question: "How do I generate dynamic Open Graph images for social media?",
+        answer: "Use Screenshotly to capture live screenshots of your pages and serve them as og:image meta tags. This creates unique, up-to-date previews for each page that reflect your current content and branding."
+      },
+      {
+        question: "What's the optimal image size for social media previews?",
+        answer: "For maximum compatibility, use 1200x630 pixels (1.91:1 aspect ratio). This works perfectly for Facebook, Twitter, LinkedIn, and most other social platforms. Our API can automatically resize to this dimension."
+      },
+      {
+        question: "Can I add device mockups to social media previews?",
+        answer: "Yes! Our browser, iPhone, and MacBook mockups make your social previews stand out in feeds. Device mockups create a premium look that increases click-through rates by up to 2.3x compared to plain screenshots."
+      },
+      {
+        question: "How do I handle caching for social media images?",
+        answer: "Cache generated images for at least 24 hours to reduce API costs and improve performance. Use URL parameters or timestamps to bust cache when content changes. Most social platforms cache images for several days."
+      }
+    ],
   },
   {
     slug: 'e-commerce-product-images',
@@ -157,6 +193,24 @@ const response = await fetch('https://api.screenshotly.app/screenshot', {
     delay: 2000, // Wait for images to load
   }),
 });`,
+    faqs: [
+      {
+        question: "How do I capture thousands of product pages efficiently?",
+        answer: "Process URLs in batches and use appropriate delays between requests to respect rate limits. Our API can handle high-volume requests, and you can parallelize captures across multiple API keys for maximum throughput."
+      },
+      {
+        question: "Can I capture product pages from any e-commerce platform?",
+        answer: "Yes! Screenshotly works with all major e-commerce platforms including Shopify, WooCommerce, Magento, Amazon, eBay, and custom-built stores. We handle different page structures and loading patterns automatically."
+      },
+      {
+        question: "How do I ensure product images load before capturing?",
+        answer: "Use the delay parameter (2-5 seconds) to wait for images and dynamic content to fully load. For heavy pages with many images, consider using our wait-for-selector option to ensure specific elements are visible."
+      },
+      {
+        question: "What's the best approach for competitor price monitoring?",
+        answer: "Capture product pages regularly (daily/weekly) and store screenshots with metadata like price, availability, and timestamp. This creates a visual history of competitor changes that's invaluable for pricing strategy."
+      }
+    ],
   },
   {
     slug: 'automated-testing',
@@ -214,6 +268,24 @@ const captureForTesting = async (urls: string[]) => {
   );
   return screenshots;
 };`,
+    faqs: [
+      {
+        question: "How do I integrate screenshot testing into my CI/CD pipeline?",
+        answer: "Add screenshot capture as a step in your GitHub Actions, GitLab CI, or Jenkins pipeline. Capture screenshots after deployment and compare them against baseline images using visual diff tools like Percy or Chromatic."
+      },
+      {
+        question: "What's the best way to handle visual test baselines?",
+        answer: "Store baseline screenshots in version control or a dedicated storage service. Update baselines when intentional UI changes are made, and use automated diff tools to detect unintended changes."
+      },
+      {
+        question: "Can I test responsive designs across multiple viewports?",
+        answer: "Yes! Capture the same page at different viewport sizes (mobile, tablet, desktop) to ensure responsive designs work correctly. Our API supports custom viewport dimensions for comprehensive testing."
+      },
+      {
+        question: "How do I handle dynamic content in visual tests?",
+        answer: "Use our AI-powered element removal to hide timestamps, user-specific data, and dynamic elements. You can also use CSS selectors to hide specific elements that change between test runs."
+      }
+    ],
   },
   {
     slug: 'website-thumbnails',
@@ -265,6 +337,24 @@ const response = await fetch('https://api.screenshotly.app/screenshot', {
     quality: 80,
   }),
 });`,
+    faqs: [
+      {
+        question: "What's the optimal thumbnail size for web directories?",
+        answer: "For most directories, 400x300 pixels (4:3 aspect ratio) works well. This provides enough detail while keeping file sizes small. For mobile-first designs, consider 300x200 or 320x240 pixels."
+      },
+      {
+        question: "How do I handle websites that take time to load?",
+        answer: "Use the delay parameter (2-5 seconds) to wait for content to fully load. For sites with heavy JavaScript or slow APIs, you can increase the delay or use our wait-for-selector option to ensure specific elements are visible."
+      },
+      {
+        question: "Should I use JPEG or PNG for thumbnails?",
+        answer: "JPEG is recommended for thumbnails as it provides smaller file sizes with acceptable quality. Use quality settings between 70-85 for the best balance. PNG is only needed if you require transparency."
+      },
+      {
+        question: "How long should I cache thumbnails?",
+        answer: "Cache thumbnails for at least 24 hours, preferably 7 days or more. Most websites don't change their homepage frequently, so longer caching reduces API costs while maintaining freshness."
+      }
+    ],
   },
   {
     slug: 'pdf-generation',

@@ -91,6 +91,13 @@ export const metadata: Metadata = {
   other: {
     'contact:phone_number': '+1-281-506-0216',
     'contact:postal_address': '10685-B Hazelhurst Dr. # 21148, Houston, TX 77043, USA',
+    'apple-mobile-web-app-capable': 'yes',
+    'apple-mobile-web-app-status-bar-style': 'default',
+    'apple-mobile-web-app-title': 'Screenshotly',
+    'application-name': 'Screenshotly',
+    'msapplication-TileColor': '#8b5cf6',
+    'msapplication-config': '/browserconfig.xml',
+    'theme-color': '#8b5cf6',
   },
 };
 

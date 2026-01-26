@@ -40,6 +40,24 @@ export const comparisons = [
             { feature: 'PDF Generation', screenshotly: '✅ Yes', competitor: '✅ Yes' },
             { feature: 'Custom Viewport', screenshotly: '✅ Yes', competitor: '✅ Yes' },
         ],
+        faqs: [
+            {
+                question: "Why should I choose Screenshotly over ScreenshotAPI?",
+                answer: "Screenshotly offers AI-powered element removal that automatically removes cookie banners and popups, beautiful device mockups, and more competitive pricing. Our modern API design also provides a better developer experience."
+            },
+            {
+                question: "Does Screenshotly have better pricing than ScreenshotAPI?",
+                answer: "Yes! Screenshotly offers 500 free screenshots per day compared to ScreenshotAPI's 100 per month. Our Pro plans are also more affordable for high-volume usage."
+            },
+            {
+                question: "Can I migrate from ScreenshotAPI to Screenshotly easily?",
+                answer: "Absolutely! Our API is designed to be simple to integrate. Most developers complete the migration in under an hour by updating their API endpoint and authentication headers."
+            },
+            {
+                question: "What unique features does Screenshotly offer?",
+                answer: "Screenshotly's standout features include AI-powered element removal, professional device mockups (iPhone, MacBook, Browser), and clean screenshots without cookie banners or popups."
+            }
+        ],
     },
     {
         slug: 'urlbox',

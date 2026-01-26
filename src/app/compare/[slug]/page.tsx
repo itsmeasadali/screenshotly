@@ -61,7 +61,8 @@ export default async function ComparisonPage({ params }: Props) {
         { name: `vs ${comparison.name}`, url: `${BASE_URL}/compare/${slug}` },
     ];
 
-    const faqs = [
+    // Use specific FAQs from comparison data, or fall back to generic ones
+    const faqs = 'faqs' in comparison && comparison.faqs ? comparison.faqs : [
         {
             question: `What's the difference between Screenshotly and ${comparison.name}?`,
             answer: `Screenshotly offers AI-powered element removal, built-in device mockups, and a simpler developer experience. ${comparison.name} ${comparison.competitor.cons[0].toLowerCase()}.`,

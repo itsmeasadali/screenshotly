@@ -25,5 +25,47 @@
         "developer tools",
         "productivity",
         "utilities"
+    ],
+    "lang": "en",
+    "dir": "ltr",
+    "scope": "/",
+    "prefer_related_applications": false,
+    "edge_side_panel": {
+        "preferred_width": 400
+    },
+    "shortcuts": [
+        {
+            "name": "API Playground",
+            "short_name": "Playground",
+            "description": "Test the screenshot API",
+            "url": "/playground",
+            "icons": [
+                {
+                    "src": "/icon-512.png",
+                    "sizes": "512x512"
+                }
+            ]
+        },
+        {
+            "name": "Documentation",
+            "short_name": "Docs",
+            "description": "API documentation and guides",
+            "url": "/help",
+            "icons": [
+                {
+                    "src": "/icon-512.png",
+                    "sizes": "512x512"
+                }
+            ]
+        }
+    ],
+    "screenshots": [
+        {
+            "src": "/og-image.png",
+            "sizes": "1200x630",
+            "type": "image/png",
+            "form_factor": "wide",
+            "label": "Screenshotly API Dashboard"
+        }
     ]
 }

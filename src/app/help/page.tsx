@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { JsonLd } from "@/components/seo";
-import { getBreadcrumbSchema, getFAQSchema } from "@/lib/seo/structured-data";
+import { getBreadcrumbSchema, getFAQSchema, getAPIDocumentationSchema, getDatasetSchema } from "@/lib/seo/structured-data";
 import Link from 'next/link';
 import {
   MessageCircle,
@@ -146,6 +146,8 @@ export default function HelpPage() {
     <GuestLayout>
       <JsonLd data={getBreadcrumbSchema(breadcrumbs)} />
       <JsonLd data={getFAQSchema(faqs)} />
+      <JsonLd data={getAPIDocumentationSchema()} />
+      <JsonLd data={getDatasetSchema()} />
 
       <div className="container mx-auto px-4 py-12 max-w-6xl">
         {/* Header */}

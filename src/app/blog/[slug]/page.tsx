@@ -7,7 +7,7 @@ import GuestLayout from "@/components/layouts/GuestLayout";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { JsonLd } from "@/components/seo";
-import { getBreadcrumbSchema, getArticleSchema } from "@/lib/seo/structured-data";
+import { getBreadcrumbSchema, getArticleSchema, getHowToSchema } from "@/lib/seo/structured-data";
 import { getBlogPost, getRelatedBlogPosts, getAllBlogSlugs, getAuthor } from "@/lib/markdown";
 
 const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://screenshotly.app';
@@ -105,6 +105,21 @@ export default async function BlogPostPage({ params }: Props) {
                 } : { name: post.author },
                 faqs: post.faqs,
             })} />
+            
+            {/* Add HowTo schema for tutorial posts */}
+            {post.category === 'tutorial' && (
+                <JsonLd data={getHowToSchema({
+                    name: post.title,
+                    description: post.excerpt,
+                    totalTime: `PT${post.readingTime}M`,
+                    steps: [
+                        { name: "Set up your environment", text: "Install required dependencies and get your API key from the dashboard." },
+                        { name: "Configure your request", text: "Set up the URL, device type, and any AI removal options you need." },
+                        { name: "Make the API call", text: "Send a POST request to our API endpoint with your configuration." },
+                        { name: "Process the response", text: "Handle the returned image data and save or use it in your application." },
+                    ],
+                })} />
+            )}
 
             <article className="py-16">
                 <div className="container mx-auto px-4 max-w-3xl">

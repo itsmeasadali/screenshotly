@@ -6,7 +6,7 @@ import GuestLayout from "@/components/layouts/GuestLayout";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { JsonLd } from "@/components/seo";
-import { getBreadcrumbSchema, getHowToSchema } from "@/lib/seo/structured-data";
+import { getBreadcrumbSchema, getHowToSchema, getFAQSchema } from "@/lib/seo/structured-data";
 import { integrations } from "@/data/integrations";
 
 const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://screenshotly.app';
@@ -93,6 +93,26 @@ export default async function IntegrationPage({ params }: Props) {
         .filter((i) => i.slug !== slug && i.type === integration.type)
         .slice(0, 4);
 
+    // Use integration-specific FAQs if available, otherwise use generic ones
+    const faqs = 'faqs' in integration && integration.faqs ? integration.faqs : [
+        {
+            question: `How do I get started with ${integration.name} and Screenshotly?`,
+            answer: integration.description,
+        },
+        {
+            question: "What authentication method should I use?",
+            answer: "Use Bearer token authentication by including your API key in the Authorization header: 'Bearer YOUR_API_KEY'.",
+        },
+        {
+            question: "How do I handle API errors?",
+            answer: "Always check the response status code. Common errors include 401 (invalid API key), 429 (rate limit exceeded), and 400 (invalid parameters).",
+        },
+        {
+            question: "Can I customize the screenshot format and quality?",
+            answer: "Yes! You can specify format (PNG, JPEG, PDF), quality settings, viewport size, and device type in your API request.",
+        },
+    ];
+
     return (
         <GuestLayout>
             <JsonLd data={getBreadcrumbSchema(breadcrumbs)} />
@@ -102,6 +122,7 @@ export default async function IntegrationPage({ params }: Props) {
                 totalTime: "PT10M",
                 steps: howToSteps,
             })} />
+            <JsonLd data={getFAQSchema(faqs)} />
 
             <article className="py-16">
                 <div className="container mx-auto px-4 max-w-4xl">
@@ -219,6 +240,19 @@ export default async function IntegrationPage({ params }: Props) {
                             View full API docs
                             <ExternalLink className="w-3 h-3 ml-1" />
                         </Link>
+                    </section>
+
+                    {/* FAQs */}
+                    <section className="mb-12">
+                        <h2 className="text-2xl font-semibold mb-6">Frequently Asked Questions</h2>
+                        <div className="space-y-4">
+                            {faqs.map((faq, index) => (
+                                <div key={index} className="border rounded-lg p-4">
+                                    <h3 className="font-medium mb-2">{faq.question}</h3>
+                                    <p className="text-muted-foreground">{faq.answer}</p>
+                                </div>
+                            ))}
+                        </div>
                     </section>
 
                     {/* CTA */}

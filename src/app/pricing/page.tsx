@@ -3,6 +3,7 @@ import Pricing from '@/components/Pricing';
 import GuestLayout from '@/components/layouts/GuestLayout';
 import { JsonLd } from "@/components/seo";
 import { getProductSchema, getFAQSchema } from "@/lib/seo/structured-data";
+import { getReviewSchema } from "@/data/testimonials";
 
 export const metadata: Metadata = {
   title: "Pricing - Affordable Screenshot API Plans",
@@ -59,6 +60,7 @@ export default function PricingPage() {
     <GuestLayout>
       <JsonLd data={getProductSchema()} />
       <JsonLd data={getFAQSchema(pricingFAQs)} />
+      <JsonLd data={getReviewSchema()} />
       <Pricing />
     </GuestLayout>
   );

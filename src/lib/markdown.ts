@@ -32,15 +32,16 @@ export interface Author {
   name: string;
   slug: string;
   bio: string;
-  credentials: string;
-  avatar: string;
-  social: {
+  credentials?: string;
+  avatar?: string;
+  content: string;
+  social?: {
     linkedin?: string;
     github?: string;
     twitter?: string;
   };
-  expertise: string[];
-  company: {
+  expertise?: string[];
+  company?: {
     name: string;
     url: string;
     role: string;
@@ -104,12 +105,40 @@ export async function getBlogPost(slug: string): Promise<BlogPost | null> {
   }
 }
 
-// Get author information
-export async function getAuthor(slug: string): Promise<Author | null> {
+// Get all authors
+export async function getAllAuthors(): Promise<Author[]> {
+  try {
+    const authorsDirectory = path.join(contentDirectory, 'authors');
+    const filenames = fs.readdirSync(authorsDirectory);
+    
+    const authors = await Promise.all(
+      filenames
+        .filter(name => name.endsWith('.md'))
+        .map(async (filename) => {
+          const slug = filename.replace(/\.md$/, '');
+          return await getAuthorBySlug(slug);
+        })
+    );
+    
+    return authors.filter((author): author is Author => author !== null);
+  } catch (error) {
+    console.error('Error reading authors directory:', error);
+    return [];
+  }
+}
+
+// Get author by slug
+export async function getAuthorBySlug(slug: string): Promise<Author | null> {
   try {
     const filePath = path.join(contentDirectory, 'authors', `${slug}.md`);
     const fileContents = fs.readFileSync(filePath, 'utf8');
-    const { data } = matter(fileContents);
+    const { data, content } = matter(fileContents);
+    
+    // Process markdown to HTML
+    const processedContent = await remark()
+      .use(gfm)
+      .use(html, { sanitize: false })
+      .process(content);
     
     return {
       name: data.name,
@@ -117,6 +146,7 @@ export async function getAuthor(slug: string): Promise<Author | null> {
       bio: data.bio,
       credentials: data.credentials,
       avatar: data.avatar,
+      content: processedContent.toString(),
       social: data.social || {},
       expertise: data.expertise || [],
       company: data.company || {},
@@ -125,6 +155,11 @@ export async function getAuthor(slug: string): Promise<Author | null> {
     console.error(`Error reading author ${slug}:`, error);
     return null;
   }
+}
+
+// Get author information (legacy function)
+export async function getAuthor(slug: string): Promise<Author | null> {
+  return getAuthorBySlug(slug);
 }
 
 // Get featured blog posts

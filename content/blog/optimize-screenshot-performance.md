@@ -36,7 +36,7 @@ Every millisecond counts in production. Here's how to get faster screenshots whi
 
 Screenshot APIs are critical for modern web applications, from [automated testing](/use-cases/visual-regression-testing) to [content generation](/use-cases/social-media). However, slow screenshot capture can bottleneck your entire application. After analyzing millions of screenshot requests, we've identified the key optimization strategies that can reduce capture times by up to 70% while cutting costs significantly.
 
-Learn more about our [screenshot API features](/pricing) and explore [real-world use cases](/use-cases) where performance optimization makes the biggest impact.
+This guide builds on our [getting started tutorial](/blog/getting-started-with-screenshot-api) and complements our [integration guides](/integrations) for [JavaScript](/integrations/javascript), [Python](/integrations/python), and other popular languages. Learn more about our [screenshot API features](/pricing) and explore [real-world use cases](/use-cases) where performance optimization makes the biggest impact.
 
 ## Understanding Screenshot Performance Bottlenecks
 

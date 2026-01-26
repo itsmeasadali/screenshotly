@@ -31,6 +31,24 @@ const captureScreenshot = async (url) => {
   const blob = await response.blob();
   return URL.createObjectURL(blob);
 };`,
+            faqs: [
+                {
+                    question: "How do I handle CORS when calling the screenshot API from the browser?",
+                    answer: "The Screenshotly API supports CORS for browser requests. Make sure to include your API key in the Authorization header and use HTTPS. For production apps, consider proxying requests through your backend for better security."
+                },
+                {
+                    question: "Can I capture screenshots in React applications?",
+                    answer: "Yes! Use the fetch API or libraries like axios to call our screenshot API from React components. You can display captured screenshots using blob URLs or save them to your backend storage."
+                },
+                {
+                    question: "What's the best way to handle errors in JavaScript?",
+                    answer: "Always wrap API calls in try-catch blocks and check response.ok before processing. Common errors include 401 (invalid API key), 429 (rate limit exceeded), and 400 (invalid parameters)."
+                },
+                {
+                    question: "How do I convert the response to different formats?",
+                    answer: "The API returns binary image data. Use response.blob() for browser display, response.arrayBuffer() for processing, or response.buffer() in Node.js for file operations."
+                }
+            ],
         },
         {
             slug: 'nodejs',
@@ -65,6 +83,24 @@ const captureScreenshot = async (url, outputPath) => {
   const buffer = await response.arrayBuffer();
   fs.writeFileSync(outputPath, Buffer.from(buffer));
 };`,
+            faqs: [
+                {
+                    question: "How do I handle large volumes of screenshots in Node.js?",
+                    answer: "Use async/await with Promise.all() for parallel processing, but limit concurrency to avoid rate limits. Consider using a queue system like Bull or Agenda for high-volume processing with proper retry logic."
+                },
+                {
+                    question: "What's the best way to store API keys in Node.js?",
+                    answer: "Use environment variables with the dotenv package. Never hardcode API keys in your source code. For production, use secure secret management services like AWS Secrets Manager or Azure Key Vault."
+                },
+                {
+                    question: "Can I use Screenshotly with Express.js APIs?",
+                    answer: "Absolutely! Create API endpoints that accept URLs and return screenshots. You can stream the response directly to clients or save to cloud storage like AWS S3 for later retrieval."
+                },
+                {
+                    question: "How do I handle timeouts and retries in Node.js?",
+                    answer: "Set appropriate timeout values using AbortController or request timeout options. Implement exponential backoff for retries on temporary failures (429, 500, 502, 503 status codes)."
+                }
+            ],
         },
         {
             slug: 'python',
@@ -97,6 +133,24 @@ def capture_screenshot(url: str, output_path: str) -> None:
     
     with open(output_path, 'wb') as f:
         f.write(response.content)`,
+            faqs: [
+                {
+                    question: "How do I handle authentication in Python requests?",
+                    answer: "Include your API key in the Authorization header as 'Bearer YOUR_API_KEY'. Use environment variables to store your key securely: os.getenv('SCREENSHOTLY_API_KEY')."
+                },
+                {
+                    question: "Can I use Screenshotly with Django or Flask?",
+                    answer: "Yes! Create views that accept URLs and return screenshots. You can serve images directly using HttpResponse with image content-type or save to media storage for later access."
+                },
+                {
+                    question: "What's the best way to handle errors in Python?",
+                    answer: "Use response.raise_for_status() to raise exceptions for HTTP errors. Wrap API calls in try-except blocks to handle RequestException, Timeout, and ConnectionError appropriately."
+                },
+                {
+                    question: "How do I process screenshots in Python data pipelines?",
+                    answer: "Use libraries like Pandas for batch processing URLs, concurrent.futures for parallel requests, and PIL/Pillow for image processing. Consider using asyncio with aiohttp for high-performance async processing."
+                }
+            ],
         },
         {
             slug: 'php',

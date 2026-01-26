@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next';
 import { useCases } from '@/data/use-cases';
 import { integrations } from '@/data/integrations';
 import { comparisons } from '@/data/comparisons';
-import { getAllBlogPosts } from '@/lib/markdown';
+import { getAllBlogPosts, getAllAuthors } from '@/lib/markdown';
 
 const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://screenshotly.app';
 
@@ -95,21 +95,23 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ];
 
-  // Use case pages (pSEO) - from data
+  // Use case pages (pSEO) - from data with priority based on importance
+  const highPriorityUseCases = ['documentation-screenshots', 'social-media-previews', 'automated-testing'];
   const useCasePages: MetadataRoute.Sitemap = useCases.map((useCase) => ({
     url: `${BASE_URL}/use-cases/${useCase.slug}`,
     lastModified: now,
     changeFrequency: 'monthly' as const,
-    priority: 0.7,
+    priority: highPriorityUseCases.includes(useCase.slug) ? 0.8 : 0.7,
   }));
 
-  // Integration pages (pSEO) - from data
+  // Integration pages (pSEO) - from data with priority based on popularity
   const allIntegrations = [...integrations.languages, ...integrations.platforms];
+  const highPriorityIntegrations = ['javascript', 'nodejs', 'python', 'php'];
   const integrationPages: MetadataRoute.Sitemap = allIntegrations.map((integration) => ({
     url: `${BASE_URL}/integrations/${integration.slug}`,
     lastModified: now,
     changeFrequency: 'monthly' as const,
-    priority: 0.7,
+    priority: highPriorityIntegrations.includes(integration.slug) ? 0.8 : 0.7,
   }));
 
   // Comparison pages (pSEO) - from data
@@ -120,13 +122,22 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }));
 
-  // Blog pages - from markdown files
+  // Blog pages - from markdown files with higher priority for featured posts
   const blogPosts = await getAllBlogPosts();
   const blogPagesList: MetadataRoute.Sitemap = blogPosts.map((post) => ({
     url: `${BASE_URL}/blog/${post.slug}`,
     lastModified: new Date(post.updatedAt || post.publishedAt),
     changeFrequency: 'monthly' as const,
-    priority: 0.6,
+    priority: post.featured ? 0.7 : 0.6,
+  }));
+
+  // Author pages - from markdown files
+  const authors = await getAllAuthors();
+  const authorPagesList: MetadataRoute.Sitemap = authors.map((author) => ({
+    url: `${BASE_URL}/author/${author.slug}`,
+    lastModified: now,
+    changeFrequency: 'monthly' as const,
+    priority: 0.5,
   }));
 
   return [
@@ -136,5 +147,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...integrationPages,
     ...comparisonPages,
     ...blogPagesList,
+    ...authorPagesList,
   ];
 }

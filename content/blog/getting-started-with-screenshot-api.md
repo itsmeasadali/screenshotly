@@ -28,7 +28,9 @@ faqs:
 
 Welcome to Screenshotly! This guide will walk you through making your first API call to capture a website screenshot.
 
-Whether you're building automated testing workflows, creating [social media previews](/use-cases/social-media), or generating [documentation screenshots](/use-cases/documentation), Screenshotly makes it simple to capture high-quality website screenshots programmatically.
+Whether you're building [automated testing workflows](/use-cases/testing-automation), creating [social media previews](/use-cases/social-media), or generating [documentation screenshots](/use-cases/documentation), Screenshotly makes it simple to capture high-quality website screenshots programmatically.
+
+Our API is designed to be developer-friendly and works seamlessly with popular frameworks and languages. Check out our [integration guides](/integrations) for specific examples with [JavaScript](/integrations/javascript), [Python](/integrations/python), [PHP](/integrations/php), and more.
 
 ## Prerequisites
 
@@ -89,6 +91,8 @@ if (response.ok) {
   console.error('Failed to capture screenshot:', response.status);
 }
 ```
+
+For more advanced JavaScript integration patterns, including React and Node.js examples, see our comprehensive [JavaScript integration guide](/integrations/javascript).
 
 ### Python Example
 
