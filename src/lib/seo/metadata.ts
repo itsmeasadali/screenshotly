@@ -112,14 +112,16 @@ export const pageMetadata = {
     }),
 
     pricing: generateMetadata({
-        title: 'Pricing - Affordable Screenshot API Plans',
-        description: 'Simple, transparent pricing for Screenshotly. Start free with 500 screenshots/day. Scale to Pro for 5000+ screenshots. No hidden fees, cancel anytime.',
+        title: 'Pricing - Screenshot API Plans | 100 Free Screenshots',
+        description: 'Start free with 100 screenshots. Plans from $14/mo for 2,500 screenshots to $199/mo for 50,000. AI element removal, PDF rendering, no hidden fees.',
         keywords: [
             'screenshot API pricing',
             'screenshot service cost',
             'cheap screenshot API',
             'free screenshot API',
             'API pricing plans',
+            'buy screenshot API',
+            'screenshot API comparison',
         ],
         canonical: `${BASE_URL}/pricing`,
     }),

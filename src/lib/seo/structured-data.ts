@@ -80,24 +80,40 @@ export function getSoftwareApplicationSchema() {
         offers: {
             '@type': 'AggregateOffer',
             lowPrice: '0',
-            highPrice: '49',
+            highPrice: '199',
             priceCurrency: 'USD',
-            offerCount: 2,
+            offerCount: 4,
             offers: [
                 {
                     '@type': 'Offer',
                     name: 'Free Plan',
                     price: '0',
                     priceCurrency: 'USD',
-                    description: '500 screenshots per day',
+                    description: '100 free screenshots to start (lifetime)',
                 },
                 {
                     '@type': 'Offer',
-                    name: 'Pro Plan',
-                    price: '49',
+                    name: 'Basic Plan',
+                    price: '14',
                     priceCurrency: 'USD',
                     priceValidUntil: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-                    description: '5000 screenshots per day with priority support',
+                    description: '2,500 screenshots per month with PDF rendering and caching',
+                },
+                {
+                    '@type': 'Offer',
+                    name: 'Growth Plan',
+                    price: '59',
+                    priceCurrency: 'USD',
+                    priceValidUntil: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+                    description: '12,000 screenshots per month with AI element removal and video generation',
+                },
+                {
+                    '@type': 'Offer',
+                    name: 'Scale Plan',
+                    price: '199',
+                    priceCurrency: 'USD',
+                    priceValidUntil: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+                    description: '50,000 screenshots per month with GPU rendering and priority support',
                 },
             ],
         },
@@ -168,7 +184,7 @@ export function getProductSchema() {
         offers: {
             '@type': 'AggregateOffer',
             lowPrice: '0',
-            highPrice: '49',
+            highPrice: '199',
             priceCurrency: 'USD',
             availability: 'https://schema.org/InStock',
         },
@@ -660,7 +676,28 @@ export function getWebAPISchema() {
             url: `${BASE_URL}/pricing`,
             priceCurrency: 'USD',
             price: '0',
-            description: 'Free tier with 500 screenshots per day',
+            description: 'Free tier with 100 screenshots to start. Paid plans from $14/mo.',
+        },
+    };
+}
+
+// CollectionPage Schema (for topic hubs and category pages)
+export function getCollectionPageSchema({ name, description, url }: { name: string; description: string; url: string }) {
+    return {
+        '@context': 'https://schema.org',
+        '@type': 'CollectionPage',
+        name,
+        description,
+        url,
+        isPartOf: {
+            '@type': 'WebSite',
+            name: 'Screenshotly',
+            url: BASE_URL,
+        },
+        publisher: {
+            '@type': 'Organization',
+            name: 'Screenshotly',
+            url: BASE_URL,
         },
     };
 }

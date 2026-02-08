@@ -7,11 +7,11 @@ if (process.env.REDIS_URL) {
   try {
     // Clean the URL by removing any extra quotes
     const cleanUrl = process.env.REDIS_URL.replace(/^["']|["']$/g, '');
-    
+
     redis = createClient({
       url: cleanUrl,
     });
-    
+
     // Connect to Redis
     redis.connect().catch((error) => {
       console.warn('Failed to connect to Redis:', error);
@@ -46,13 +46,26 @@ export const RATE_LIMITS: Record<string, RateLimitTier> = {
     windowInHours: 1, // 50 per hour for playground
   },
   free: {
-    requestsPerWindow: 500,
-    windowInHours: 24, // 500 per day
+    requestsPerWindow: 100,
+    windowInHours: 87600, // 100 total (lifetime — ~10 year window, effectively never resets)
   },
+  basic: {
+    requestsPerWindow: 2500,
+    windowInHours: 720, // 2,500 per month (30 days)
+  },
+  growth: {
+    requestsPerWindow: 12000,
+    windowInHours: 720, // 12,000 per month (30 days)
+  },
+  scale: {
+    requestsPerWindow: 50000,
+    windowInHours: 720, // 50,000 per month (30 days)
+  },
+  // Legacy alias
   pro: {
-    requestsPerWindow: 5000,
-    windowInHours: 24, // 5000 per day
-  }
+    requestsPerWindow: 12000,
+    windowInHours: 720, // Maps to growth tier
+  },
 };
 
 export async function checkRateLimit(identifier: string, tier: string = 'free'): Promise<RateLimitResult> {
@@ -75,7 +88,7 @@ export async function checkRateLimit(identifier: string, tier: string = 'free'):
   // Get current count and reset time from Redis
   const entryString = await redis!.get(key);
   const entry: RateLimitEntry | null = entryString ? JSON.parse(entryString) : null;
-  
+
   // If no entry exists or it's expired, create a new one
   if (!entry || entry.reset <= now) {
     const newEntry: RateLimitEntry = {
@@ -117,6 +130,6 @@ export function getRateLimitIdentifier(req: Request): string {
   const forwardedFor = req.headers.get('x-forwarded-for');
   const realIp = req.headers.get('x-real-ip');
   const ip = forwardedFor?.split(',')[0] || realIp || 'anonymous';
-  
+
   return `api:${ip}`;
 } 

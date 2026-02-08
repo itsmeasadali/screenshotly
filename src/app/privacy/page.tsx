@@ -5,7 +5,7 @@ export default function PrivacyPage() {
     <GuestLayout>
       <div className="container mx-auto px-4 py-12 max-w-4xl">
         <h1 className="text-4xl font-bold text-foreground mb-8">Privacy Policy</h1>
-        
+
         <div className="prose prose-gray dark:prose-invert max-w-none">
           <p className="text-lg text-muted-foreground mb-8">
             Last updated: September 22, 2025
@@ -14,7 +14,7 @@ export default function PrivacyPage() {
           <section className="mb-8">
             <h2 className="text-2xl font-semibold text-foreground mb-4">Information We Collect</h2>
             <p className="text-muted-foreground mb-4">
-              We collect information you provide directly to us, such as when you create an account, 
+              We collect information you provide directly to us, such as when you create an account,
               make API requests, or contact us for support.
             </p>
             <ul className="list-disc list-inside space-y-2 text-muted-foreground">
@@ -39,8 +39,8 @@ export default function PrivacyPage() {
           <section className="mb-8">
             <h2 className="text-2xl font-semibold text-foreground mb-4">Data Security</h2>
             <p className="text-muted-foreground">
-              We implement appropriate security measures to protect your personal information against 
-              unauthorized access, alteration, disclosure, or destruction. All data is encrypted in 
+              We implement appropriate security measures to protect your personal information against
+              unauthorized access, alteration, disclosure, or destruction. All data is encrypted in
               transit and at rest.
             </p>
           </section>
@@ -48,7 +48,7 @@ export default function PrivacyPage() {
           <section className="mb-8">
             <h2 className="text-2xl font-semibold text-foreground mb-4">Data Retention</h2>
             <p className="text-muted-foreground">
-              We retain your personal information only as long as necessary to provide our services 
+              We retain your personal information only as long as necessary to provide our services
               and comply with legal obligations. API logs are typically retained for 30 days.
             </p>
           </section>

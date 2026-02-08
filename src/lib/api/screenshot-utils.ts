@@ -7,17 +7,17 @@ export async function safeSharpResize(screenshot: Buffer, width: number, height:
   if (!Buffer.isBuffer(screenshot)) {
     throw new Error(`Sharp resize input must be Buffer, got ${typeof screenshot}`);
   }
-  
+
   try {
     // Create a fresh Sharp instance from the buffer
     const sharpInstance = sharp(Buffer.from(screenshot));
-    
+
     // Apply resize with explicit options
     const resizedInstance = sharpInstance.resize(width, height, options);
-    
+
     // Convert to buffer
     const result = await resizedInstance.toBuffer();
-    
+
     return Buffer.from(result);
   } catch (error) {
     console.error('Sharp resize operation failed:', error);
@@ -38,18 +38,18 @@ export async function applyMockup(screenshot: Buffer, mockupType: string): Promi
 
   try {
     const mockupPath = path.join(process.cwd(), 'public', mockupConfig.path);
-    
+
     // Load the mockup template
     const mockupImage = sharp(mockupPath);
     const mockupMetadata = await mockupImage.metadata();
-    
+
     if (!mockupMetadata.width || !mockupMetadata.height) {
       throw new Error('Could not determine mockup dimensions');
     }
 
     // Get placement configuration
     const placement = mockupConfig.screenshotPlacement;
-    
+
     // Resize screenshot to fit the placement area
     const resizedScreenshot = await safeSharpResize(
       screenshot,
@@ -82,7 +82,7 @@ export function getViewportDimensions(device?: string, width?: number, height?: 
   if (width && height) {
     return { width, height };
   }
-  
+
   if (device && device in mockupMap) {
     const deviceConfig = mockupMap[device as keyof typeof mockupMap];
     return {
@@ -90,7 +90,7 @@ export function getViewportDimensions(device?: string, width?: number, height?: 
       height: deviceConfig.screenshotPlacement.height
     };
   }
-  
+
   // Default fallback
   return { width: 1920, height: 1080 };
 }
@@ -99,6 +99,8 @@ export function getContentType(format: string): string {
   switch (format) {
     case 'jpeg':
       return 'image/jpeg';
+    case 'webp':
+      return 'image/webp';
     case 'pdf':
       return 'application/pdf';
     case 'png':
@@ -111,6 +113,8 @@ export function getFileExtension(format: string): string {
   switch (format) {
     case 'jpeg':
       return 'jpg';
+    case 'webp':
+      return 'webp';
     case 'pdf':
       return 'pdf';
     case 'png':

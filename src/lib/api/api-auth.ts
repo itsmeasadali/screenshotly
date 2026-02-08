@@ -13,13 +13,15 @@ export interface RateLimitResult {
   success: boolean;
   message?: string;
   retryAfter?: number;
+  limit?: number;
+  remaining?: number;
 }
 
 export async function authenticateApiRequest(request: NextRequest): Promise<AuthResult> {
   try {
     // Get API key from header
     const apiKey = request.headers.get('x-api-key') || request.headers.get('authorization')?.replace('Bearer ', '');
-    
+
     if (!apiKey) {
       return {
         success: false,
@@ -30,7 +32,7 @@ export async function authenticateApiRequest(request: NextRequest): Promise<Auth
 
     // Validate API key
     const validation = await validateApiKey(apiKey);
-    
+
     if (!validation.isValid) {
       return {
         success: false,
@@ -61,12 +63,12 @@ export async function authenticateApiRequest(request: NextRequest): Promise<Auth
 export async function checkApiRateLimit(userId: string): Promise<RateLimitResult> {
   try {
     const rateLimitInfo = await getRateLimitInfo(userId);
-    
+
     if (rateLimitInfo && rateLimitInfo.remaining <= 0) {
       const resetTime = rateLimitInfo.reset;
       const now = new Date();
       const retryAfter = Math.ceil((resetTime.getTime() - now.getTime()) / 1000);
-      
+
       return {
         success: false,
         message: `Rate limit exceeded. Limit resets at ${resetTime.toISOString()}`,
@@ -74,7 +76,11 @@ export async function checkApiRateLimit(userId: string): Promise<RateLimitResult
       };
     }
 
-    return { success: true };
+    return {
+      success: true,
+      limit: rateLimitInfo?.limit,
+      remaining: rateLimitInfo?.remaining,
+    };
 
   } catch (error) {
     console.error('Rate limit check error:', error);

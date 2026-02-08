@@ -127,9 +127,9 @@ export default function CompareIndexPage() {
                                 </p>
                             </div>
                             <div>
-                                <h3 className="font-semibold mb-2">💰 Generous Free Tier</h3>
+                                <h3 className="font-semibold mb-2">💰 Free Tier Included</h3>
                                 <p className="text-sm text-muted-foreground">
-                                    500 screenshots per day free, no credit card required
+                                    100 free screenshots to start, no credit card required
                                 </p>
                             </div>
                         </div>

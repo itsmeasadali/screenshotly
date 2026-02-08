@@ -67,8 +67,8 @@ export default function UseCasesIndexPage() {
                             <div className="text-sm text-muted-foreground">Detailed use case guides</div>
                         </div>
                         <div className="text-center p-6 bg-muted/50 rounded-xl">
-                            <div className="text-3xl font-bold text-primary mb-2">500+</div>
-                            <div className="text-sm text-muted-foreground">Free screenshots daily</div>
+                            <div className="text-3xl font-bold text-primary mb-2">100</div>
+                            <div className="text-sm text-muted-foreground">Free screenshots to start</div>
                         </div>
                         <div className="text-center p-6 bg-muted/50 rounded-xl">
                             <div className="text-3xl font-bold text-primary mb-2">&lt; 5 min</div>

@@ -21,7 +21,7 @@ const homepageFAQs = [
   },
   {
     question: "How do I get started with the Screenshot API?",
-    answer: "Sign up for a free account to get your API key. You can make up to 500 screenshots per day on the free plan. Simply make a POST request to our API endpoint with the URL you want to capture.",
+    answer: "Sign up for a free account to get your API key. You get 100 free screenshots to start — no credit card required. Simply make a POST request to our API endpoint with the URL you want to capture.",
   },
   {
     question: "What formats does the Screenshot API support?",

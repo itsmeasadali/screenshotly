@@ -5,7 +5,7 @@ export default function GDPRPage() {
     <GuestLayout>
       <div className="container mx-auto px-4 py-12 max-w-4xl">
         <h1 className="text-4xl font-bold text-foreground mb-8">GDPR Compliance</h1>
-        
+
         <div className="prose prose-gray dark:prose-invert max-w-none">
           <p className="text-lg text-muted-foreground mb-8">
             Last updated: {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
@@ -14,7 +14,7 @@ export default function GDPRPage() {
           <section className="mb-8">
             <h2 className="text-2xl font-semibold text-foreground mb-4">Our Commitment to GDPR</h2>
             <p className="text-muted-foreground mb-4">
-              Screenshotly is committed to protecting your personal data and respecting your privacy rights under the 
+              Screenshotly is committed to protecting your personal data and respecting your privacy rights under the
               General Data Protection Regulation (GDPR). This page outlines how we comply with GDPR requirements.
             </p>
           </section>
@@ -37,7 +37,7 @@ export default function GDPRPage() {
             <p className="text-muted-foreground mb-4">
               As a data subject, you have the following rights:
             </p>
-            
+
             <div className="space-y-4">
               <div>
                 <h3 className="text-lg font-medium text-foreground mb-2">Right of Access</h3>
@@ -141,8 +141,8 @@ export default function GDPRPage() {
             </p>
             <div className="bg-muted/50 p-4 rounded-lg">
               <p className="text-muted-foreground">
-                <strong>Email:</strong> gdpr@screenshotly.app<br/>
-                <strong>Subject:</strong> GDPR Request - [Your Request Type]<br/>
+                <strong>Email:</strong> gdpr@screenshotly.app<br />
+                <strong>Subject:</strong> GDPR Request - [Your Request Type]<br />
                 <strong>Response Time:</strong> Within 30 days
               </p>
             </div>
@@ -154,8 +154,8 @@ export default function GDPRPage() {
           <section className="mb-8">
             <h2 className="text-2xl font-semibold text-foreground mb-4">Contact Our DPO</h2>
             <p className="text-muted-foreground">
-              If you have any questions about our GDPR compliance or wish to file a complaint, 
-              you can contact our Data Protection Officer at dpo@screenshotly.app or lodge a 
+              If you have any questions about our GDPR compliance or wish to file a complaint,
+              you can contact our Data Protection Officer at dpo@screenshotly.app or lodge a
               complaint with your local supervisory authority.
             </p>
           </section>

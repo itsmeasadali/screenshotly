@@ -14,7 +14,7 @@ export default function StatusPage() {
     },
     {
       name: "AI Processing",
-      status: "operational", 
+      status: "operational",
       description: "Element removal and image processing",
       uptime: "99.95%"
     },
@@ -107,8 +107,8 @@ export default function StatusPage() {
                         <p className="text-xs text-muted-foreground">30-day uptime</p>
                       </div>
                       <Badge className={getStatusBadge(service.status)}>
-                        {service.status === 'operational' ? 'Operational' : 
-                         service.status === 'degraded' ? 'Degraded' : 'Outage'}
+                        {service.status === 'operational' ? 'Operational' :
+                          service.status === 'degraded' ? 'Degraded' : 'Outage'}
                       </Badge>
                     </div>
                   </div>

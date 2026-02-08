@@ -204,7 +204,7 @@ export default async function ComparisonPage({ params }: Props) {
                             Ready to switch to Screenshotly?
                         </h2>
                         <p className="text-muted-foreground mb-6">
-                            Get started with 500 free screenshots per day. Migrate in minutes.
+                            Get started with 100 free screenshots. Migrate in minutes.
                         </p>
                         <div className="flex flex-col sm:flex-row gap-4 justify-center">
                             <Button size="lg" asChild>

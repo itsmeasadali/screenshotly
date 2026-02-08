@@ -9,16 +9,16 @@ export async function POST(request: NextRequest) {
   try {
     // Parse request body
     const body = await request.json();
-    
+
     // Validate request data
     const validatedData = screenshotSchema.parse(body);
-    
+
     // Check authentication for AI features
     const { userId } = await auth();
-    
+
     if (validatedData.aiRemoval?.enabled && !userId) {
       return NextResponse.json(
-        { 
+        {
           error: 'AI features require authentication',
           message: 'Please sign in to use AI element removal features',
           requiresAuth: true
@@ -29,17 +29,17 @@ export async function POST(request: NextRequest) {
 
     // Rate limiting
     const rateLimitKey = userId || request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'anonymous';
-    const rateLimitResult = await checkRateLimit(rateLimitKey, userId ? 'pro' : 'free');
-    
+    const rateLimitResult = await checkRateLimit(rateLimitKey, 'playground');
+
     if (!rateLimitResult.success) {
       const retryAfter = Math.ceil((rateLimitResult.reset - Date.now()) / 1000);
       return NextResponse.json(
-        { 
+        {
           error: 'Rate limit exceeded',
           message: `Too many requests. Try again later.`,
           retryAfter: retryAfter
         },
-        { 
+        {
           status: 429,
           headers: {
             'Retry-After': retryAfter.toString()
@@ -56,7 +56,7 @@ export async function POST(request: NextRequest) {
     const fileExtension = getFileExtension(validatedData.format || 'png');
     const filename = `screenshot-${Date.now()}.${fileExtension}`;
 
-    return new NextResponse(screenshotBuffer, {
+    return new NextResponse(new Uint8Array(screenshotBuffer), {
       status: 200,
       headers: {
         'Content-Type': contentType,
@@ -69,11 +69,11 @@ export async function POST(request: NextRequest) {
 
   } catch (error) {
     console.error('Screenshot API error:', error);
-    
+
     // Handle validation errors
     if (error instanceof Error && error.name === 'ZodError') {
       return NextResponse.json(
-        { 
+        {
           error: 'Invalid request data',
           message: 'Please check your request parameters',
           details: error.message
@@ -86,18 +86,18 @@ export async function POST(request: NextRequest) {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
 
     return NextResponse.json(
-      { 
+      {
         error: 'Screenshot generation failed',
         message: errorMessage
       },
       { status: 500 }
     );
   }
-} 
+}
 
 export async function GET() {
   return NextResponse.json(
-    { 
+    {
       error: 'Method not allowed',
       message: 'This endpoint only accepts POST requests'
     },

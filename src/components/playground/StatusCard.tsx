@@ -29,9 +29,9 @@ export const StatusCard = ({ isSignedIn, userName }: StatusCardProps) => {
                 )}
               </h3>
               <p className="text-sm text-muted-foreground mt-1">
-                {isSignedIn 
-                  ? 'You have access to 500 requests per day and AI features'
-                  : 'Anonymous users: 50 requests per hour. Sign in for higher limits and AI features'
+                {isSignedIn
+                  ? 'Free tier: 100 screenshots total. Upgrade for higher monthly limits and premium features'
+                  : 'Anonymous users: 50 requests per hour. Sign in for 100 free screenshots and AI features'
                 }
               </p>
             </div>

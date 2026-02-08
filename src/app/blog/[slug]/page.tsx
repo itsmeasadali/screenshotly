@@ -105,7 +105,7 @@ export default async function BlogPostPage({ params }: Props) {
                 } : { name: post.author },
                 faqs: post.faqs,
             })} />
-            
+
             {/* Add HowTo schema for tutorial posts */}
             {post.category === 'tutorial' && (
                 <JsonLd data={getHowToSchema({
@@ -154,7 +154,9 @@ export default async function BlogPostPage({ params }: Props) {
                         <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground border-t border-b py-4">
                             <span className="flex items-center gap-2">
                                 <User className="w-4 h-4" />
-                                {author?.name || post.author}
+                                <Link href={`/author/${post.author}`} className="hover:text-foreground transition-colors underline-offset-4 hover:underline">
+                                    {author?.name || post.author}
+                                </Link>
                             </span>
                             <span className="flex items-center gap-2">
                                 <Calendar className="w-4 h-4" />
@@ -168,7 +170,7 @@ export default async function BlogPostPage({ params }: Props) {
                     </header>
 
                     {/* Content */}
-                    <div 
+                    <div
                         className="prose prose-lg dark:prose-invert max-w-none mb-12"
                         dangerouslySetInnerHTML={{ __html: post.htmlContent }}
                     />
@@ -189,8 +191,8 @@ export default async function BlogPostPage({ params }: Props) {
                             <h3 className="text-lg font-semibold mb-4">About the Author</h3>
                             <div className="flex items-start gap-4">
                                 {author.avatar && (
-                                    <Image 
-                                        src={author.avatar} 
+                                    <Image
+                                        src={author.avatar}
                                         alt={author.name}
                                         width={64}
                                         height={64}
@@ -208,7 +210,7 @@ export default async function BlogPostPage({ params }: Props) {
                                     {author.social && (
                                         <div className="flex gap-3">
                                             {author.social.twitter && (
-                                                <a 
+                                                <a
                                                     href={author.social.twitter}
                                                     className="text-blue-500 hover:text-blue-600 text-sm"
                                                     target="_blank"
@@ -218,7 +220,7 @@ export default async function BlogPostPage({ params }: Props) {
                                                 </a>
                                             )}
                                             {author.social.linkedin && (
-                                                <a 
+                                                <a
                                                     href={author.social.linkedin}
                                                     className="text-blue-700 hover:text-blue-800 text-sm"
                                                     target="_blank"
@@ -228,7 +230,7 @@ export default async function BlogPostPage({ params }: Props) {
                                                 </a>
                                             )}
                                             {author.social.github && (
-                                                <a 
+                                                <a
                                                     href={author.social.github}
                                                     className="text-gray-700 hover:text-gray-800 text-sm"
                                                     target="_blank"
@@ -265,7 +267,7 @@ export default async function BlogPostPage({ params }: Props) {
                             Ready to capture your first screenshot?
                         </h2>
                         <p className="text-muted-foreground mb-6">
-                            Get started with 500 free screenshots per day. No credit card required.
+                            Get started with 100 free screenshots. No credit card required.
                         </p>
                         <div className="flex flex-col sm:flex-row gap-4 justify-center">
                             <Button size="lg" asChild>

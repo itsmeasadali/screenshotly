@@ -4,8 +4,8 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { 
-  ArrowRight, Rocket, CheckCircle, FileText, 
+import {
+  ArrowRight, Rocket, CheckCircle, FileText,
   Settings
 } from 'lucide-react';
 
@@ -26,10 +26,10 @@ export const CTASection = ({ userId }: CTASectionProps) => {
             Start building with our screenshot API
           </h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
-            Join thousands of developers using our API to automate screenshot capture, 
+            Join thousands of developers using our API to automate screenshot capture,
             testing workflows, and documentation generation.
           </p>
-          
+
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button size="lg" asChild>
               <Link href={userId ? "/dashboard" : "/sign-up"}>
@@ -54,7 +54,7 @@ export const CTASection = ({ userId }: CTASectionProps) => {
               </div>
               <h3 className="font-semibold mb-2">Free to Start</h3>
               <p className="text-sm text-muted-foreground">
-                500 free screenshots monthly. No credit card required.
+                100 free screenshots to start. No credit card required.
               </p>
             </CardContent>
           </Card>
@@ -92,7 +92,7 @@ export const CTASection = ({ userId }: CTASectionProps) => {
               Start free, scale as you grow. No hidden fees or surprise charges.
             </p>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Free Tier */}
             <Card className="border-2 border-muted">
@@ -105,15 +105,15 @@ export const CTASection = ({ userId }: CTASectionProps) => {
                 <ul className="space-y-3 mb-6">
                   <li className="flex items-center gap-2 text-sm">
                     <CheckCircle className="w-4 h-4 text-foreground" />
-                    500 screenshots/month
+                    100 free screenshots
                   </li>
                   <li className="flex items-center gap-2 text-sm">
                     <CheckCircle className="w-4 h-4 text-foreground" />
-                    Basic device mockups
+                    PNG, WebP, JPEG formats
                   </li>
                   <li className="flex items-center gap-2 text-sm">
                     <CheckCircle className="w-4 h-4 text-foreground" />
-                    Community support
+                    Full page screenshots
                   </li>
                 </ul>
                 <Button variant="outline" className="w-full" asChild>
@@ -124,74 +124,74 @@ export const CTASection = ({ userId }: CTASectionProps) => {
               </CardContent>
             </Card>
 
-            {/* Pro Tier */}
+            {/* Growth Tier */}
             <div className="relative">
               <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 z-10">
                 <Badge className="bg-primary text-primary-foreground border-0 px-3 py-1">Most Popular</Badge>
               </div>
               <Card className="border-2 border-primary shadow-lg">
+                <CardContent className="p-6">
+                  <div className="text-center mb-6">
+                    <h4 className="font-semibold text-lg mb-2">Growth</h4>
+                    <div className="text-3xl font-bold mb-1">$59</div>
+                    <div className="text-sm text-muted-foreground">per month</div>
+                  </div>
+                  <ul className="space-y-3 mb-6">
+                    <li className="flex items-center gap-2 text-sm">
+                      <CheckCircle className="w-4 h-4 text-foreground" />
+                      12,000 screenshots/month
+                    </li>
+                    <li className="flex items-center gap-2 text-sm">
+                      <CheckCircle className="w-4 h-4 text-foreground" />
+                      AI element removal
+                    </li>
+                    <li className="flex items-center gap-2 text-sm">
+                      <CheckCircle className="w-4 h-4 text-foreground" />
+                      Scrolling screenshots
+                    </li>
+                    <li className="flex items-center gap-2 text-sm">
+                      <CheckCircle className="w-4 h-4 text-foreground" />
+                      Video generation
+                    </li>
+                  </ul>
+                  <Button className="w-full" asChild>
+                    <Link href={userId ? "/dashboard" : "/sign-up"}>
+                      Start Growth Plan
+                    </Link>
+                  </Button>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Scale Tier */}
+            <Card className="border-2 border-muted">
               <CardContent className="p-6">
                 <div className="text-center mb-6">
-                  <h4 className="font-semibold text-lg mb-2">Pro</h4>
-                  <div className="text-3xl font-bold mb-1">$29</div>
+                  <h4 className="font-semibold text-lg mb-2">Scale</h4>
+                  <div className="text-3xl font-bold mb-1">$199</div>
                   <div className="text-sm text-muted-foreground">per month</div>
                 </div>
                 <ul className="space-y-3 mb-6">
                   <li className="flex items-center gap-2 text-sm">
                     <CheckCircle className="w-4 h-4 text-foreground" />
-                    10,000 screenshots/month
+                    50,000 screenshots/month
                   </li>
                   <li className="flex items-center gap-2 text-sm">
                     <CheckCircle className="w-4 h-4 text-foreground" />
-                    AI element removal
-                  </li>
-                  <li className="flex items-center gap-2 text-sm">
-                    <CheckCircle className="w-4 h-4 text-foreground" />
-                    Premium mockups
+                    GPU rendering
                   </li>
                   <li className="flex items-center gap-2 text-sm">
                     <CheckCircle className="w-4 h-4 text-foreground" />
                     Priority support
                   </li>
-                </ul>
-                <Button className="w-full" asChild>
-                  <Link href={userId ? "/dashboard" : "/sign-up"}>
-                    Start Pro Trial
-                  </Link>
-                </Button>
-              </CardContent>
-            </Card>
-            </div>
-
-            {/* Enterprise Tier */}
-            <Card className="border-2 border-muted">
-              <CardContent className="p-6">
-                <div className="text-center mb-6">
-                  <h4 className="font-semibold text-lg mb-2">Enterprise</h4>
-                  <div className="text-3xl font-bold mb-1">Custom</div>
-                  <div className="text-sm text-muted-foreground">contact us</div>
-                </div>
-                <ul className="space-y-3 mb-6">
                   <li className="flex items-center gap-2 text-sm">
                     <CheckCircle className="w-4 h-4 text-foreground" />
-                    Unlimited screenshots
-                  </li>
-                  <li className="flex items-center gap-2 text-sm">
-                    <CheckCircle className="w-4 h-4 text-foreground" />
-                    Custom integrations
-                  </li>
-                  <li className="flex items-center gap-2 text-sm">
-                    <CheckCircle className="w-4 h-4 text-foreground" />
-                    Dedicated support
-                  </li>
-                  <li className="flex items-center gap-2 text-sm">
-                    <CheckCircle className="w-4 h-4 text-foreground" />
-                    SLA guarantee
+                    99.9% Uptime SLA
                   </li>
                 </ul>
                 <Button variant="outline" className="w-full" asChild>
-                  <Link href="/contact">
-                    Contact Sales
+                  <Link href={userId ? "/dashboard" : "/sign-up"}>
+                    Start Scale Plan
                   </Link>
                 </Button>
               </CardContent>

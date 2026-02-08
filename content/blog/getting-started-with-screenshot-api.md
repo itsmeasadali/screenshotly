@@ -17,7 +17,7 @@ featured: true
 image: "/images/blog/getting-started/hero.jpg"
 faqs:
   - question: "Do I need a credit card to get started?"
-    answer: "No! Screenshotly offers 500 free screenshots per day without requiring a credit card. You can start testing immediately after signing up."
+    answer: "No! Screenshotly offers 100 free screenshots without requiring a credit card. You can start testing immediately after signing up."
   - question: "What programming languages are supported?"
     answer: "Screenshotly works with any language that can make HTTP requests. We provide examples for JavaScript, Python, PHP, Ruby, and more."
   - question: "How long does it take to capture a screenshot?"

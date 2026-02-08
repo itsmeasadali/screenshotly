@@ -35,7 +35,7 @@ export const comparisons = [
         comparisonTable: [
             { feature: 'AI Element Removal', screenshotly: '✅ Built-in', competitor: '❌ Not available' },
             { feature: 'Device Mockups', screenshotly: '✅ iPhone, MacBook, Browser', competitor: '⚠️ Limited' },
-            { feature: 'Free Tier', screenshotly: '✅ 500/day', competitor: '✅ 100/month' },
+            { feature: 'Free Tier', screenshotly: '✅ 100 free', competitor: '✅ 100/month' },
             { feature: 'Full Page Screenshots', screenshotly: '✅ Yes', competitor: '✅ Yes' },
             { feature: 'PDF Generation', screenshotly: '✅ Yes', competitor: '✅ Yes' },
             { feature: 'Custom Viewport', screenshotly: '✅ Yes', competitor: '✅ Yes' },
@@ -47,7 +47,7 @@ export const comparisons = [
             },
             {
                 question: "Does Screenshotly have better pricing than ScreenshotAPI?",
-                answer: "Yes! Screenshotly offers 500 free screenshots per day compared to ScreenshotAPI's 100 per month. Our Pro plans are also more affordable for high-volume usage."
+                answer: "Yes! Screenshotly offers 100 free screenshots to get started with no credit card, plus competitive paid plans starting at $14/mo for 2,500 screenshots — significantly cheaper than most competitors."
             },
             {
                 question: "Can I migrate from ScreenshotAPI to Screenshotly easily?",
@@ -308,7 +308,7 @@ export const comparisons = [
         comparisonTable: [
             { feature: 'AI Element Removal', screenshotly: '✅ Yes', competitor: '❌ No' },
             { feature: 'Device Mockups', screenshotly: '✅ Yes', competitor: '❌ No' },
-            { feature: 'Free Tier', screenshotly: '✅ 500/day', competitor: '✅ 100/month' },
+            { feature: 'Free Tier', screenshotly: '✅ 100 free', competitor: '✅ 100/month' },
             { feature: 'Full Page', screenshotly: '✅ Yes', competitor: '✅ Yes' },
             { feature: 'Delay Control', screenshotly: '✅ Yes', competitor: '✅ Yes' },
             { feature: 'Cookie Injection', screenshotly: '✅ Yes', competitor: '⚠️ Limited' },

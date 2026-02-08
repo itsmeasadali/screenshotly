@@ -5,7 +5,7 @@ export default function CookiePage() {
     <GuestLayout>
       <div className="container mx-auto px-4 py-12 max-w-4xl">
         <h1 className="text-4xl font-bold text-foreground mb-8">Cookie Policy</h1>
-        
+
         <div className="prose prose-gray dark:prose-invert max-w-none">
           <p className="text-lg text-muted-foreground mb-8">
             Last updated: {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
@@ -14,7 +14,7 @@ export default function CookiePage() {
           <section className="mb-8">
             <h2 className="text-2xl font-semibold text-foreground mb-4">What Are Cookies</h2>
             <p className="text-muted-foreground mb-4">
-              Cookies are small text files that are placed on your computer or mobile device when you visit a website. 
+              Cookies are small text files that are placed on your computer or mobile device when you visit a website.
               They are widely used to make websites work more efficiently and provide information to website owners.
             </p>
           </section>
@@ -34,7 +34,7 @@ export default function CookiePage() {
 
           <section className="mb-8">
             <h2 className="text-2xl font-semibold text-foreground mb-4">Types of Cookies We Use</h2>
-            
+
             <div className="space-y-6">
               <div>
                 <h3 className="text-xl font-medium text-foreground mb-2">Strictly Necessary Cookies</h3>
