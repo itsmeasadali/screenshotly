@@ -117,13 +117,6 @@ export function getSoftwareApplicationSchema() {
                 },
             ],
         },
-        aggregateRating: {
-            '@type': 'AggregateRating',
-            ratingValue: '4.8',
-            ratingCount: '150',
-            bestRating: '5',
-            worstRating: '1',
-        },
         featureList: [
             'AI-powered element removal',
             'Device mockups (iPhone, MacBook, Browser)',
@@ -187,11 +180,6 @@ export function getProductSchema() {
             highPrice: '199',
             priceCurrency: 'USD',
             availability: 'https://schema.org/InStock',
-        },
-        aggregateRating: {
-            '@type': 'AggregateRating',
-            ratingValue: '4.8',
-            reviewCount: '150',
         },
     };
 }

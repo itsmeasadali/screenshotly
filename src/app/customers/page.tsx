@@ -23,80 +23,12 @@ export const metadata: Metadata = {
     },
 };
 
-const testimonials = [
-    {
-        name: "Sarah Chen",
-        role: "Lead Developer",
-        company: "TechFlow",
-        companyUrl: "https://techflow.dev",
-        avatar: "/images/testimonials/avatar-1.jpg",
-        content: "Screenshotly's AI element removal is a game-changer. We were spending hours manually editing screenshots to remove cookie banners and popups. Now it's completely automated and the results are consistently clean.",
-        rating: 5,
-        useCase: "Documentation automation",
-        results: "Reduced screenshot editing time by 85%",
-    },
-    {
-        name: "Marcus Johnson",
-        role: "CTO",
-        company: "DesignStudio Pro",
-        companyUrl: "https://designstudiopro.com",
-        avatar: "/images/testimonials/avatar-2.jpg",
-        content: "We evaluated several screenshot APIs before choosing Screenshotly. The device mockups feature alone justified the switch - our marketing team now creates professional app store screenshots in seconds instead of hours in Figma.",
-        rating: 5,
-        useCase: "Marketing materials",
-        results: "10x faster marketing asset creation",
-    },
-    {
-        name: "Emily Rodriguez",
-        role: "QA Lead",
-        company: "TestAutomation Inc",
-        companyUrl: "https://testautomation.io",
-        avatar: "/images/testimonials/avatar-3.jpg",
-        content: "Our visual regression testing suite runs 500+ screenshots per deployment. Screenshotly handles the load effortlessly with consistent results. The API is fast, reliable, and the documentation is excellent.",
-        rating: 5,
-        useCase: "Visual regression testing",
-        results: "500+ screenshots per deployment, 99.9% uptime",
-    },
-    {
-        name: "David Park",
-        role: "Founder",
-        company: "ContentScale",
-        companyUrl: "https://contentscale.io",
-        avatar: "/images/testimonials/avatar-4.jpg",
-        content: "We use Screenshotly to generate Open Graph images for our content platform. The API is incredibly simple to integrate - we had it running in production within an hour. Support is responsive and the pricing is fair.",
-        rating: 5,
-        useCase: "OG image generation",
-        results: "40% increase in social media CTR",
-    },
-    {
-        name: "Jennifer Walsh",
-        role: "Senior Engineer",
-        company: "DocuFlow",
-        companyUrl: "https://docuflow.com",
-        avatar: "/images/testimonials/avatar-5.jpg",
-        content: "The PDF generation capability is exactly what we needed for our invoice system. Clean, professional PDFs generated from HTML templates in milliseconds. It's become an essential part of our billing infrastructure.",
-        rating: 5,
-        useCase: "Invoice generation",
-        results: "Processing 10,000+ invoices monthly",
-    },
-    {
-        name: "Alex Thompson",
-        role: "Product Manager",
-        company: "SaaSMetrics",
-        companyUrl: "https://saasmetrics.io",
-        avatar: "/images/testimonials/avatar-6.jpg",
-        content: "Screenshotly powers our competitor monitoring dashboard. We capture screenshots of 200+ SaaS landing pages daily to track design and pricing changes. The batch processing is rock solid.",
-        rating: 5,
-        useCase: "Competitor monitoring",
-        results: "200+ daily captures, zero downtime",
-    },
-];
+import { testimonials } from "@/data/testimonials";
 
 const stats = [
     { value: "10M+", label: "Screenshots captured" },
     { value: "99.9%", label: "Uptime SLA" },
     { value: "1,000+", label: "Active developers" },
-    { value: "4.9/5", label: "Average rating" },
 ];
 
 export default function CustomersPage() {
@@ -105,41 +37,10 @@ export default function CustomersPage() {
         { name: "Customers", url: `${BASE_URL}/customers` },
     ];
 
-    const reviewSchema = {
-        "@context": "https://schema.org",
-        "@type": "Product",
-        name: "Screenshotly Screenshot API",
-        description: "AI-powered screenshot API for developers",
-        brand: {
-            "@type": "Brand",
-            name: "Screenshotly",
-        },
-        aggregateRating: {
-            "@type": "AggregateRating",
-            ratingValue: "4.9",
-            reviewCount: testimonials.length.toString(),
-            bestRating: "5",
-            worstRating: "1",
-        },
-        review: testimonials.map((t) => ({
-            "@type": "Review",
-            reviewRating: {
-                "@type": "Rating",
-                ratingValue: t.rating.toString(),
-                bestRating: "5",
-            },
-            author: {
-                "@type": "Person",
-                name: t.name,
-            },
-            reviewBody: t.content,
-        })),
-    };
 
     return (
         <GuestLayout>
             <JsonLd data={getBreadcrumbSchema(breadcrumbs)} />
-            <JsonLd data={reviewSchema} />
 
             <section className="py-16">
                 <div className="container mx-auto px-4">
@@ -188,7 +89,7 @@ export default function CustomersPage() {
                                 <div className="relative mb-6">
                                     <Quote className="w-8 h-8 text-muted-foreground/20 absolute -top-2 -left-2" />
                                     <p className="text-muted-foreground relative z-10 pl-4">
-                                        &ldquo;{testimonial.content}&rdquo;
+                                        &ldquo;{testimonial.quote}&rdquo;
                                     </p>
                                 </div>
 
@@ -210,7 +111,7 @@ export default function CustomersPage() {
                                     <div>
                                         <div className="font-semibold">{testimonial.name}</div>
                                         <div className="text-sm text-muted-foreground">
-                                            {testimonial.role} at {testimonial.company}
+                                            {testimonial.title} at {testimonial.company}
                                         </div>
                                     </div>
                                 </div>
