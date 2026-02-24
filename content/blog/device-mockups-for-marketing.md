@@ -9,7 +9,7 @@ category: "guide"
 tags: ["mockups", "marketing", "design", "social-media"]
 keywords: 
   - "device mockup generator"
-  - "screenshot mockup API"
+  - "marketing mockup tool"
   - "iPhone mockup screenshot"
   - "MacBook mockup generator"
   - "browser frame screenshot"

@@ -1,5 +1,6 @@
 'use client';
 
+import Link from "next/link";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { 
@@ -17,7 +18,7 @@ const features = [
     icon: Smartphone,
     title: "Device Mockups",
     description: "Professional device frames for iPhone, iPad, MacBook, and browsers via simple API parameters",
-    highlight: "15+ templates"
+    highlight: "6 templates"
   },
   {
     icon: Brain,
@@ -27,21 +28,21 @@ const features = [
   },
   {
     icon: Globe,
-    title: "Reliable Hosting",
-    description: "Hosted on modern cloud infrastructure with automatic scaling and monitoring",
-    highlight: "Cloud hosted"
+    title: "Full Page Capture",
+    description: "Capture entire pages from header to footer, including lazy-loaded content. Set max height limits for long pages",
+    highlight: "Lazy-load aware"
   },
   {
     icon: Shield,
-    title: "Secure API",
-    description: "API key authentication with HTTPS encryption and secure token-based access control",
-    highlight: "HTTPS only"
+    title: "Custom Viewports",
+    description: "Set exact width, height, and device pixel ratio. Emulate any device from iPhone SE to 4K desktop displays",
+    highlight: "Any resolution"
   },
   {
     icon: Code,
-    title: "Rate Limited",
-    description: "Built-in rate limiting and usage tracking to prevent abuse and manage API consumption",
-    highlight: "Usage tracking"
+    title: "Multiple Output Formats",
+    description: "Export as PNG, JPEG, WebP, or PDF. Choose quality, dimensions, and full-page capture from a single endpoint",
+    highlight: "PNG · JPEG · WebP · PDF"
   }
 ];
 
@@ -90,21 +91,22 @@ export const FeaturesSection = () => {
         <div className="mt-20 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div className="space-y-8">
             <div>
-              <h3 className="text-2xl font-bold mb-4">Built for Scale</h3>
+              <h3 className="text-2xl font-bold mb-4">Developer-First Integration</h3>
               <p className="text-muted-foreground text-lg leading-relaxed">
-                Built with modern web technologies and designed to scale. Simple REST API 
-                that integrates with any programming language or framework.
+                One REST endpoint, any language. Send a POST with your URL and options — get back a 
+                pixel-perfect screenshot. Add device mockups, AI cleanup, and format conversion 
+                without managing Chrome instances.
               </p>
             </div>
             
             <div className="grid grid-cols-2 gap-6">
               <div className="text-center p-4 rounded-lg bg-card border">
-                <div className="text-2xl font-bold text-foreground mb-1">REST</div>
-                <div className="text-sm text-muted-foreground">API Standard</div>
+                <div className="text-2xl font-bold text-foreground mb-1">1 endpoint</div>
+                <div className="text-sm text-muted-foreground">REST API</div>
               </div>
               <div className="text-center p-4 rounded-lg bg-card border">
-                <div className="text-2xl font-bold text-foreground mb-1">15+</div>
-                <div className="text-sm text-muted-foreground">Device Templates</div>
+                <div className="text-2xl font-bold text-foreground mb-1">6</div>
+                <div className="text-sm text-muted-foreground">Device Mockups</div>
               </div>
             </div>
           </div>
@@ -129,7 +131,7 @@ export const FeaturesSection = () => {
                 </div>
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-muted-foreground">Ready to integrate</span>
-                  <span className="text-primary font-medium">View API Docs →</span>
+                  <Link href="/integrations" className="text-primary font-medium hover:underline">View Integration Guides →</Link>
                 </div>
               </div>
             </div>

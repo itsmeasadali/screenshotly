@@ -1,5 +1,5 @@
 ---
-title: "Getting Started with Screenshotly: Your First API Call"
+title: "Getting Started: Your First Screenshot API Call in 5 Minutes"
 slug: "getting-started-with-screenshot-api"
 excerpt: "Learn how to capture your first website screenshot with Screenshotly's REST API. Step-by-step guide for developers."
 publishedAt: "2024-01-15T10:00:00Z"
@@ -28,7 +28,7 @@ faqs:
 
 Welcome to Screenshotly! This guide will walk you through making your first API call to capture a website screenshot.
 
-Whether you're building [automated testing workflows](/use-cases/testing-automation), creating [social media previews](/use-cases/social-media), or generating [documentation screenshots](/use-cases/documentation), Screenshotly makes it simple to capture high-quality website screenshots programmatically.
+Whether you're building [automated testing workflows](/use-cases/automated-testing), creating [social media previews](/use-cases/social-media-previews), or generating [documentation screenshots](/use-cases/documentation-screenshots), Screenshotly makes it simple to capture high-quality website screenshots programmatically.
 
 Our API is designed to be developer-friendly and works seamlessly with popular frameworks and languages. Check out our [integration guides](/integrations) for specific examples with [JavaScript](/integrations/javascript), [Python](/integrations/python), [PHP](/integrations/php), and more.
 
@@ -257,10 +257,10 @@ Now that you've captured your first screenshot, explore our advanced features:
 - [PHP Integration](/integrations/php)
 
 ### Popular Use Cases
-- [Visual Regression Testing](/use-cases/visual-regression-testing)
-- [Social Media Automation](/use-cases/social-media)
-- [E-commerce Product Images](/use-cases/ecommerce)
-- [Documentation Screenshots](/use-cases/documentation)
+- [Visual Regression Testing](/use-cases/automated-testing)
+- [Social Media Automation](/use-cases/social-media-previews)
+- [E-commerce Product Images](/use-cases/e-commerce-product-images)
+- [Documentation Screenshots](/use-cases/documentation-screenshots)
 
 Ready to build something amazing? Start with our [interactive playground](/playground) to test different options, or dive into our comprehensive [API documentation](/help).
 

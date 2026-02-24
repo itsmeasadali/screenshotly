@@ -5,6 +5,7 @@ import { FeaturesSection } from "./home/FeaturesSection";
 import { UseCasesSection } from "./home/UseCasesSection";
 import { CTASection } from "./home/CTASection";
 import { Testimonials } from "./Testimonials";
+import { HomeFAQSection } from "./home/HomeFAQSection";
 
 interface HomeContentProps {
   userId?: string | null;
@@ -17,6 +18,7 @@ export default function HomeContent({ userId }: HomeContentProps) {
       <FeaturesSection />
       <UseCasesSection />
       <Testimonials />
+      <HomeFAQSection />
       <CTASection userId={userId} />
     </div>
   );

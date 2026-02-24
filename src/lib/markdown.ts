@@ -7,24 +7,36 @@ import gfm from 'remark-gfm';
 
 const contentDirectory = path.join(process.cwd(), 'content');
 
+export interface TocHeading {
+  id: string;
+  text: string;
+  level: number;
+}
+
 export interface BlogPost {
   slug: string;
   title: string;
   excerpt: string;
   content: string;
   htmlContent: string;
+  headings: TocHeading[];
   publishedAt: string;
   updatedAt?: string;
   author: string;
-  category: 'tutorial' | 'guide' | 'news' | 'comparison' | 'tips';
+  category: 'tutorial' | 'guide' | 'news' | 'comparison' | 'tips' | 'case-study' | 'reference';
   tags: string[];
   keywords: string[];
   readingTime: number;
   featured?: boolean;
   image?: string;
+  canonical?: string;
   faqs?: Array<{
     question: string;
     answer: string;
+  }>;
+  howToSteps?: Array<{
+    name: string;
+    text: string;
   }>;
 }
 
@@ -80,7 +92,9 @@ export async function getBlogPost(slug: string): Promise<BlogPost | null> {
       .use(html, { sanitize: false })
       .process(content);
     
-    const htmlContent = processedContent.toString();
+    const rawHtml = processedContent.toString();
+    const htmlContent = addHeadingIds(rawHtml);
+    const headings = extractHeadings(rawHtml);
     
     return {
       slug,
@@ -88,6 +102,7 @@ export async function getBlogPost(slug: string): Promise<BlogPost | null> {
       excerpt: data.excerpt,
       content,
       htmlContent,
+      headings,
       publishedAt: data.publishedAt,
       updatedAt: data.updatedAt,
       author: data.author,
@@ -97,7 +112,9 @@ export async function getBlogPost(slug: string): Promise<BlogPost | null> {
       readingTime: data.readingTime || calculateReadingTime(content),
       featured: data.featured || false,
       image: data.image,
+      canonical: data.canonical,
       faqs: data.faqs || [],
+      howToSteps: data.howToSteps,
     };
   } catch (error) {
     console.error(`Error reading blog post ${slug}:`, error);
@@ -188,6 +205,39 @@ export async function getRelatedBlogPosts(currentSlug: string, limit = 3): Promi
       post.tags.some(tag => currentPost.tags.includes(tag))
     )
     .slice(0, limit);
+}
+
+function slugify(text: string): string {
+  return text
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '');
+}
+
+function extractHeadings(htmlContent: string): TocHeading[] {
+  const headingRegex = /<h([2-3])[^>]*>(.*?)<\/h\1>/gi;
+  const headings: TocHeading[] = [];
+  let match;
+  while ((match = headingRegex.exec(htmlContent)) !== null) {
+    const text = match[2].replace(/<[^>]*>/g, '').trim();
+    headings.push({
+      id: slugify(text),
+      text,
+      level: parseInt(match[1], 10),
+    });
+  }
+  return headings;
+}
+
+function addHeadingIds(htmlContent: string): string {
+  return htmlContent.replace(
+    /<h([2-3])([^>]*)>(.*?)<\/h\1>/gi,
+    (_match, level, attrs, inner) => {
+      const text = inner.replace(/<[^>]*>/g, '').trim();
+      const id = slugify(text);
+      return `<h${level}${attrs} id="${id}">${inner}</h${level}>`;
+    }
+  );
 }
 
 // Calculate reading time

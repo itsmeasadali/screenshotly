@@ -1,7 +1,20 @@
+import { Metadata } from 'next';
 import GuestLayout from '@/components/layouts/GuestLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle, AlertCircle, Clock, Globe, Zap, Shield } from 'lucide-react';
+
+export const metadata: Metadata = {
+  title: "API Status",
+  description: "Real-time operational status of the Screenshotly screenshot API, AI processing, authentication, and dashboard services.",
+  alternates: {
+    canonical: "/status",
+  },
+  robots: {
+    index: false,
+    follow: true,
+  },
+};
 
 export default function StatusPage() {
   // In a real app, this would come from your monitoring API

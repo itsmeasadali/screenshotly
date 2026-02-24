@@ -515,4 +515,4 @@ With proper implementation, screenshot-based archival provides legally defensibl
 
 [Get your free API key →](/sign-up) - 100 free screenshots to get started.
 
-Learn more about [website archival use cases →](/use-cases/website-archival)
+Learn more about [website archival use cases →](/use-cases/web-archiving)

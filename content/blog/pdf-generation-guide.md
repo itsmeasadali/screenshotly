@@ -11,11 +11,11 @@ keywords:
   - "PDF generation API"
   - "web page to PDF"
   - "screenshot to PDF"
-  - "automated PDF creation"
-  - "invoice PDF generator"
-  - "report PDF API"
-  - "HTML to PDF conversion"
-  - "document automation"
+  - "PDF API tutorial"
+  - "generate PDF from URL"
+  - "PDF page size options"
+  - "PDF headers footers API"
+  - "PDF margin settings"
 readingTime: 12
 featured: false
 image: "/images/blog/pdf-generation/hero.jpg"
@@ -47,7 +47,7 @@ PDF generation is essential for:
 - **Documentation exports**
 - **Archival and compliance**
 
-Screenshotly's PDF output handles all these use cases with a simple API.
+Screenshotly's PDF output handles all these use cases with a simple API. This guide covers the **core API mechanics**: page sizes, margins, headers/footers, multi-page handling, and output settings. For invoice-specific workflows, see our [Invoice & Financial PDF Generation](/blog/pdf-generation-complete-guide) guide. For CSS print styling (`@media print`, page breaks, font embedding), see our [CSS Print Styling for PDFs](/blog/html-to-pdf-generation-guide) guide. For batch generation and email delivery pipelines, see our [Automated Invoice & Report Generation](/blog/invoice-report-generation-guide) guide.
 
 ## Basic PDF Generation
 
@@ -116,62 +116,18 @@ const response = await fetch('https://api.screenshotly.app/screenshot', {
 
 ## Common PDF Use Cases
 
-### Invoice Generation
+The PDF API works for invoices, reports, certificates, documentation exports, and more. Here's a quick overview of each pattern — with links to deeper guides for specific workflows.
 
-For [e-commerce](/use-cases/ecommerce-screenshots) and billing systems:
+### Invoice and Financial Documents
 
-```javascript
-async function generateInvoice(invoiceId) {
-  const invoiceUrl = `${process.env.APP_URL}/invoice/${invoiceId}?print=true`;
+Invoices, receipts, and tax documents require precise formatting, currency handling, and tax compliance sections. For a complete walkthrough including HTML templates, currency formatting helpers, and tax compliance layouts, see our [Invoice & Financial PDF Generation](/blog/pdf-generation-complete-guide) guide.
 
-  const response = await fetch('https://api.screenshotly.app/screenshot', {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${process.env.SCREENSHOTLY_API_KEY}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      url: invoiceUrl,
-      format: 'pdf',
-      pdfOptions: {
-        format: 'A4',
-        printBackground: true,
-        margin: {
-          top: 60,
-          right: 40,
-          bottom: 60,
-          left: 40,
-        },
-      },
-      // Remove interactive elements
-      hideSelectors: [
-        '.download-button',
-        '.print-button',
-        '.navigation',
-      ],
-      // Wait for data to load
-      waitForSelector: '.invoice-total',
-      delay: 500,
-    }),
-  });
+### Report and Dashboard PDFs
 
-  if (!response.ok) {
-    throw new Error(`PDF generation failed: ${response.status}`);
-  }
-
-  return response.arrayBuffer();
-}
-```
-
-**Pro tip:** Create a dedicated print-friendly route (e.g., `/invoice/:id?print=true`) that hides navigation and optimizes layout for PDF.
-
-### Report Generation
-
-For analytics dashboards and [documentation](/use-cases/documentation-screenshots):
+For analytics dashboards and [documentation](/use-cases/documentation-screenshots), use landscape orientation and wait for charts to render:
 
 ```javascript
 async function generateReport(reportData) {
-  // Render report to a page
   const reportUrl = `${process.env.APP_URL}/reports/render?data=${encodeURIComponent(
     JSON.stringify(reportData)
   )}`;
@@ -187,11 +143,10 @@ async function generateReport(reportData) {
       format: 'pdf',
       pdfOptions: {
         format: 'A4',
-        landscape: true, // Better for charts
+        landscape: true,
         printBackground: true,
         margin: { top: 50, right: 50, bottom: 50, left: 50 },
       },
-      // Wait for charts to render
       delay: 2000,
       waitForSelector: '.chart-rendered',
     }),
@@ -203,7 +158,7 @@ async function generateReport(reportData) {
 
 ### Certificate Generation
 
-For courses, achievements, and credentials:
+For courses, achievements, and credentials, use full-bleed landscape layout:
 
 ```javascript
 async function generateCertificate(userId, courseId) {
@@ -220,11 +175,10 @@ async function generateCertificate(userId, courseId) {
       format: 'pdf',
       pdfOptions: {
         format: 'Letter',
-        landscape: true, // Certificate format
+        landscape: true,
         printBackground: true,
-        margin: { top: 0, right: 0, bottom: 0, left: 0 }, // Full bleed
+        margin: { top: 0, right: 0, bottom: 0, left: 0 },
       },
-      // Ensure fonts are loaded
       delay: 1000,
     }),
   });
@@ -260,58 +214,7 @@ const response = await fetch('https://api.screenshotly.app/screenshot', {
 
 ### CSS Page Break Control
 
-Control where pages break using CSS:
-
-```css
-/* Force page break before an element */
-.chapter-start {
-  page-break-before: always;
-}
-
-/* Prevent breaking inside an element */
-.keep-together {
-  page-break-inside: avoid;
-}
-
-/* Keep element with next element */
-h2 {
-  page-break-after: avoid;
-}
-```
-
-### Print-Specific Styles
-
-Create print-optimized styles:
-
-```css
-@media print {
-  /* Hide non-essential elements */
-  .navigation,
-  .sidebar,
-  .footer,
-  .ads {
-    display: none !important;
-  }
-
-  /* Optimize layout for print */
-  .content {
-    width: 100%;
-    margin: 0;
-    padding: 0;
-  }
-
-  /* Ensure backgrounds print */
-  .header {
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
-  }
-
-  /* Force page breaks */
-  .section {
-    page-break-inside: avoid;
-  }
-}
-```
+You can control where pages break using CSS properties like `page-break-before`, `page-break-inside`, and `@media print` rules to hide navigation and optimize layouts. For a deep dive into print stylesheets — including orphan/widow control, `@page` margins, A4 vs Letter sizing, and complete print stylesheet examples — see our [CSS Print Styling for PDFs](/blog/html-to-pdf-generation-guide) guide.
 
 ## Headers and Footers
 
@@ -358,118 +261,13 @@ Use these special classes in templates:
 
 ## Integration Patterns
 
-### Email Attachment Workflow
-
-```javascript
-async function sendInvoiceEmail(customerId, invoiceId) {
-  // Generate PDF
-  const pdfBuffer = await generateInvoice(invoiceId);
-
-  // Send email with attachment
-  await transporter.sendMail({
-    from: 'billing@company.com',
-    to: customer.email,
-    subject: `Invoice #${invoiceId}`,
-    text: 'Please find your invoice attached.',
-    attachments: [
-      {
-        filename: `invoice-${invoiceId}.pdf`,
-        content: Buffer.from(pdfBuffer),
-        contentType: 'application/pdf',
-      },
-    ],
-  });
-}
-```
-
-### Download Endpoint
-
-```javascript
-// Next.js API route
-export async function GET(request) {
-  const { searchParams } = new URL(request.url);
-  const invoiceId = searchParams.get('id');
-
-  // Validate access
-  const session = await getSession();
-  if (!canAccessInvoice(session.userId, invoiceId)) {
-    return new Response('Unauthorized', { status: 401 });
-  }
-
-  // Generate PDF
-  const pdfBuffer = await generateInvoice(invoiceId);
-
-  return new Response(pdfBuffer, {
-    headers: {
-      'Content-Type': 'application/pdf',
-      'Content-Disposition': `attachment; filename="invoice-${invoiceId}.pdf"`,
-    },
-  });
-}
-```
-
-### Batch PDF Generation
-
-For bulk document creation:
-
-```javascript
-async function generateBulkReports(reportIds) {
-  const batchSize = 5; // Parallel limit
-  const results = [];
-
-  for (let i = 0; i < reportIds.length; i += batchSize) {
-    const batch = reportIds.slice(i, i + batchSize);
-
-    const batchResults = await Promise.all(
-      batch.map(async (id) => {
-        try {
-          const pdf = await generateReport(id);
-          return { id, success: true, pdf };
-        } catch (error) {
-          return { id, success: false, error: error.message };
-        }
-      })
-    );
-
-    results.push(...batchResults);
-
-    // Rate limiting pause between batches
-    if (i + batchSize < reportIds.length) {
-      await new Promise((r) => setTimeout(r, 1000));
-    }
-  }
-
-  return results;
-}
-```
+Once you're generating PDFs, you'll typically need to deliver them via email, expose download endpoints, or produce them in bulk. For complete implementations of these workflows — including email attachment delivery, authenticated download routes, and batch generation with concurrency control — see our [Automated Invoice & Report Generation](/blog/invoice-report-generation-guide) guide.
 
 ## Performance Optimization
 
 ### Caching Generated PDFs
 
-```javascript
-const pdfCache = new Map();
-const CACHE_TTL = 60 * 60 * 1000; // 1 hour
-
-async function getCachedPdf(cacheKey, generateFn) {
-  const cached = pdfCache.get(cacheKey);
-
-  if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
-    return cached.pdf;
-  }
-
-  const pdf = await generateFn();
-  pdfCache.set(cacheKey, { pdf, timestamp: Date.now() });
-
-  return pdf;
-}
-
-// Usage
-const invoice = await getCachedPdf(
-  `invoice-${invoiceId}`,
-  () => generateInvoice(invoiceId)
-);
-```
+For documents that don't change frequently (e.g., finalized invoices, monthly reports), cache the generated PDF to avoid redundant API calls. Use a cache key based on the document ID and a TTL matched to your update frequency. For a complete guide to Redis, CDN, and multi-layer caching strategies, see our [Screenshot Caching Strategies](/blog/screenshot-caching-strategies-guide) guide.
 
 ### Optimizing Generation Speed
 
@@ -571,10 +369,15 @@ For more security practices, see our [security guide](/blog/screenshot-api-secur
 
 ## Next Steps
 
+Explore related PDF guides:
+
+- **[Invoice & Financial PDFs](/blog/pdf-generation-complete-guide)**: Templates, currency formatting, tax compliance
+- **[CSS Print Styling for PDFs](/blog/html-to-pdf-generation-guide)**: `@media print`, page breaks, orphan/widow control
+- **[Batch Generation & Email Delivery](/blog/invoice-report-generation-guide)**: Automation pipelines, scheduled generation, email attachments
+
 Explore related features:
 
 - **[Performance Optimization](/blog/optimize-screenshot-performance)**: Speed up PDF generation
-- **[AI Element Removal](/blog/ai-element-removal-guide)**: Clean documents automatically
 - **[Security Guide](/blog/screenshot-api-security-guide)**: Protect sensitive documents
 - **[Documentation Screenshots](/use-cases/documentation-screenshots)**: Create docs alongside PDFs
 

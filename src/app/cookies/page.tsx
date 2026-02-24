@@ -1,4 +1,13 @@
+import { Metadata } from 'next';
 import GuestLayout from '@/components/layouts/GuestLayout';
+
+export const metadata: Metadata = {
+  title: "Cookie Policy",
+  description: "How Screenshotly uses cookies and similar technologies. Learn about essential, analytics, and functional cookies on our website.",
+  alternates: {
+    canonical: "/cookies",
+  },
+};
 
 export default function CookiePage() {
   return (

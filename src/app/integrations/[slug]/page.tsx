@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, Code, Copy, ExternalLink } from "lucide-react";
+import { ArrowLeft, ArrowRight, Code, Copy, ExternalLink, Lightbulb, CheckCircle } from "lucide-react";
 import GuestLayout from "@/components/layouts/GuestLayout";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -10,6 +10,18 @@ import { getBreadcrumbSchema, getHowToSchema, getFAQSchema } from "@/lib/seo/str
 import { integrations } from "@/data/integrations";
 
 const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://screenshotly.app';
+
+const deepDiveBlogPosts: Record<string, { title: string; slug: string }> = {
+    javascript: { title: "JavaScript Screenshot API Tutorial", slug: "javascript-screenshot-api-tutorial" },
+    nodejs: { title: "Node.js Screenshot API Tutorial", slug: "nodejs-screenshot-api-tutorial" },
+    python: { title: "Python Screenshot API Tutorial", slug: "python-screenshot-api-tutorial" },
+    php: { title: "PHP Screenshot API Tutorial", slug: "php-screenshot-api-tutorial" },
+    ruby: { title: "Ruby Screenshot API Tutorial", slug: "ruby-screenshot-api-tutorial" },
+    go: { title: "Go Screenshot API Tutorial", slug: "go-screenshot-api-tutorial" },
+    zapier: { title: "Zapier Screenshot Integration Guide", slug: "zapier-screenshot-integration" },
+    make: { title: "Make.com Screenshot Integration Guide", slug: "make-com-screenshot-integration" },
+    n8n: { title: "n8n Screenshot Integration Guide", slug: "n8n-screenshot-integration" },
+};
 
 interface Props {
     params: Promise<{ slug: string }>;
@@ -39,18 +51,23 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
     const isLanguage = integration.type === 'language';
     const title = isLanguage
-        ? `${integration.name} Screenshot API - Code Examples & Integration`
-        : `${integration.name} + Screenshotly Integration Guide`;
+        ? `${integration.name} Screenshot API - Quick Start & Code Examples`
+        : `${integration.name} Screenshot API - No-Code Integration Guide`;
+
+    const metaDesc = 'metaDescription' in integration && integration.metaDescription
+        ? integration.metaDescription
+        : integration.description.length > 155
+            ? integration.description.slice(0, 152) + '...'
+            : integration.description;
 
     return {
         title,
-        description: integration.description,
-        keywords: integration.keywords,
+        description: metaDesc,
         alternates: {
             canonical: `/integrations/${slug}`,
         },
         openGraph: {
-            title: `${integration.name} | Screenshotly`,
+            title: integration.name,
             description: integration.description,
             url: `${BASE_URL}/integrations/${slug}`,
             type: "article",
@@ -74,15 +91,18 @@ export default async function IntegrationPage({ params }: Props) {
         { name: integration.name, url: `${BASE_URL}/integrations/${slug}` },
     ];
 
+    const installStepText = (integration as { installStep?: string }).installStep
+        ?? (isLanguage ? `Set up your ${integration.name} environment with HTTP client support.` : `Log into your ${integration.name} account and create a new workflow.`);
+
     const howToSteps = isLanguage
         ? [
-            { name: "Install dependencies", text: `Set up your ${integration.name} environment with HTTP client support.` },
+            { name: "Install dependencies", text: installStepText },
             { name: "Get your API key", text: "Sign up for Screenshotly and get your API key from the dashboard." },
             { name: "Copy the code example", text: `Use our ${integration.name} code example as a starting point.` },
             { name: "Customize and integrate", text: "Modify the code to fit your specific use case and requirements." },
         ]
         : [
-            { name: `Open ${integration.name}`, text: `Log into your ${integration.name} account and create a new workflow.` },
+            { name: "Set up your account", text: installStepText },
             { name: "Add HTTP module", text: "Add an HTTP request module to make API calls." },
             { name: "Configure the request", text: "Set up the POST request with Screenshotly API endpoint and authentication." },
             { name: "Connect your apps", text: "Link the screenshot output to your destination apps." },
@@ -213,6 +233,65 @@ export default async function IntegrationPage({ params }: Props) {
                                     </div>
                                 ))}
                             </div>
+                        </section>
+                    )}
+
+                    {/* When to Use */}
+                    <section className="mb-12">
+                        <h2 className="text-2xl font-semibold mb-4">When to Use {integration.name} with Screenshotly</h2>
+                        <div className="prose prose-gray dark:prose-invert max-w-none">
+                            {'whenToUse' in integration && integration.whenToUse ? (
+                                <p className="text-muted-foreground leading-relaxed">{integration.whenToUse}</p>
+                            ) : isLanguage ? (
+                                <p className="text-muted-foreground leading-relaxed">
+                                    Use the {integration.name} integration when you need to capture screenshots
+                                    programmatically from a {integration.name} application or backend service.
+                                    Common scenarios include generating thumbnails in a web app, automating visual
+                                    regression tests in a CI/CD pipeline, producing PDF reports from HTML templates,
+                                    and building link preview services. The code example above provides a minimal
+                                    working implementation — adapt it to your framework and error handling patterns.
+                                </p>
+                            ) : (
+                                <p className="text-muted-foreground leading-relaxed">
+                                    Use the {integration.name} integration when you need to automate screenshot
+                                    capture without writing code. Common workflows include capturing pages on a
+                                    schedule, saving screenshots to cloud storage when a form is submitted, sending
+                                    visual reports via email or Slack, and archiving web content triggered by external
+                                    events. {integration.name} handles the orchestration while Screenshotly handles
+                                    the rendering.
+                                </p>
+                            )}
+                        </div>
+                    </section>
+
+                    {/* Best Practices */}
+                    {'tips' in integration && integration.tips && integration.tips.length > 0 && (
+                        <section className="mb-12">
+                            <h2 className="text-2xl font-semibold mb-6 flex items-center gap-2">
+                                <Lightbulb className="w-6 h-6 text-yellow-500" />
+                                {integration.name} Best Practices
+                            </h2>
+                            <div className="space-y-3">
+                                {integration.tips.map((tip: string, index: number) => (
+                                    <div key={index} className="flex items-start gap-3 p-3 bg-muted/30 rounded-lg">
+                                        <CheckCircle className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                                        <p className="text-muted-foreground text-sm leading-relaxed">{tip}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        </section>
+                    )}
+
+                    {/* Deep Dive Blog Link */}
+                    {deepDiveBlogPosts[slug] && (
+                        <section className="mb-12 p-5 bg-muted/50 rounded-xl border">
+                            <p className="text-sm text-muted-foreground mb-2">Want a step-by-step walkthrough?</p>
+                            <Link
+                                href={`/blog/${deepDiveBlogPosts[slug].slug}`}
+                                className="text-primary hover:underline font-medium flex items-center gap-2"
+                            >
+                                Read the full {integration.name} tutorial →
+                            </Link>
                         </section>
                     )}
 

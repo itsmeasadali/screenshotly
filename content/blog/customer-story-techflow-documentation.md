@@ -4,7 +4,7 @@ description: "Learn how TechFlow automated their documentation screenshots, savi
 excerpt: "TechFlow was spending 20+ hours weekly on manual screenshot updates. See how they automated everything with Screenshotly's API."
 author: "asad-ali"
 publishedAt: "2026-02-06"
-category: "guide"
+category: "case-study"
 tags: ["customer story", "documentation", "automation", "case study"]
 keywords: ["documentation automation", "screenshot automation", "technical documentation", "docs screenshots"]
 featured: false

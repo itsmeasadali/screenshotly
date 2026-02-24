@@ -1,0 +1,4 @@
+interface:
+  display_name: "On-Page SEO Optimizer"
+  short_description: "Audit URL-level SEO, CTR, and LLM readability."
+  default_prompt: "Audit this URL using Backlinko-style on-page SEO rules. Provide ranked issues, title/meta rewrites, a prioritized fix plan, and AI/LLM visibility improvements."

@@ -296,27 +296,27 @@ async function generateMissingSocialImages() {
 
 ### 1. Design for Mobile First
 
-Most social browsing happens on mobile. Ensure text is readable at small sizes.
+Most social browsing happens on mobile, so your images need to look sharp on small screens. Ensure headline text is at least 40px in your OG template—anything smaller becomes illegible in a phone feed. Before: a 24px subtitle crammed with detail that turns into a blur on an iPhone. After: a bold 56px title with a clean background that pops even at thumbnail scale. Screenshotly's viewport option lets you preview captures at mobile widths so you can catch readability issues before publishing.
 
 ### 2. Keep Text Minimal
 
-Large text, simple message. Users scroll quickly.
+Users scroll past hundreds of posts a day, so your image has roughly one second to land its message. Stick to a single headline of six words or fewer—no paragraphs, no bullet lists. For example, instead of "Top 10 Reasons Our Platform Saves You Time and Money," try "Ship Faster, Spend Less." When you generate OG images with Screenshotly, a minimal HTML template keeps the text layer clean and lets the visual do the talking.
 
 ### 3. Include Brand Elements
 
-Logo, colors, and consistent style build recognition.
+Consistent logos, brand colors, and typography turn random shares into recognizable content in a crowded feed. Place your logo in a fixed corner of the OG template so it appears on every generated image without manual effort. For instance, a SaaS company that adds its icon at bottom-left and uses its brand gradient as the background saw a 20% lift in click-through recognition. With Screenshotly, you can bake these elements into an HTML template once and every captured social image inherits them automatically.
 
 ### 4. Use High Contrast
 
-Ensure visibility across different screen brightnesses.
+Social feeds are viewed everywhere—bright sunlight, dark mode, low-brightness commute scrolling—so contrast is non-negotiable. Aim for a WCAG AA contrast ratio (at least 4.5:1) between text and background in your OG images. Before: light-gray text on a pastel background that vanishes in direct sunlight. After: white bold text on a deep-purple gradient that stays legible in any lighting. You can verify this quickly by capturing the template with Screenshotly and checking the result on your phone in both light and dark mode.
 
 ### 5. Test on Multiple Platforms
 
-Preview doesn't look the same everywhere. Test each platform.
+An image that looks perfect on Twitter may get cropped awkwardly on LinkedIn or appear tiny on Facebook. Always run your URL through each platform's debugger—Facebook Sharing Debugger, Twitter Card Validator, and LinkedIn Post Inspector—before a launch. A common pitfall is centering a key headline that gets sliced in half by Instagram's square crop. Screenshotly's multi-platform generation feature lets you render the same template at every required dimension in a single API call, so you can visually compare results across platforms before anything goes live.
 
 ### 6. Automate Everything
 
-Manual image creation doesn't scale. Automate with templates.
+Manually creating social images for every blog post, landing page, and changelog entry quickly becomes a bottleneck. Instead, build an HTML template once and let automation handle the rest on every publish event. For example, the workflow shown earlier in this guide triggers Screenshotly's API on content publish, generates the OG image, uploads it to a CDN, and updates the post meta—all with zero designer involvement. Teams that automate this step report saving 15–30 minutes per piece of content and eliminating forgotten or mismatched preview images entirely.
 
 ## Conclusion
 

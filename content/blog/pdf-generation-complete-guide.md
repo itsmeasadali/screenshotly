@@ -1,26 +1,30 @@
 ---
-title: "PDF Generation from HTML: Complete API Guide"
-description: "Generate PDFs from HTML, URLs, and templates using screenshot APIs. Covers formatting, options, and production patterns for invoice, report, and document generation."
-excerpt: "Convert HTML to PDF with complete control over formatting. From simple pages to complex invoices and reports."
+title: "Invoice & Financial PDF Generation with Screenshot APIs"
+description: "Generate invoice PDFs, receipts, and financial documents programmatically. API guide for billing systems, tax document automation, and receipt PDF generation."
+excerpt: "API-driven invoice and financial document PDF generation. Billing systems, receipts, tax compliance formatting, batch exports, and currency handling."
 author: "asad-ali"
 publishedAt: "2025-11-08"
 category: "tutorial"
-tags: ["pdf", "html", "documents", "invoices", "reports"]
-keywords: ["html to pdf", "url to pdf", "pdf generation api", "invoice pdf", "report pdf", "document generation"]
+tags: ["pdf", "invoices", "billing", "financial", "receipts", "automation"]
+keywords: ["invoice PDF API", "receipt PDF generation", "financial document API", "invoice generation API", "tax document PDF", "currency formatting PDF", "invoice HTML template"]
 featured: false
-readingTime: 8
+readingTime: 12
 ---
 
-PDF generation is a common requirement—invoices, reports, certificates, and documentation all need PDF output. Using a screenshot API for PDF generation provides pixel-perfect rendering with full CSS support.
+Billing systems, e-commerce platforms, and financial software need reliable PDF generation for invoices, receipts, and tax documents. Screenshot APIs deliver pixel-perfect, production-ready PDFs from your existing HTML templates—without heavyweight PDF libraries or server-side rendering complexity. This guide focuses exclusively on **invoice and financial document design**: HTML templates, currency/number formatting, tax compliance layouts, and receipt generation.
 
-This guide covers everything from basic URL-to-PDF to complex templated document generation.
+For the core PDF API mechanics (page sizes, margins, headers/footers), see our [PDF Generation API Guide](/blog/pdf-generation-guide). For batch invoice generation, email delivery, and scheduled automation pipelines, see our [Batch PDF Generation & Email Delivery](/blog/invoice-report-generation-guide) guide. For CSS print styling (`@media print`, page breaks), see our [CSS Print Styling for PDFs](/blog/html-to-pdf-generation-guide) guide.
 
-## Basic PDF Generation
+## Financial Document PDF Generation
 
-### URL to PDF
+### Invoice PDF from URL
+
+Generate PDFs from your existing invoice pages:
 
 ```javascript
-async function urlToPdf(url) {
+async function generateInvoicePdf(invoiceId) {
+  const invoiceUrl = `${process.env.APP_URL}/invoice/${invoiceId}?print=true`;
+
   const response = await fetch('https://api.screenshotly.app/screenshot', {
     method: 'POST',
     headers: {
@@ -28,12 +32,21 @@ async function urlToPdf(url) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      url,
+      url: invoiceUrl,
       format: 'pdf',
-      pdf: {
+      pdfOptions: {
         format: 'A4',
         printBackground: true,
+        margin: {
+          top: 60,
+          right: 40,
+          bottom: 60,
+          left: 40,
+        },
       },
+      hideSelectors: ['.download-button', '.print-button', '.navigation'],
+      waitForSelector: '.invoice-total',
+      delay: 500,
     }),
   });
 
@@ -41,13 +54,13 @@ async function urlToPdf(url) {
 }
 
 // Usage
-const pdf = await urlToPdf('https://example.com/invoice/123');
-fs.writeFileSync('invoice.pdf', Buffer.from(pdf));
+const pdf = await generateInvoicePdf('INV-2025-001');
+fs.writeFileSync('invoice-INV-2025-001.pdf', Buffer.from(pdf));
 ```
 
-### HTML to PDF
+### HTML to PDF for Invoice Templates
 
-Render HTML directly:
+Render Handlebars or server-side templates directly to PDF:
 
 ```javascript
 async function htmlToPdf(html) {
@@ -60,7 +73,7 @@ async function htmlToPdf(html) {
     body: JSON.stringify({
       html,
       format: 'pdf',
-      pdf: {
+      pdfOptions: {
         format: 'A4',
         printBackground: true,
         margin: {
@@ -77,80 +90,11 @@ async function htmlToPdf(html) {
 }
 ```
 
-## PDF Options
+## Invoice Template Structure
 
-### Page Size
+### Professional Invoice HTML Template
 
-Standard paper sizes:
-
-```javascript
-pdf: {
-  format: 'A4',  // 210 × 297 mm
-  // format: 'Letter',  // 8.5 × 11 in
-  // format: 'Legal',  // 8.5 × 14 in
-}
-
-// Or custom dimensions
-pdf: {
-  width: '210mm',
-  height: '297mm',
-}
-```
-
-### Orientation
-
-```javascript
-pdf: {
-  format: 'A4',
-  landscape: true,  // Default: false (portrait)
-}
-```
-
-### Margins
-
-```javascript
-pdf: {
-  margin: {
-    top: '25mm',
-    bottom: '25mm',
-    left: '20mm',
-    right: '20mm',
-  },
-}
-```
-
-### Headers and Footers
-
-```javascript
-pdf: {
-  displayHeaderFooter: true,
-  headerTemplate: `
-    <div style="font-size: 10px; text-align: center; width: 100%;">
-      <span>Company Name</span>
-    </div>
-  `,
-  footerTemplate: `
-    <div style="font-size: 10px; text-align: center; width: 100%;">
-      <span>Page <span class="pageNumber"></span> of <span class="totalPages"></span></span>
-    </div>
-  `,
-  margin: {
-    top: '40mm',  // Space for header
-    bottom: '30mm',  // Space for footer
-  },
-}
-```
-
-Available template classes:
-- `.date` - Formatted date
-- `.title` - Document title
-- `.url` - Document URL
-- `.pageNumber` - Current page
-- `.totalPages` - Total pages
-
-## Invoice Generation
-
-### Invoice Template
+A print-ready invoice template with proper structure for financial documents:
 
 ```html
 <!DOCTYPE html>
@@ -271,8 +215,8 @@ Available template classes:
         <tr>
           <td>{{description}}</td>
           <td>{{quantity}}</td>
-          <td class="amount">${{price}}</td>
-          <td class="amount">${{total}}</td>
+          <td class="amount">{{price}}</td>
+          <td class="amount">{{total}}</td>
         </tr>
         {{/each}}
       </tbody>
@@ -281,15 +225,15 @@ Available template classes:
     <div class="totals">
       <div class="totals-row">
         <span>Subtotal</span>
-        <span>${{subtotal}}</span>
+        <span>{{subtotal}}</span>
       </div>
       <div class="totals-row">
         <span>Tax ({{tax_rate}}%)</span>
-        <span>${{tax}}</span>
+        <span>{{tax}}</span>
       </div>
       <div class="totals-row total-final">
         <span>Total</span>
-        <span>${{total}}</span>
+        <span>{{total}}</span>
       </div>
     </div>
     
@@ -301,7 +245,50 @@ Available template classes:
 </html>
 ```
 
-### Generating Invoice PDF
+## Number and Currency Formatting
+
+Financial documents require consistent, locale-aware formatting. Incorrect decimal places or currency symbols create compliance and clarity issues.
+
+### Currency Formatting Helper
+
+```javascript
+function formatCurrency(amount, currency = 'USD', locale = 'en-US') {
+  return new Intl.NumberFormat(locale, {
+    style: 'currency',
+    currency,
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(amount);
+}
+
+// $1,234.56 (USD)
+formatCurrency(1234.56, 'USD');
+
+// €1.234,56 (EUR, European style)
+formatCurrency(1234.56, 'EUR', 'de-DE');
+```
+
+### Number Formatting for Quantities and Totals
+
+```javascript
+function formatNumber(num, decimals = 2) {
+  return new Intl.NumberFormat('en-US', {
+    minimumFractionDigits: decimals,
+    maximumFractionDigits: decimals,
+  }).format(num);
+}
+
+// For quantity (no decimals)
+formatNumber(5, 0);  // "5"
+
+// For unit prices
+formatNumber(19.99, 2);  // "19.99"
+
+// For large totals
+formatNumber(125430.50, 2);  // "125,430.50"
+```
+
+### Generating Invoice PDF with Proper Formatting
 
 ```javascript
 import Handlebars from 'handlebars';
@@ -309,7 +296,6 @@ import Handlebars from 'handlebars';
 const invoiceTemplate = Handlebars.compile(templateHtml);
 
 async function generateInvoicePdf(invoiceData) {
-  // Render template with data
   const html = invoiceTemplate({
     company_name: 'Acme Inc',
     company_address: '123 Business St, City',
@@ -322,7 +308,7 @@ async function generateInvoicePdf(invoiceData) {
     client_email: invoiceData.client.email,
     items: invoiceData.items.map(item => ({
       description: item.description,
-      quantity: item.quantity,
+      quantity: formatNumber(item.quantity, 0),
       price: formatCurrency(item.price),
       total: formatCurrency(item.quantity * item.price),
     })),
@@ -331,312 +317,133 @@ async function generateInvoicePdf(invoiceData) {
     tax: formatCurrency(invoiceData.tax),
     total: formatCurrency(invoiceData.total),
   });
-  
-  // Generate PDF
+
   return await htmlToPdf(html);
 }
 ```
 
-## Report Generation
+## Tax Compliance and Receipt Formatting
 
-### Multi-Page Reports
+### Tax Document Requirements
+
+Many jurisdictions require invoices and receipts to show:
+- **Tax ID / VAT number** – Company and sometimes client
+- **Tax breakdown** – Line-item or summary tax rates
+- **Tax-inclusive vs tax-exclusive** – Clear labeling
+- **Legal disclaimers** – Terms, payment instructions, retention policies
+
+Add a tax compliance section to your template:
+
+```html
+<div class="tax-compliance">
+  <div class="vat-number">VAT ID: {{company_vat}}</div>
+  <div class="tax-summary">Tax applied at {{tax_rate}}% ({{tax_description}})</div>
+  <div class="legal-note">{{legal_disclaimer}}</div>
+</div>
+```
+
+### Receipt PDF Generation
+
+Receipts differ from invoices: shorter, often thermal-style, with emphasis on transaction ID and payment method:
 
 ```javascript
-async function generateReport(data) {
+async function generateReceiptPdf(transaction) {
   const html = `
-    <!DOCTYPE html>
-    <html>
-    <head>
-      <style>
-        @page { margin: 20mm; }
-        .page-break { page-break-after: always; }
-        .chart { width: 100%; height: 300px; }
-        table { width: 100%; margin: 20px 0; }
-        th, td { padding: 8px; border: 1px solid #ddd; }
-      </style>
-    </head>
-    <body>
-      <!-- Cover Page -->
-      <div class="cover">
-        <h1>${data.title}</h1>
-        <p>Generated: ${new Date().toLocaleDateString()}</p>
-      </div>
-      
-      <div class="page-break"></div>
-      
-      <!-- Executive Summary -->
-      <h2>Executive Summary</h2>
-      <p>${data.summary}</p>
-      
-      <div class="page-break"></div>
-      
-      <!-- Data Tables -->
-      ${data.sections.map(section => `
-        <h2>${section.title}</h2>
-        <table>
-          <thead>
-            <tr>${section.columns.map(c => `<th>${c}</th>`).join('')}</tr>
-          </thead>
-          <tbody>
-            ${section.rows.map(row => `
-              <tr>${row.map(cell => `<td>${cell}</td>`).join('')}</tr>
-            `).join('')}
-          </tbody>
-        </table>
-      `).join('<div class="page-break"></div>')}
-    </body>
-    </html>
+    <div class="receipt">
+      <div class="receipt-header">{{store_name}}</div>
+      <div class="receipt-id">Receipt #${transaction.id}</div>
+      <div class="receipt-date">${new Date(transaction.date).toLocaleString()}</div>
+      <table class="receipt-items">
+        ${transaction.items.map(i => `
+          <tr>
+            <td>${i.name}</td>
+            <td class="amount">${formatCurrency(i.total)}</td>
+          </tr>
+        `).join('')}
+      </table>
+      <div class="receipt-total">Total: ${formatCurrency(transaction.total)}</div>
+      <div class="payment-method">Paid via ${transaction.paymentMethod}</div>
+    </div>
   `;
-  
+
   return await htmlToPdf(html);
 }
 ```
 
-### Including Charts
+## PDF Options for Financial Documents
 
-Use base64 images for charts:
+### Page Size
 
-```javascript
-import { ChartJSNodeCanvas } from 'chartjs-node-canvas';
-
-async function generateChartImage(config) {
-  const canvas = new ChartJSNodeCanvas({ width: 800, height: 400 });
-  const buffer = await canvas.renderToBuffer(config);
-  return `data:image/png;base64,${buffer.toString('base64')}`;
-}
-
-async function generateReportWithCharts(data) {
-  const chartImage = await generateChartImage({
-    type: 'bar',
-    data: {
-      labels: data.labels,
-      datasets: [{ data: data.values }],
-    },
-  });
-  
-  const html = `
-    <h1>Sales Report</h1>
-    <img src="${chartImage}" width="800" height="400" />
-    <!-- rest of report -->
-  `;
-  
-  return await htmlToPdf(html);
-}
-```
-
-## Certificate Generation
+Use A4 for international invoicing, Letter for North American clients:
 
 ```javascript
-async function generateCertificate(recipientName, courseName, date) {
-  const html = `
-    <!DOCTYPE html>
-    <html>
-    <head>
-      <style>
-        body {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          min-height: 100vh;
-          background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-        }
-        .certificate {
-          background: white;
-          padding: 60px;
-          border: 8px double #2c3e50;
-          text-align: center;
-          width: 800px;
-        }
-        h1 {
-          font-size: 48px;
-          color: #2c3e50;
-          margin-bottom: 20px;
-        }
-        .recipient {
-          font-size: 36px;
-          font-family: 'Georgia', serif;
-          margin: 30px 0;
-          color: #1a5f7a;
-        }
-        .course {
-          font-size: 24px;
-          margin: 20px 0;
-        }
-        .date {
-          color: #666;
-          margin-top: 40px;
-        }
-        .signature {
-          margin-top: 60px;
-          border-top: 2px solid #333;
-          padding-top: 10px;
-          width: 200px;
-          margin-left: auto;
-          margin-right: auto;
-        }
-      </style>
-    </head>
-    <body>
-      <div class="certificate">
-        <h1>Certificate of Completion</h1>
-        <p>This is to certify that</p>
-        <div class="recipient">${recipientName}</div>
-        <p>has successfully completed</p>
-        <div class="course">${courseName}</div>
-        <div class="date">${date}</div>
-        <div class="signature">Authorized Signature</div>
-      </div>
-    </body>
-    </html>
-  `;
-  
-  return await htmlToPdf(html);
+pdfOptions: {
+  format: 'A4',  // 210 × 297 mm – international standard
+  // format: 'Letter',  // 8.5 × 11 in – US/Canada
 }
 ```
 
-## Print-Optimized CSS
+### Headers, Footers, and Margins
 
-### CSS for PDF
+Multi-page invoices benefit from repeating headers (company name) and footers (page numbers, generation date). The PDF API supports `headerTemplate` and `footerTemplate` with special classes like `.pageNumber` and `.totalPages`. For complete header/footer implementation details and margin configuration, see our [PDF Generation API Guide](/blog/pdf-generation-guide#headers-and-footers).
 
-```css
-/* PDF-specific styles */
-@media print {
-  /* Hide non-printable elements */
-  .no-print, nav, .sidebar {
-    display: none !important;
-  }
-  
-  /* Prevent page breaks inside elements */
-  .keep-together {
-    page-break-inside: avoid;
-  }
-  
-  /* Force page break before element */
-  .page-break-before {
-    page-break-before: always;
-  }
-  
-  /* Force page break after element */
-  .page-break-after {
-    page-break-after: always;
-  }
-  
-  /* Ensure links are readable */
-  a[href]:after {
-    content: " (" attr(href) ")";
-  }
-  
-  /* Black and white friendly */
-  body {
-    color: black !important;
-    background: white !important;
-  }
-}
+## Batch Billing, Email Delivery, and Download Endpoints
 
-/* Page margins */
-@page {
-  margin: 20mm;
-}
+Once your invoice templates and formatting are in place, you'll typically need to generate invoices in bulk (end-of-month billing), email them as attachments, and expose authenticated download endpoints. For complete implementations of these automation workflows — including concurrency-controlled batch generation, Nodemailer email attachment delivery, and secure Next.js download routes — see our [Batch PDF Generation & Email Delivery](/blog/invoice-report-generation-guide) guide.
 
-@page :first {
-  margin-top: 40mm;
-}
-```
-
-## Batch PDF Generation
-
-```javascript
-async function generateBulkPdfs(items, template) {
-  const results = [];
-  const limit = pLimit(5);
-  
-  await Promise.all(
-    items.map(item => limit(async () => {
-      const html = template(item);
-      const pdf = await htmlToPdf(html);
-      
-      results.push({
-        id: item.id,
-        filename: `${item.id}.pdf`,
-        pdf,
-      });
-    }))
-  );
-  
-  return results;
-}
-
-// Generate invoices for all orders
-const invoices = await generateBulkPdfs(orders, invoiceTemplate);
-
-// Save all PDFs
-for (const invoice of invoices) {
-  fs.writeFileSync(`invoices/${invoice.filename}`, Buffer.from(invoice.pdf));
-}
-```
-
-## Best Practices
+## Best Practices for Financial PDFs
 
 ### 1. Use System Fonts
 
-Avoid loading external fonts for reliability:
+Avoid external font loading for reliability and speed:
 
 ```css
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
                'Helvetica Neue', Arial, sans-serif;
 }
 ```
 
 ### 2. Embed Images as Base64
 
-External images may not load:
+Ensure logos and watermarks always render:
 
 ```javascript
-const imageBase64 = fs.readFileSync('logo.png').toString('base64');
-const html = `<img src="data:image/png;base64,${imageBase64}" />`;
+const logoBase64 = fs.readFileSync('logo.png').toString('base64');
+const html = `<img src="data:image/png;base64,${logoBase64}" alt="Logo" />`;
 ```
 
-### 3. Test Page Breaks
+### 3. Keep Line Items Together
 
-Long content needs careful break management:
+Prevent awkward page breaks inside invoice rows:
 
 ```css
-tr, .item {
-  page-break-inside: avoid;
-}
-
-h2 {
-  page-break-after: avoid;
+@media print {
+  tr, .invoice-row {
+    page-break-inside: avoid;
+  }
 }
 ```
 
-### 4. Set Explicit Dimensions
+### 4. Test Across Currencies and Locales
 
-Avoid layout issues:
-
-```css
-body {
-  width: 210mm;  /* A4 width */
-  min-height: 297mm;  /* A4 height */
-}
-```
+Validate formatting for each target market (USD, EUR, GBP, etc.) and ensure decimal separators and thousands separators render correctly.
 
 ## Conclusion
 
-PDF generation via screenshot API provides:
+Screenshot APIs streamline invoice and financial document PDF generation: invoices, receipts, and tax-compliant exports from your existing HTML templates. With proper currency formatting, batch billing support, and secure download flows, you can automate financial document workflows without heavyweight PDF libraries.
 
-1. **Perfect rendering** - Full CSS support
-2. **Flexibility** - Any HTML to PDF
-3. **Consistency** - Same output every time
-4. **Simplicity** - No server-side libraries needed
-
-From simple invoices to complex reports, HTML-to-PDF covers all document generation needs.
+Key takeaways:
+- Generate PDFs from invoice URLs or HTML templates
+- Use `Intl.NumberFormat` for currency and number formatting
+- Add tax compliance sections and receipt-specific layouts
+- Use system fonts and base64 images for reliability
+- Test across currencies and locales
 
 ---
 
-**Ready to generate PDFs?**
+**Ready to automate invoice PDF generation?**
 
-[Get your free API key →](/sign-up) - 100 free screenshots to get started.
+[Get your free API key →](/sign-up) – 100 free screenshots to get started.
 
-See also: [HTML to PDF Generation →](/blog/html-to-pdf-generation-guide)
+See also: [PDF Generation API Guide →](/blog/pdf-generation-guide) | [CSS Print Styling for PDFs →](/blog/html-to-pdf-generation-guide) | [Batch Generation & Email Delivery →](/blog/invoice-report-generation-guide)

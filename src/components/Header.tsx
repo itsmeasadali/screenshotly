@@ -29,9 +29,9 @@ const features = [
     icon: Camera,
   },
   {
-    title: "Device Mockups",
-    href: "/mockups",
-    description: "Beautiful frames for phones, tablets, and browsers",
+    title: "API Playground",
+    href: "/playground",
+    description: "Test the API live — mockups, formats, viewports, and more",
     icon: Zap,
   },
   {
@@ -202,6 +202,19 @@ export default function Header() {
                           </Link>
                         </NavigationMenuLink>
                       </li>
+                      <li>
+                        <NavigationMenuLink asChild>
+                          <Link
+                            href="/topics"
+                            className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                          >
+                            <div className="text-sm font-medium leading-none">Topics</div>
+                            <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                              Browse by topic & category
+                            </p>
+                          </Link>
+                        </NavigationMenuLink>
+                      </li>
                     </ul>
                   </NavigationMenuContent>
                 </NavigationMenuItem>
@@ -333,6 +346,9 @@ export default function Header() {
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
                     <Link href="/customers">Customers</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/topics">Topics</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
                     <Link href="/help">Help Center</Link>

@@ -10,17 +10,20 @@ import { getBreadcrumbSchema } from "@/lib/seo/structured-data";
 const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://screenshotly.app';
 
 export const metadata: Metadata = {
-    title: "Changelog - Product Updates & New Features | Screenshotly",
+    title: "Changelog - Product Updates & New Features",
     description: "Stay up to date with Screenshotly's latest features, improvements, and bug fixes. View our product changelog and release notes.",
-    keywords: [
-        "Screenshotly changelog",
-        "screenshot API updates",
-        "Screenshotly releases",
-        "new features",
-        "product updates"
-    ],
     alternates: {
         canonical: "/changelog",
+    },
+    openGraph: {
+        title: "Changelog - Product Updates & New Features",
+        description: "Stay up to date with Screenshotly's latest features, improvements, and bug fixes. View our product changelog and release notes.",
+        type: "website",
+    },
+    twitter: {
+        card: "summary",
+        title: "Changelog - Product Updates & New Features",
+        description: "Stay up to date with Screenshotly's latest features, improvements, and bug fixes.",
     },
 };
 

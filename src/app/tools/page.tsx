@@ -5,22 +5,25 @@ import GuestLayout from "@/components/layouts/GuestLayout";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { JsonLd } from "@/components/seo";
-import { getBreadcrumbSchema, getCollectionPageSchema } from "@/lib/seo/structured-data";
+import { getBreadcrumbSchema, getCollectionPageSchema, getFAQSchema } from "@/lib/seo/structured-data";
 
 const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://screenshotly.app';
 
 export const metadata: Metadata = {
-    title: "Free Screenshot Tools - Capture Websites Online | Screenshotly",
+    title: "Free Screenshot Tools - Capture Websites Online",
     description: "Free online tools to capture website screenshots. Take desktop, mobile, and full-page screenshots without signup. Perfect for quick captures.",
-    keywords: [
-        "free screenshot tools",
-        "website screenshot",
-        "online screenshot tool",
-        "capture website",
-        "screenshot generator"
-    ],
     alternates: {
         canonical: "/tools",
+    },
+    openGraph: {
+        title: "Free Screenshot Tools - Capture Websites Online",
+        description: "Free online tools to capture website screenshots. Take desktop, mobile, and full-page screenshots without signup. Perfect for quick captures.",
+        type: "website",
+    },
+    twitter: {
+        card: "summary_large_image",
+        title: "Free Screenshot Tools - Capture Websites Online",
+        description: "Free online tools to capture website screenshots. Take desktop, mobile, and full-page screenshots without signup. Perfect for quick captures.",
     },
 };
 
@@ -44,10 +47,33 @@ const tools = [
     {
         slug: "scrolling-screenshot",
         title: "Scrolling Screenshot",
-        description: "Create animated scrolling screenshots to showcase entire pages in motion.",
+        description: "Capture entire scrollable pages with custom viewport dimensions. Choose PNG, JPEG, or WebP output.",
         icon: Scroll,
         status: "available",
-        features: ["Animated output", "Custom scroll speed", "GIF/MP4 export"],
+        features: ["Custom viewport", "Multi-format output", "Below-fold content"],
+    },
+];
+
+const faqs = [
+    {
+        question: "Are these screenshot tools really free?",
+        answer: "Yes, all three tools are completely free with no signup required. They run on the same rendering engine as our paid API. For automated or bulk captures, sign up for a free API key that includes 100 screenshots.",
+    },
+    {
+        question: "What is the difference between full page and scrolling screenshots?",
+        answer: "Both capture the entire page including below-fold content. The full page tool outputs a single PNG with one click. The scrolling tool lets you set a custom viewport width and height and choose between PNG, JPEG, or WebP formats — ideal when you need specific dimensions.",
+    },
+    {
+        question: "Can I use these tools for commercial purposes?",
+        answer: "Yes. Screenshots you capture are yours to use for any purpose — documentation, marketing, reports, presentations, or client work. No attribution required.",
+    },
+    {
+        question: "Do I need to install anything?",
+        answer: "No. All tools run in your browser. Just paste a URL, click capture, and download the result. No extensions, no desktop apps, no signup.",
+    },
+    {
+        question: "How are these different from the Screenshotly API?",
+        answer: "These free tools are for manual, one-at-a-time captures. The API supports automation, batch processing, AI element removal, device mockups, PDF output, and programmatic integration via REST endpoints.",
     },
 ];
 
@@ -65,6 +91,7 @@ export default function ToolsPage() {
                 description: "Free online tools to capture website screenshots",
                 url: `${BASE_URL}/tools`,
             })} />
+            <JsonLd data={getFAQSchema(faqs)} />
 
             <section className="py-16">
                 <div className="container mx-auto px-4">
@@ -74,10 +101,43 @@ export default function ToolsPage() {
                         <h1 className="text-4xl md:text-5xl font-bold mb-6">
                             Free Screenshot Tools
                         </h1>
-                        <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-                            Quick and easy website screenshot tools. No signup required -
-                            just paste a URL and capture.
+                        <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-6">
+                            Capture website screenshots instantly — no signup, no API key, no install. Paste a URL and download your screenshot in seconds.
                         </p>
+                        <p className="text-muted-foreground max-w-3xl mx-auto">
+                            Each tool below runs on Screenshotly&apos;s rendering engine, the same infrastructure
+                            that powers our REST API. Use these free tools for quick one-off captures, or{' '}
+                            <Link href="/sign-up" className="text-primary hover:underline">sign up for a free API key</Link>{' '}
+                            to automate captures programmatically.
+                        </p>
+                    </div>
+
+                    {/* How It Works */}
+                    <div className="max-w-3xl mx-auto mb-16">
+                        <h2 className="text-2xl font-bold text-center mb-8">How It Works</h2>
+                        <div className="grid md:grid-cols-3 gap-6 text-center">
+                            <div>
+                                <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-3">
+                                    <span className="text-primary font-bold">1</span>
+                                </div>
+                                <h3 className="font-semibold mb-1">Paste a URL</h3>
+                                <p className="text-sm text-muted-foreground">Enter any public website URL into the tool.</p>
+                            </div>
+                            <div>
+                                <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-3">
+                                    <span className="text-primary font-bold">2</span>
+                                </div>
+                                <h3 className="font-semibold mb-1">Capture</h3>
+                                <p className="text-sm text-muted-foreground">Our engine renders the page in a real browser and captures a high-resolution screenshot.</p>
+                            </div>
+                            <div>
+                                <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-3">
+                                    <span className="text-primary font-bold">3</span>
+                                </div>
+                                <h3 className="font-semibold mb-1">Download</h3>
+                                <p className="text-sm text-muted-foreground">Download your screenshot as a PNG file. No watermark, no limits on file size.</p>
+                            </div>
+                        </div>
                     </div>
 
                     {/* Tools Grid */}
@@ -129,6 +189,44 @@ export default function ToolsPage() {
                                 </div>
                             );
                         })}
+                    </div>
+
+                    {/* Tool Comparison */}
+                    <div className="max-w-4xl mx-auto mt-16 mb-16">
+                        <h2 className="text-2xl font-bold text-center mb-8">Compare Our Screenshot Tools</h2>
+                        <div className="border rounded-lg overflow-hidden">
+                            <table className="w-full">
+                                <thead>
+                                    <tr className="bg-muted">
+                                        <th className="text-left p-4 font-medium">Feature</th>
+                                        <th className="text-center p-4 font-medium">Website Screenshot</th>
+                                        <th className="text-center p-4 font-medium">Full Page</th>
+                                        <th className="text-center p-4 font-medium">Scrolling</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr className="border-t"><td className="p-4">Viewport capture</td><td className="p-4 text-center">✅</td><td className="p-4 text-center">✅</td><td className="p-4 text-center">✅</td></tr>
+                                    <tr className="border-t"><td className="p-4">Below-fold content</td><td className="p-4 text-center">❌</td><td className="p-4 text-center">✅</td><td className="p-4 text-center">✅</td></tr>
+                                    <tr className="border-t"><td className="p-4">Device presets</td><td className="p-4 text-center">✅ Desktop, Tablet, Mobile</td><td className="p-4 text-center">❌</td><td className="p-4 text-center">❌</td></tr>
+                                    <tr className="border-t"><td className="p-4">Custom viewport size</td><td className="p-4 text-center">❌</td><td className="p-4 text-center">❌</td><td className="p-4 text-center">✅</td></tr>
+                                    <tr className="border-t"><td className="p-4">Output formats</td><td className="p-4 text-center">PNG</td><td className="p-4 text-center">PNG</td><td className="p-4 text-center">PNG, JPEG, WebP</td></tr>
+                                    <tr className="border-t"><td className="p-4">Best for</td><td className="p-4 text-center">Quick captures</td><td className="p-4 text-center">Long pages, archival</td><td className="p-4 text-center">Custom sizes, portfolios</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    {/* FAQ */}
+                    <div className="max-w-3xl mx-auto mb-16">
+                        <h2 className="text-2xl font-bold text-center mb-8">Frequently Asked Questions</h2>
+                        <div className="space-y-4">
+                            {faqs.map((faq, index) => (
+                                <div key={index} className="border rounded-lg p-4">
+                                    <h3 className="font-medium mb-2">{faq.question}</h3>
+                                    <p className="text-muted-foreground">{faq.answer}</p>
+                                </div>
+                            ))}
+                        </div>
                     </div>
 
                     {/* API Promo */}

@@ -69,6 +69,8 @@ export function getFooterLinks() {
         product: [
             { href: '/pricing', title: 'Pricing' },
             { href: '/playground', title: 'Playground' },
+            { href: '/tools', title: 'Free Tools' },
+            { href: '/customers', title: 'Customers' },
             { href: '/status', title: 'Status' },
         ],
         resources: [
@@ -76,6 +78,8 @@ export function getFooterLinks() {
             { href: '/help', title: 'Help Center' },
             { href: '/use-cases', title: 'Use Cases' },
             { href: '/integrations', title: 'Integrations' },
+            { href: '/topics', title: 'Topics' },
+            { href: '/changelog', title: 'Changelog' },
         ],
         compare: comparisons.slice(0, 4).map(c => ({
             href: `/compare/${c.slug}`,

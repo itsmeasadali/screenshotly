@@ -7,7 +7,7 @@ import GuestLayout from "@/components/layouts/GuestLayout";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { JsonLd } from "@/components/seo";
-import { getBreadcrumbSchema, getArticleSchema, getHowToSchema } from "@/lib/seo/structured-data";
+import { getBreadcrumbSchema, getArticleSchema, getHowToSchema, getFAQSchema } from "@/lib/seo/structured-data";
 import { getBlogPost, getRelatedBlogPosts, getAllBlogSlugs, getAuthor } from "@/lib/markdown";
 
 const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://screenshotly.app';
@@ -36,10 +36,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return {
         title: post.title,
         description: post.excerpt,
-        keywords: post.keywords,
         authors: [{ name: post.author }],
         alternates: {
-            canonical: `/blog/${slug}`,
+            canonical: post.canonical || `/blog/${slug}`,
         },
         openGraph: {
             type: "article",
@@ -51,14 +50,21 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
             authors: [post.author],
             tags: post.tags,
         },
+        twitter: {
+            card: "summary_large_image",
+            title: post.title,
+            description: post.excerpt,
+        },
     };
 }
 
-const categoryLabels = {
+const categoryLabels: Record<string, string> = {
     tutorial: 'Tutorial',
     guide: 'Guide',
     news: 'News',
     comparison: 'Comparison',
+    'case-study': 'Case Study',
+    reference: 'Reference',
     tips: 'Tips & Tricks',
 };
 
@@ -103,21 +109,18 @@ export default async function BlogPostPage({ params }: Props) {
                     credentials: author.credentials,
                     social: author.social
                 } : { name: post.author },
-                faqs: post.faqs,
             })} />
+            {post.faqs && post.faqs.length > 0 && (
+                <JsonLd data={getFAQSchema(post.faqs)} />
+            )}
 
-            {/* Add HowTo schema for tutorial posts */}
-            {post.category === 'tutorial' && (
+            {/* Add HowTo schema only for tutorial posts that define explicit steps */}
+            {post.category === 'tutorial' && post.howToSteps && post.howToSteps.length > 0 && (
                 <JsonLd data={getHowToSchema({
                     name: post.title,
                     description: post.excerpt,
                     totalTime: `PT${post.readingTime}M`,
-                    steps: [
-                        { name: "Set up your environment", text: "Install required dependencies and get your API key from the dashboard." },
-                        { name: "Configure your request", text: "Set up the URL, device type, and any AI removal options you need." },
-                        { name: "Make the API call", text: "Send a POST request to our API endpoint with your configuration." },
-                        { name: "Process the response", text: "Handle the returned image data and save or use it in your application." },
-                    ],
+                    steps: post.howToSteps,
                 })} />
             )}
 
@@ -168,6 +171,27 @@ export default async function BlogPostPage({ params }: Props) {
                             </span>
                         </div>
                     </header>
+
+                    {/* Table of Contents */}
+                    {post.headings && post.headings.length >= 4 && (
+                        <nav className="mb-12 p-6 bg-muted/40 rounded-xl border" aria-label="Table of contents">
+                            <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground mb-4">
+                                In this article
+                            </h2>
+                            <ul className="space-y-2">
+                                {post.headings.map((heading) => (
+                                    <li key={heading.id} className={heading.level === 3 ? 'ml-4' : ''}>
+                                        <a
+                                            href={`#${heading.id}`}
+                                            className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                                        >
+                                            {heading.text}
+                                        </a>
+                                    </li>
+                                ))}
+                            </ul>
+                        </nav>
+                    )}
 
                     {/* Content */}
                     <div
@@ -262,7 +286,7 @@ export default async function BlogPostPage({ params }: Props) {
                     )}
 
                     {/* CTA */}
-                    <section className="bg-primary/10 rounded-xl p-8 text-center mb-12">
+                    <section className="bg-primary/10 rounded-xl p-8 text-center mb-12" aria-label="Get started">
                         <h2 className="text-2xl font-bold mb-4">
                             Ready to capture your first screenshot?
                         </h2>

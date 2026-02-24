@@ -4,7 +4,7 @@ import { ArrowRight, Code2, Workflow } from "lucide-react";
 import GuestLayout from "@/components/layouts/GuestLayout";
 import { Badge } from "@/components/ui/badge";
 import { JsonLd } from "@/components/seo";
-import { getBreadcrumbSchema } from "@/lib/seo/structured-data";
+import { getBreadcrumbSchema, getFAQSchema } from "@/lib/seo/structured-data";
 import { integrations } from "@/data/integrations";
 
 const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://screenshotly.app';
@@ -12,15 +12,18 @@ const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://screenshotly.app';
 export const metadata: Metadata = {
     title: "Integrations - Screenshot API for Every Language & Platform",
     description: "Integrate Screenshotly with JavaScript, Python, PHP, Go, and more. Connect with Zapier, Make, and n8n for no-code automation.",
-    keywords: [
-        "screenshot API integrations",
-        "screenshot API SDKs",
-        "javascript screenshot",
-        "python screenshot API",
-        "zapier screenshot",
-    ],
     alternates: {
         canonical: "/integrations",
+    },
+    openGraph: {
+        title: "Integrations - Screenshot API for Every Language & Platform",
+        description: "Integrate Screenshotly with JavaScript, Python, PHP, Go, and more. Connect with Zapier, Make, and n8n for no-code automation.",
+        type: "website",
+    },
+    twitter: {
+        card: "summary_large_image",
+        title: "Integrations - Screenshot API for Every Language & Platform",
+        description: "Integrate Screenshotly with JavaScript, Python, PHP, Go, and more. Connect with Zapier, Make, and n8n for no-code automation.",
     },
 };
 
@@ -30,9 +33,25 @@ export default function IntegrationsIndexPage() {
         { name: "Integrations", url: `${BASE_URL}/integrations` },
     ];
 
+    const faqs = [
+        {
+            question: "Which programming languages does Screenshotly support?",
+            answer: "Screenshotly's REST API works with any language that can make HTTP requests. We provide detailed integration guides with copy-paste code examples for JavaScript, Node.js, Python, PHP, Ruby, Go, and cURL.",
+        },
+        {
+            question: "Can I use Screenshotly without writing code?",
+            answer: "Yes. Screenshotly integrates with no-code platforms including Zapier, Make (Integromat), and n8n. You can build automated screenshot workflows using drag-and-drop interfaces without writing a single line of code.",
+        },
+        {
+            question: "How do I authenticate API requests?",
+            answer: "All API requests are authenticated using a Bearer token in the Authorization header. Sign up for a free account to get your API key, then include it as 'Authorization: Bearer YOUR_API_KEY' in every request.",
+        },
+    ];
+
     return (
         <GuestLayout>
             <JsonLd data={getBreadcrumbSchema(breadcrumbs)} />
+            <JsonLd data={getFAQSchema(faqs)} />
 
             <div className="py-16">
                 <div className="container mx-auto px-4 max-w-6xl">
@@ -141,6 +160,19 @@ export default function IntegrationsIndexPage() {
                                         <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
                                     </div>
                                 </Link>
+                            ))}
+                        </div>
+                    </section>
+
+                    {/* FAQ Section */}
+                    <section className="mb-16 max-w-3xl mx-auto">
+                        <h2 className="text-2xl font-bold mb-8 text-center">Frequently Asked Questions</h2>
+                        <div className="space-y-6">
+                            {faqs.map((faq, index) => (
+                                <div key={index} className="border rounded-xl p-6">
+                                    <h3 className="font-semibold mb-2">{faq.question}</h3>
+                                    <p className="text-muted-foreground">{faq.answer}</p>
+                                </div>
                             ))}
                         </div>
                     </section>

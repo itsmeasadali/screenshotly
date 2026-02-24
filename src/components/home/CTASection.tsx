@@ -33,7 +33,7 @@ export const CTASection = ({ userId }: CTASectionProps) => {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button size="lg" asChild>
               <Link href={userId ? "/dashboard" : "/sign-up"}>
-                {userId ? "Go to Dashboard" : "Start Free Trial"}
+                {userId ? "Go to Dashboard" : "Get 100 Free Screenshots"}
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Link>
             </Button>
@@ -59,29 +59,33 @@ export const CTASection = ({ userId }: CTASectionProps) => {
             </CardContent>
           </Card>
 
-          <Card className="shadow-lg">
-            <CardContent className="p-6 text-center">
-              <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-muted mb-4">
-                <FileText className="w-6 h-6 text-foreground" />
-              </div>
-              <h3 className="font-semibold mb-2">Full Documentation</h3>
-              <p className="text-sm text-muted-foreground">
-                Complete API docs, SDKs, and integration guides.
-              </p>
-            </CardContent>
-          </Card>
+          <Link href="/help">
+            <Card className="shadow-lg hover:shadow-xl hover:border-primary/50 transition-all duration-300">
+              <CardContent className="p-6 text-center">
+                <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-muted mb-4">
+                  <FileText className="w-6 h-6 text-foreground" />
+                </div>
+                <h3 className="font-semibold mb-2">Full Documentation</h3>
+                <p className="text-sm text-muted-foreground">
+                  Complete API docs and integration guides for every language.
+                </p>
+              </CardContent>
+            </Card>
+          </Link>
 
-          <Card className="shadow-lg">
-            <CardContent className="p-6 text-center">
-              <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-muted mb-4">
-                <Settings className="w-6 h-6 text-foreground" />
-              </div>
-              <h3 className="font-semibold mb-2">Easy Integration</h3>
-              <p className="text-sm text-muted-foreground">
-                RESTful API with SDKs for all popular languages.
-              </p>
-            </CardContent>
-          </Card>
+          <Link href="/integrations">
+            <Card className="shadow-lg hover:shadow-xl hover:border-primary/50 transition-all duration-300">
+              <CardContent className="p-6 text-center">
+                <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-muted mb-4">
+                  <Settings className="w-6 h-6 text-foreground" />
+                </div>
+                <h3 className="font-semibold mb-2">Easy Integration</h3>
+                <p className="text-sm text-muted-foreground">
+                  RESTful API that works with any language or framework.
+                </p>
+              </CardContent>
+            </Card>
+          </Link>
         </div>
 
         {/* Pricing Preview */}
@@ -91,6 +95,11 @@ export const CTASection = ({ userId }: CTASectionProps) => {
             <p className="text-muted-foreground">
               Start free, scale as you grow. No hidden fees or surprise charges.
             </p>
+          </div>
+          <div className="text-center mb-6">
+            <Link href="/pricing" className="text-sm text-primary hover:underline">
+              View full pricing details & plan comparison →
+            </Link>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -196,6 +205,13 @@ export const CTASection = ({ userId }: CTASectionProps) => {
                 </Button>
               </CardContent>
             </Card>
+          </div>
+          <div className="flex flex-wrap gap-4 justify-center mt-8 text-sm">
+            <Link href="/blog" className="text-primary hover:underline">Read our blog</Link>
+            <span className="text-muted-foreground">·</span>
+            <Link href="/customers" className="text-primary hover:underline">Customer stories</Link>
+            <span className="text-muted-foreground">·</span>
+            <Link href="/compare" className="text-primary hover:underline">Compare alternatives</Link>
           </div>
         </div>
       </div>

@@ -4,23 +4,26 @@ import { ArrowRight } from "lucide-react";
 import GuestLayout from "@/components/layouts/GuestLayout";
 import { Badge } from "@/components/ui/badge";
 import { JsonLd } from "@/components/seo";
-import { getBreadcrumbSchema } from "@/lib/seo/structured-data";
+import { getBreadcrumbSchema, getFAQSchema } from "@/lib/seo/structured-data";
 import { comparisons } from "@/data/comparisons";
 
 const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://screenshotly.app';
 
 export const metadata: Metadata = {
-    title: "Compare Screenshot APIs - Screenshotly Alternatives & Comparisons",
-    description: "Compare Screenshotly with other screenshot APIs and tools. See feature comparisons, pricing, and why developers choose Screenshotly.",
-    keywords: [
-        "screenshot API comparison",
-        "best screenshot API",
-        "screenshot API alternatives",
-        "screenshotly vs",
-        "puppeteer alternative",
-    ],
+    title: "Compare Screenshot APIs - Alternatives & Feature Comparison (2026)",
+    description: "Compare Screenshotly with other screenshot APIs and tools. See detailed feature comparisons and why developers choose Screenshotly.",
     alternates: {
         canonical: "/compare",
+    },
+    openGraph: {
+        title: "Compare Screenshot APIs - Alternatives & Feature Comparison (2026)",
+        description: "Compare Screenshotly with other screenshot APIs and tools. See detailed feature comparisons and why developers choose Screenshotly.",
+        type: "website",
+    },
+    twitter: {
+        card: "summary_large_image",
+        title: "Compare Screenshot APIs - Alternatives & Pricing (2026)",
+        description: "Compare Screenshotly with other screenshot APIs and tools. See feature comparisons, pricing, and why developers choose Screenshotly.",
     },
 };
 
@@ -30,9 +33,25 @@ export default function CompareIndexPage() {
         { name: "Comparisons", url: `${BASE_URL}/compare` },
     ];
 
+    const faqs = [
+        {
+            question: "What is the best screenshot API in 2026?",
+            answer: "The best screenshot API depends on your needs. Screenshotly stands out for its AI-powered element removal, built-in device mockups, and competitive pricing starting at $14/mo. It's ideal for developers who need clean, professional screenshots without managing headless browser infrastructure.",
+        },
+        {
+            question: "How does Screenshotly compare to self-hosted Puppeteer?",
+            answer: "Screenshotly eliminates the DevOps overhead of self-hosted Puppeteer. You don't need to manage servers, browser updates, or scaling infrastructure. Screenshotly also adds AI element removal and device mockups that Puppeteer doesn't offer out of the box.",
+        },
+        {
+            question: "Can I switch to Screenshotly from another screenshot API?",
+            answer: "Yes. Migration typically takes under an hour. Screenshotly uses a standard REST API with similar parameters to most screenshot services. Our comparison guides include migration steps for each competitor.",
+        },
+    ];
+
     return (
         <GuestLayout>
             <JsonLd data={getBreadcrumbSchema(breadcrumbs)} />
+            <JsonLd data={getFAQSchema(faqs)} />
 
             <div className="py-16">
                 <div className="container mx-auto px-4 max-w-6xl">
@@ -107,6 +126,19 @@ export default function CompareIndexPage() {
                             </Link>
                         ))}
                     </div>
+
+                    {/* FAQ Section */}
+                    <section className="mt-16 max-w-3xl mx-auto">
+                        <h2 className="text-2xl font-bold mb-8 text-center">Frequently Asked Questions</h2>
+                        <div className="space-y-6">
+                            {faqs.map((faq, index) => (
+                                <div key={index} className="border rounded-xl p-6">
+                                    <h3 className="font-semibold mb-2">{faq.question}</h3>
+                                    <p className="text-muted-foreground">{faq.answer}</p>
+                                </div>
+                            ))}
+                        </div>
+                    </section>
 
                     {/* Why Screenshotly */}
                     <div className="mt-16 p-8 bg-muted/50 rounded-xl text-center">

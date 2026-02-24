@@ -6,12 +6,14 @@ author: "asad-ali"
 publishedAt: "2025-11-12"
 category: "guide"
 tags: ["caching", "performance", "redis", "cdn", "optimization"]
-keywords: ["screenshot caching", "redis cache", "cdn caching", "screenshot performance", "api caching"]
+keywords: ["screenshot caching", "redis cache screenshots", "cdn caching screenshots", "cache invalidation screenshots", "multi-layer cache API"]
 featured: false
 readingTime: 7
 ---
 
-Screenshots are expensive to generate but often reusable. Effective caching reduces API costs, improves response times, and provides offline resilience. This guide covers caching strategies for different scales and requirements.
+Screenshots are expensive to generate but often reusable. Effective caching reduces API costs, improves response times, and provides offline resilience. This is the canonical caching reference — covering Redis, CDN, local file, and multi-layer caching strategies for different scales.
+
+For **speed optimization** beyond caching (resource blocking, viewport tuning, parallel processing), see our [Screenshot Speed Optimization](/blog/optimize-screenshot-performance) guide. For **cost reduction strategies** (credit-saving techniques, budget monitoring, plan optimization), see our [Screenshot API Cost Optimization](/blog/screenshot-api-performance-optimization) guide.
 
 ## Why Cache Screenshots?
 
@@ -552,4 +554,7 @@ Start with Redis for simplicity, add CDN layers as traffic grows.
 
 [Get your free API key →](/sign-up) - 100 free screenshots to get started.
 
-See also: [Batch Screenshot Processing →](/blog/batch-screenshot-processing)
+See also:
+- [Screenshot Speed Optimization →](/blog/optimize-screenshot-performance)
+- [Screenshot API Cost Optimization →](/blog/screenshot-api-performance-optimization)
+- [Batch Screenshot Processing →](/blog/batch-screenshot-processing)

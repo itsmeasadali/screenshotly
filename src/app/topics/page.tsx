@@ -10,16 +10,20 @@ import { getBreadcrumbSchema, getCollectionPageSchema } from "@/lib/seo/structur
 const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://screenshotly.app';
 
 export const metadata: Metadata = {
-    title: "Screenshot API Topics & Guides | Screenshotly",
+    title: "Screenshot API Topics & Guides",
     description: "Explore comprehensive guides on screenshot automation, visual testing, performance optimization, and more. Master every aspect of screenshot APIs.",
-    keywords: [
-        "screenshot API guides",
-        "screenshot automation tutorials",
-        "visual testing guides",
-        "screenshot API documentation"
-    ],
     alternates: {
         canonical: "/topics",
+    },
+    openGraph: {
+        title: "Screenshot API Topics & Guides",
+        description: "Explore comprehensive guides on screenshot automation, visual testing, performance optimization, and more. Master every aspect of screenshot APIs.",
+        type: "website",
+    },
+    twitter: {
+        card: "summary_large_image",
+        title: "Screenshot API Topics & Guides",
+        description: "Explore comprehensive guides on screenshot automation, visual testing, performance optimization, and more. Master every aspect of screenshot APIs.",
     },
 };
 
@@ -27,7 +31,7 @@ const topicClusters = [
     {
         slug: "automation",
         title: "Automation & Integration",
-        description: "Learn how to automate screenshot capture and integrate with your existing workflows, CI/CD pipelines, and development tools.",
+        description: "Screenshot automation replaces manual screen captures with API calls that run on schedule, on deploy, or on demand. The guides below cover everything from your first API request to building production pipelines that capture thousands of pages per hour. Start with the Getting Started tutorial if you're new, then move to batch processing and CI/CD integration as your workload grows.",
         icon: Zap,
         color: "bg-yellow-500/10 text-yellow-600 dark:text-yellow-400",
         articles: [
@@ -48,7 +52,7 @@ const topicClusters = [
     {
         slug: "performance",
         title: "Performance & Optimization",
-        description: "Master techniques to speed up screenshot capture, reduce costs, and handle high-volume workloads efficiently.",
+        description: "Capturing screenshots at scale requires careful attention to caching, viewport configuration, and request parallelism. These guides cover how to reduce average capture time below 2 seconds, implement smart caching strategies to avoid redundant captures, and optimize image output size for web delivery. If you're processing more than a few hundred screenshots per day, start here.",
         icon: Layers,
         color: "bg-blue-500/10 text-blue-600 dark:text-blue-400",
         articles: [
@@ -57,14 +61,14 @@ const topicClusters = [
             { title: "Mobile Screenshot Optimization", slug: "/blog/mobile-responsive-screenshots" },
         ],
         useCases: [
-            { title: "E-commerce Screenshots", slug: "/use-cases/ecommerce-screenshots" },
+            { title: "E-commerce Product Images", slug: "/use-cases/e-commerce-product-images" },
             { title: "Social Media Previews", slug: "/use-cases/social-media-previews" },
         ],
     },
     {
         slug: "testing",
         title: "Visual Testing & QA",
-        description: "Implement visual regression testing, catch UI bugs before production, and ensure consistent user experiences across devices.",
+        description: "Visual regression testing catches UI bugs that unit tests miss — broken layouts, overlapping elements, and styling regressions. These guides walk you through setting up baseline captures, running pixel-diff comparisons on every pull request, and integrating screenshot assertions into your existing test suite. Screenshotly's AI element removal ensures your baselines stay consistent by stripping dynamic ads, banners, and popups.",
         icon: Code,
         color: "bg-green-500/10 text-green-600 dark:text-green-400",
         articles: [
@@ -73,7 +77,7 @@ const topicClusters = [
         ],
         useCases: [
             { title: "Automated Testing", slug: "/use-cases/automated-testing" },
-            { title: "Visual Regression Testing", slug: "/use-cases/visual-regression-testing" },
+            { title: "Bug Tracking", slug: "/use-cases/bug-tracking" },
         ],
         comparisons: [
             { title: "Screenshotly vs Puppeteer", slug: "/compare/puppeteer" },
@@ -83,7 +87,7 @@ const topicClusters = [
     {
         slug: "content",
         title: "Content & Marketing",
-        description: "Create stunning visuals for marketing, social media, documentation, and product showcases with device mockups and clean screenshots.",
+        description: "Professional screenshots drive engagement in marketing materials, social media posts, and product documentation. These guides cover using device mockups to present your product in iPhone, MacBook, and browser frames, generating dynamic OG images for social sharing, and using AI cleanup to remove distracting page elements. Learn how teams use Screenshotly to produce marketing assets at scale without a design team.",
         icon: FileText,
         color: "bg-purple-500/10 text-purple-600 dark:text-purple-400",
         articles: [
@@ -100,7 +104,7 @@ const topicClusters = [
     {
         slug: "security",
         title: "Security & Best Practices",
-        description: "Protect your API keys, secure your screenshot workflows, and implement production-ready integrations.",
+        description: "API key management, HTTPS-only communication, and proper error handling are critical for production screenshot workflows. These guides cover how to rotate API keys safely, implement rate limiting on your end to avoid overage charges, handle authentication for capturing protected pages, and follow security best practices that keep your integration safe and reliable.",
         icon: Shield,
         color: "bg-red-500/10 text-red-600 dark:text-red-400",
         articles: [
@@ -133,9 +137,14 @@ export default function TopicsPage() {
                         <h1 className="text-4xl md:text-5xl font-bold mb-6">
                             Screenshot API Topics & Guides
                         </h1>
-                        <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+                        <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-6">
                             Master every aspect of screenshot automation. From getting started to advanced optimization,
                             find comprehensive guides organized by topic.
+                        </p>
+                        <p className="text-muted-foreground max-w-3xl mx-auto">
+                            Each topic below groups related tutorials, use cases, and integration guides so you can
+                            learn end-to-end. Whether you&apos;re building automated visual tests, generating marketing assets,
+                            or integrating screenshots into your SaaS product, start with the topic that matches your goal.
                         </p>
                     </div>
 

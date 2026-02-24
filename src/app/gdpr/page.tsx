@@ -1,4 +1,13 @@
+import { Metadata } from 'next';
 import GuestLayout from '@/components/layouts/GuestLayout';
+
+export const metadata: Metadata = {
+  title: "GDPR Compliance",
+  description: "Screenshotly's commitment to GDPR compliance. Learn about your data rights, our legal basis for processing, and how to exercise your rights.",
+  alternates: {
+    canonical: "/gdpr",
+  },
+};
 
 export default function GDPRPage() {
   return (

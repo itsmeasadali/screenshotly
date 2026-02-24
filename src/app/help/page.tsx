@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { JsonLd } from "@/components/seo";
-import { getBreadcrumbSchema, getFAQSchema, getAPIDocumentationSchema, getDatasetSchema } from "@/lib/seo/structured-data";
+import { getBreadcrumbSchema, getFAQSchema } from "@/lib/seo/structured-data";
 import Link from 'next/link';
 import {
   MessageCircle,
@@ -23,13 +23,6 @@ const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://screenshotly.app';
 export const metadata: Metadata = {
   title: "Help Center - Screenshot API Documentation & Support",
   description: "Get help with Screenshotly's screenshot API. Find answers to common questions, explore documentation, API reference, and contact our support team.",
-  keywords: [
-    "screenshot API help",
-    "screenshot API documentation",
-    "Screenshotly support",
-    "API troubleshooting",
-    "screenshot API FAQ",
-  ],
   alternates: {
     canonical: "/help",
   },
@@ -42,7 +35,7 @@ const faqs = [
   },
   {
     question: "What are the rate limits for different plans?",
-    answer: "Free plans include 100 requests per hour, Pro plans get 1,000 requests per hour, and Enterprise plans have custom limits. View your current usage in the dashboard."
+    answer: "Free tier: 5 requests/minute. Basic ($14/mo): 40 req/min. Growth ($59/mo): 80 req/min. Scale ($199/mo): 200 req/min with custom limits available. View your current usage in the dashboard."
   },
   {
     question: "Can I capture screenshots of password-protected sites?",
@@ -77,10 +70,10 @@ export default function HelpPage() {
       title: "Getting Started",
       description: "Quick setup guides and tutorials",
       articles: [
-        "Creating your first API key",
-        "Making your first screenshot request",
-        "Understanding response formats",
-        "Setting up authentication"
+        { label: "Getting Started with the Screenshot API", href: "/blog/getting-started-with-screenshot-api" },
+        { label: "SaaS Integration Guide", href: "/blog/saas-screenshot-api-integration-guide" },
+        { label: "Authenticated Screenshot Capture", href: "/blog/authenticated-screenshot-capture-guide" },
+        { label: "Node.js Screenshot Tutorial", href: "/blog/nodejs-screenshot-api-tutorial" },
       ]
     },
     {
@@ -88,10 +81,10 @@ export default function HelpPage() {
       title: "API Reference",
       description: "Complete API documentation",
       articles: [
-        "Endpoint documentation",
-        "Request parameters",
-        "Response schemas",
-        "Error codes and handling"
+        { label: "Full API Documentation", href: "https://docs.screenshotly.app", external: true },
+        { label: "Error Handling Guide", href: "/blog/screenshot-api-error-handling-guide" },
+        { label: "Rate Limits Guide", href: "/blog/screenshot-api-rate-limits-guide" },
+        { label: "Webhook Integration", href: "/blog/screenshot-webhooks-guide" },
       ]
     },
     {
@@ -99,10 +92,10 @@ export default function HelpPage() {
       title: "Security & Auth",
       description: "Authentication and security best practices",
       articles: [
-        "API key management",
-        "Rate limiting guidelines",
-        "Security best practices",
-        "CORS configuration"
+        { label: "API Security Best Practices", href: "/blog/screenshot-api-security-guide" },
+        { label: "Authenticated Page Capture", href: "/blog/authenticated-screenshot-capture-guide" },
+        { label: "Rate Limiting Guidelines", href: "/blog/screenshot-api-rate-limits-guide" },
+        { label: "CI/CD Screenshot Automation", href: "/blog/cicd-screenshot-automation-guide" },
       ]
     },
     {
@@ -110,10 +103,10 @@ export default function HelpPage() {
       title: "Troubleshooting",
       description: "Common issues and solutions",
       articles: [
-        "Screenshot failed errors",
-        "Timeout issues",
-        "Quality optimization",
-        "Debugging API responses"
+        { label: "Error Handling & Debugging", href: "/blog/screenshot-api-error-handling-guide" },
+        { label: "Cost & Budget Optimization", href: "/blog/screenshot-api-performance-optimization" },
+        { label: "Dynamic Content Captures", href: "/blog/dynamic-content-screenshot-guide" },
+        { label: "Mobile Responsive Screenshots", href: "/blog/mobile-responsive-screenshots" },
       ]
     }
   ];
@@ -146,13 +139,11 @@ export default function HelpPage() {
     <GuestLayout>
       <JsonLd data={getBreadcrumbSchema(breadcrumbs)} />
       <JsonLd data={getFAQSchema(faqs)} />
-      <JsonLd data={getAPIDocumentationSchema()} />
-      <JsonLd data={getDatasetSchema()} />
 
       <div className="container mx-auto px-4 py-12 max-w-6xl">
         {/* Header */}
         <div className="text-center mb-16">
-          <h1 className="text-4xl font-bold text-foreground mb-4">Help Center</h1>
+          <h1 className="text-4xl font-bold text-foreground mb-4">Screenshot API Help Center</h1>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
             Find answers to common questions, explore our documentation, and get the support you need.
           </p>
@@ -192,6 +183,35 @@ export default function HelpPage() {
           ))}
         </div>
 
+        {/* Quick Start Guide */}
+        <div className="mb-16 max-w-3xl mx-auto">
+          <h2 className="text-3xl font-bold text-foreground mb-6 text-center">Quick Start</h2>
+          <div className="prose prose-gray dark:prose-invert max-w-none">
+            <p className="text-muted-foreground leading-relaxed mb-4">
+              Screenshotly is a REST API that captures website screenshots programmatically. To get started:
+            </p>
+            <ol className="space-y-3 text-muted-foreground mb-6">
+              <li><strong>Sign up</strong> for a free account at <Link href="/sign-up" className="text-primary hover:underline">screenshotly.app/sign-up</Link> to get your API key. You get 100 free screenshots with no credit card required.</li>
+              <li><strong>Make your first request</strong> by sending a POST to <code className="text-sm bg-muted px-1.5 py-0.5 rounded">https://api.screenshotly.app/screenshot</code> with your target URL and API key in the Authorization header.</li>
+              <li><strong>Receive your screenshot</strong> as a PNG, JPEG, or PDF. The API returns the image data directly in the response body.</li>
+            </ol>
+            <div className="bg-muted rounded-lg p-4 font-mono text-sm mb-6">
+              <div className="text-primary mb-1">curl -X POST https://api.screenshotly.app/screenshot \</div>
+              <div className="text-muted-foreground">
+                &nbsp;&nbsp;-H &quot;Authorization: Bearer YOUR_API_KEY&quot; \<br/>
+                &nbsp;&nbsp;-H &quot;Content-Type: application/json&quot; \<br/>
+                &nbsp;&nbsp;-d &apos;{`{"url":"https://example.com","format":"png"}`}&apos; \<br/>
+                &nbsp;&nbsp;--output screenshot.png
+              </div>
+            </div>
+            <p className="text-muted-foreground">
+              For detailed setup instructions in your language, see our{' '}
+              <Link href="/integrations" className="text-primary hover:underline">integration guides</Link> or try the{' '}
+              <Link href="/playground" className="text-primary hover:underline">API playground</Link> to experiment without writing code.
+            </p>
+          </div>
+        </div>
+
         {/* Help Categories */}
         <div className="mb-16">
           <h2 className="text-3xl font-bold text-foreground mb-8 text-center">Browse by Category</h2>
@@ -206,8 +226,25 @@ export default function HelpPage() {
                 <CardContent>
                   <ul className="space-y-2">
                     {category.articles.map((article, articleIndex) => (
-                      <li key={articleIndex} className="text-sm text-muted-foreground hover:text-foreground transition-colors cursor-pointer">
-                        • {article}
+                      <li key={articleIndex}>
+                        {'external' in article && article.external ? (
+                          <a
+                            href={article.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-sm text-muted-foreground hover:text-primary transition-colors flex items-center gap-1"
+                          >
+                            • {article.label}
+                            <ExternalLink className="w-3 h-3" />
+                          </a>
+                        ) : (
+                          <Link
+                            href={article.href}
+                            className="text-sm text-muted-foreground hover:text-primary transition-colors block"
+                          >
+                            • {article.label}
+                          </Link>
+                        )}
                       </li>
                     ))}
                   </ul>

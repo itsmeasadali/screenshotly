@@ -2,6 +2,7 @@
 export const useCases = [
   {
     slug: 'documentation-screenshots',
+    metaDescription: 'Automate documentation screenshots with the Screenshotly API. Keep technical docs, README files, and API guides in sync. Try it free.',
     title: 'Documentation Screenshots',
     shortTitle: 'Documentation',
     description: 'Automate screenshot capture for technical documentation. Keep your docs always up-to-date with fresh screenshots that reflect the latest UI changes.',
@@ -74,6 +75,7 @@ const response = await fetch('https://api.screenshotly.app/screenshot', {
   },
   {
     slug: 'social-media-previews',
+    metaDescription: 'Generate dynamic OG images and social media previews with Screenshotly. Drive clicks with eye-catching link previews. Try free.',
     title: 'Social Media Previews',
     shortTitle: 'Social Media',
     description: 'Generate beautiful link previews and social media cards. Create eye-catching thumbnails that drive clicks and engagement.',
@@ -144,6 +146,7 @@ const response = await fetch('https://api.screenshotly.app/screenshot', {
   },
   {
     slug: 'e-commerce-product-images',
+    metaDescription: 'Automate e-commerce product screenshots for catalogs and marketplaces. Scale product image generation. Get 100 free captures.',
     title: 'E-commerce Product Images',
     shortTitle: 'E-commerce',
     description: 'Capture product pages and listings for catalogs, marketplaces, and comparison tools. Automate product image generation at scale.',
@@ -214,6 +217,7 @@ const response = await fetch('https://api.screenshotly.app/screenshot', {
   },
   {
     slug: 'automated-testing',
+    metaDescription: 'Visual regression testing with Screenshotly. Integrate screenshots into CI/CD for automated QA. Start testing free.',
     title: 'Automated Testing & QA',
     shortTitle: 'Testing',
     description: 'Integrate visual testing into your CI/CD pipeline. Capture screenshots for regression testing and visual diff comparisons.',
@@ -289,6 +293,7 @@ const captureForTesting = async (urls: string[]) => {
   },
   {
     slug: 'website-thumbnails',
+    metaDescription: 'Generate website thumbnails for directories, bookmarking, and link previews. Consistent quality at any size. Try free.',
     title: 'Website Thumbnails',
     shortTitle: 'Thumbnails',
     description: 'Generate thumbnail previews for link aggregators, directories, and bookmarking services. Create visual previews at any size.',
@@ -358,21 +363,22 @@ const response = await fetch('https://api.screenshotly.app/screenshot', {
   },
   {
     slug: 'pdf-generation',
+    metaDescription: 'Convert any URL to PDF with Screenshotly. Pixel-perfect PDFs from web pages. Full CSS & JavaScript support. Try free.',
     title: 'PDF Generation',
     shortTitle: 'PDF',
-    description: 'Convert web pages to PDF documents. Perfect for invoices, reports, and archival purposes.',
-    longDescription: `PDFs remain the universal format for documents that need to look identical everywhere. Invoices, contracts, reports, and certificates—when the layout matters, PDF is the answer. Screenshotly converts any web page to a perfectly formatted PDF.
+    description: 'Convert any web page or URL to a pixel-perfect PDF via API. Handles modern CSS, JavaScript rendering, and full-page capture.',
+    longDescription: `Need to turn a URL into a PDF? Screenshotly converts any web page to a perfectly formatted PDF document using a real browser engine — no stripped styles, no broken layouts.
 
-Unlike basic HTML-to-PDF converters that struggle with modern CSS and JavaScript, our rendering engine handles complex layouts, web fonts, and dynamic content. The PDF you get matches exactly what you see in the browser. This is crucial for invoices where formatting errors can look unprofessional or even raise fraud concerns.
+Unlike lightweight HTML-to-PDF converters that choke on flexbox, grid, web fonts, or client-side JavaScript, our API renders pages in a full Chromium instance. The PDF output matches exactly what you see in the browser. Pass any public or authenticated URL and receive a production-ready PDF.
 
-Full-page capture ensures you get the complete document, not just the visible viewport. Headers, footers, and all content render correctly. You can also control margins, page size, and orientation to match your exact requirements.`,
+Full-page capture ensures the complete document is included, not just the visible viewport. Control margins, page size (A4, Letter, custom), and orientation through API parameters or CSS @page rules. Use this for archiving web content, generating printable versions of articles, or building document pipelines that convert any URL to PDF on demand.`,
     icon: 'FileOutput',
     keywords: [
-      'webpage to PDF',
-      'URL to PDF',
       'HTML to PDF API',
+      'web page to PDF',
       'PDF generation API',
-      'web page PDF converter',
+      'convert URL to PDF',
+      'webpage PDF converter',
     ],
     benefits: [
       'Convert any URL to PDF',
@@ -405,9 +411,28 @@ const response = await fetch('https://api.screenshotly.app/screenshot', {
     fullPage: true,
   }),
 });`,
+    faqs: [
+      {
+        question: "What CSS properties work best for PDF output?",
+        answer: "Use @media print styles for PDF-specific formatting. Avoid CSS columns and complex flexbox nesting. Fixed-width layouts (e.g. 800px) produce the most predictable results. Set page-break-inside: avoid on important sections."
+      },
+      {
+        question: "Can I control PDF page size and orientation?",
+        answer: "Yes. The API renders the full page into a single continuous PDF by default. Use CSS @page rules in your source HTML to control page size and orientation. Landscape is useful for wide dashboards."
+      },
+      {
+        question: "How does PDF generation differ from a regular screenshot?",
+        answer: "PDF output uses the same rendering engine but produces a vector-friendly document instead of a raster image. Text remains selectable and searchable. File sizes are typically smaller than equivalent PNG screenshots for text-heavy pages."
+      },
+      {
+        question: "What's the maximum page length for PDF generation?",
+        answer: "There is no hard page-length limit. The API captures the full scrollable content and converts it into a multi-page PDF. Very long pages (50,000+ pixels) may take a few extra seconds to process."
+      }
+    ],
   },
   {
     slug: 'email-marketing',
+    metaDescription: 'Capture landing pages and email templates for campaigns. Create compelling email visuals with Screenshotly. Start free.',
     title: 'Email Marketing',
     shortTitle: 'Email',
     description: 'Capture landing pages and email templates for previews. Generate visual content for email campaigns.',
@@ -456,42 +481,61 @@ const response = await fetch('https://api.screenshotly.app/screenshot', {
     mockup: 'iphone-14',
   }),
 });`,
+    faqs: [
+      {
+        question: "What device mockups work best for email marketing screenshots?",
+        answer: "iPhone mockups work best since over 60% of emails are opened on mobile. Use the iphone-14 or iphone-15 template for modern appeal. For B2B campaigns targeting desktop users, a browser frame mockup is more appropriate."
+      },
+      {
+        question: "How do I capture responsive email templates at different sizes?",
+        answer: "Make separate API calls with different device presets — mobile (375px), tablet (768px), and desktop (1920px). This lets you preview how your email landing page renders across all breakpoints before sending."
+      },
+      {
+        question: "Can I use Screenshotly to preview emails in different clients?",
+        answer: "Screenshotly captures web pages, not email inboxes. However, you can render your email HTML as a standalone web page and capture that. For multi-client testing, deploy different rendered versions and capture each."
+      },
+      {
+        question: "How do I automate email preview generation for campaigns?",
+        answer: "Set up a webhook or cron job that calls the API whenever a new campaign is published. Pass the campaign preview URL, capture in mobile and desktop sizes, and store the results in your asset library for email insertion."
+      }
+    ],
   },
   {
     slug: 'web-archiving',
+    metaDescription: 'API for general-purpose web page archiving—research, reference, and historical preservation. Programmatic, timestamped captures. Try free.',
     title: 'Web Archiving',
     shortTitle: 'Archiving',
-    description: 'Create visual archives of web content. Capture and preserve website states for legal, compliance, or historical purposes.',
-    longDescription: `The web is ephemeral. Pages change, sites go down, and content disappears. For legal proceedings, regulatory compliance, and historical preservation, you need immutable evidence of what a webpage showed at a specific moment in time.
+    description: 'General-purpose web page archiving for research, reference, and historical preservation. Capture and preserve any webpage with API-driven automation.',
+    longDescription: `The web is ephemeral. Pages change, sites go down, and content disappears. Researchers, librarians, and archivists need programmatic tools to preserve web content for future reference and historical study.
 
-Screenshotly provides forensic-grade web archiving. Full-page captures with high resolution preserve every detail. Timestamps and metadata document exactly when the capture occurred. Unlike the Wayback Machine, you control when and what gets archived, and the captures are yours to keep.
+Screenshotly provides a web archive API for capturing any webpage on demand or schedule. Full-page captures with high resolution preserve every detail. Timestamps and metadata document exactly when the capture occurred. Unlike the Wayback Machine, you control when and what gets archived, and the captures are yours to keep.
 
-For legal use cases, disable AI element removal to preserve the exact user experience. For compliance monitoring, schedule regular captures to document changes over time. For historical preservation, capture important content before it vanishes.`,
+Use it to build reference collections, document research sources, preserve project snapshots, or create your own historical archive. Schedule recurring captures or trigger on-demand via API—ideal for website archiving automation at any scale.`,
     icon: 'Archive',
     keywords: [
-      'web archiving',
-      'website archival',
-      'legal screenshot capture',
-      'compliance screenshots',
-      'historical web capture',
+      'web archive API',
+      'website archiving automation',
+      'web page preservation',
+      'programmatic web capture',
+      'historical web archiving',
     ],
     benefits: [
-      'Legal evidence capture',
-      'Compliance documentation',
-      'Historical preservation',
-      'Content verification',
+      'Preserve web pages for research and reference',
+      'Schedule recurring captures on any cadence',
+      'Full-page capture with pixel-perfect fidelity',
+      'Build searchable historical archives',
     ],
     steps: [
-      'Identify URLs requiring archival (legal evidence, compliance pages, etc.)',
+      'Identify URLs you want to preserve (research sources, project pages, reference material)',
       'Configure capture settings: full page, high quality, AI removal disabled',
       'Store captures with complete metadata (URL, timestamp, hash)',
-      'Use immutable storage (S3 Glacier, archive services) for retention',
-      'Maintain chain of custody documentation for legal admissibility',
+      'Organize into collections using tags, folders, or a database index',
+      'Schedule recurring captures to track how pages change over time',
     ],
     metrics: [
       { stat: '100%', label: 'content fidelity' },
-      { stat: 'Timestamped', label: 'legal-grade captures' },
-      { stat: 'Immutable', label: 'archive storage ready' },
+      { stat: 'Timestamped', label: 'every capture dated' },
+      { stat: 'Any cadence', label: 'hourly to monthly schedules' },
     ],
     codeExample: `// Archive webpage
 const response = await fetch('https://api.screenshotly.app/screenshot', {
@@ -508,44 +552,63 @@ const response = await fetch('https://api.screenshotly.app/screenshot', {
     delay: 3000,
   }),
 });`,
+    faqs: [
+      {
+        question: "How long are web archive screenshots legally valid?",
+        answer: "Legal validity depends on jurisdiction, but timestamped screenshots with metadata (URL, date, HTTP headers) are widely accepted as evidence. Pair captures with hash checksums and store in tamper-proof storage for maximum legal weight."
+      },
+      {
+        question: "Can I archive dynamic or JavaScript-heavy pages?",
+        answer: "Yes. Screenshotly uses a real Chromium browser engine that fully renders JavaScript, AJAX content, and dynamic elements before capturing. Use the delay or waitForNetworkIdle option to ensure all content is loaded."
+      },
+      {
+        question: "How do I schedule recurring web archive captures?",
+        answer: "Use a cron job, GitHub Actions schedule, or workflow tools like Zapier and n8n to trigger daily or weekly API calls. Store each capture with its timestamp and URL for a complete historical record."
+      },
+      {
+        question: "What format is best for archival screenshots?",
+        answer: "PNG provides lossless quality and is the safest choice for archival. For large-scale archiving where storage costs matter, WebP offers 30-50% smaller files with near-lossless quality. PDF is best when you need selectable text."
+      }
+    ],
   },
   {
     slug: 'competitive-analysis',
+    metaDescription: 'Build competitive intelligence decks with side-by-side website screenshots. Analyze pricing, positioning, and feature gaps. Try free.',
     title: 'Competitive Analysis',
     shortTitle: 'Competitors',
-    description: 'Monitor competitor websites automatically. Track pricing changes, feature updates, and design evolution with scheduled screenshots.',
-    longDescription: `Staying ahead of competitors requires constant monitoring. But manually checking competitor websites daily is tedious and unsustainable. Screenshotly automates competitive intelligence gathering with scheduled, systematic captures.
+    description: 'Analyze competitor positioning, feature sets, and pricing strategy with side-by-side website screenshots. Build strategic market intelligence decks.',
+    longDescription: `Winning market share starts with understanding how competitors position themselves. Screenshotly captures competitor websites so you can build structured analysis decks — pricing tiers, feature matrices, messaging angles, and visual positioning side by side.
 
-Track competitor pricing pages to detect price changes the moment they happen. Monitor feature pages to spot new capabilities before they're announced. Archive landing pages to analyze messaging evolution. Compare homepage designs over time to understand brand strategy shifts.
+Capture competitor pricing pages to build comparison matrices for leadership reviews. Screenshot feature pages to map capability gaps and discover unmet market needs. Archive landing pages to reverse-engineer messaging strategy and value proposition framing. Compare homepage hero sections across competitors to understand how each targets different buyer personas.
 
-Our AI-powered cleanup ensures clean captures even when competitors use popups and overlays. Full-page screenshots capture everything, not just what's above the fold. Schedule captures hourly, daily, or weekly based on how fast your market moves.`,
+This is strategic, point-in-time analysis — not ongoing monitoring. Capture a set of competitor sites before a quarterly strategy meeting, product planning sprint, or investor pitch. Our AI-powered cleanup strips popups and overlays so your captures show the real content, not cookie banners. Use the output in Notion, Google Slides, or Figma to build polished competitive intelligence deliverables.`,
     icon: 'TrendingUp',
     keywords: [
-      'competitor monitoring',
       'competitive analysis screenshots',
-      'price monitoring',
-      'competitor tracking',
+      'competitor website comparison',
       'market research screenshots',
+      'competitive intelligence deck',
+      'pricing intelligence screenshots',
     ],
     benefits: [
-      'Track competitor pricing',
-      'Monitor feature changes',
-      'Analyze design evolution',
-      'Build competitive intelligence',
+      'Side-by-side competitor pricing comparison',
+      'Feature gap analysis from captured pages',
+      'Messaging and positioning teardowns',
+      'Board-ready competitive intelligence decks',
     ],
     steps: [
-      'List competitor URLs to monitor (pricing, features, homepage)',
-      'Set up scheduled jobs (cron, cloud functions) to trigger captures',
-      'Call Screenshotly API with AI removal enabled for clean results',
-      'Store captures with timestamps in organized folders',
-      'Implement diff detection to alert on significant changes',
+      'List competitor URLs to analyze (pricing, features, homepage, about)',
+      'Capture each URL with AI cleanup enabled for clean screenshots',
+      'Organize captures into categories (pricing, features, messaging)',
+      'Build side-by-side comparison layouts in Slides, Figma, or Notion',
+      'Present findings in strategy meetings or investor updates',
     ],
     metrics: [
-      { stat: '24/7', label: 'automated monitoring' },
-      { stat: 'Minutes', label: 'to detect changes' },
-      { stat: 'Unlimited', label: 'competitors tracked' },
+      { stat: '< 5 min', label: 'full competitor capture set' },
+      { stat: 'Side-by-side', label: 'visual comparison' },
+      { stat: 'Board-ready', label: 'intelligence decks' },
     ],
-    codeExample: `// Monitor competitor pricing
+    codeExample: `// Capture competitor page for strategic analysis
 const response = await fetch('https://api.screenshotly.app/screenshot', {
   method: 'POST',
   headers: {
@@ -563,37 +626,56 @@ const response = await fetch('https://api.screenshotly.app/screenshot', {
     },
   }),
 });`,
+    faqs: [
+      {
+        question: "How often should I capture competitor screenshots?",
+        answer: "Weekly is sufficient for design and content tracking. For pricing pages, daily captures catch flash sales and A/B tests. Store screenshots with timestamps and run automated diff tools to highlight changes between captures."
+      },
+      {
+        question: "Can I track competitor pricing changes with screenshots?",
+        answer: "Yes. Capture competitor pricing pages on a schedule and use image comparison or OCR to detect changes. Combine with AI vision analysis to extract structured pricing data from the screenshots automatically."
+      },
+      {
+        question: "How do I compare competitor screenshots over time?",
+        answer: "Store each capture with a consistent naming scheme (competitor-slug-date.png). Use image diff libraries like pixelmatch or visual regression tools to highlight pixel-level changes between captures."
+      },
+      {
+        question: "Does Screenshotly work with competitor sites that block bots?",
+        answer: "Our stealth mode parameter uses realistic browser fingerprinting to avoid detection. Combined with rotating user agents and appropriate delays between requests, it handles most anti-bot measures on public pages."
+      }
+    ],
   },
   {
     slug: 'saas-reporting',
-    title: 'SaaS Metrics Reporting',
+    metaDescription: 'Automate investor update screenshots from Stripe, Analytics, and Mixpanel dashboards. Weekly visual reports on autopilot. Try free.',
+    title: 'SaaS Investor & Stakeholder Reporting',
     shortTitle: 'Reporting',
-    description: 'Capture dashboard screenshots for automated reporting. Generate visual metrics snapshots for stakeholders and investors.',
-    longDescription: `Investor updates, board meetings, and stakeholder reports all need current metrics. But logging into every dashboard, grabbing screenshots, and compiling them into presentations is a weekly time sink. Screenshotly automates this entire workflow.
+    description: 'Automate weekly investor updates and stakeholder reports by capturing Stripe, Analytics, and Mixpanel dashboard screenshots.',
+    longDescription: `Investor updates, board meetings, and stakeholder reports all need current metrics. But logging into every dashboard, grabbing screenshots, and compiling them into presentations is a weekly time sink. Screenshotly automates the capture-and-deliver workflow for SaaS founders and ops teams.
 
-Capture your Stripe dashboard, Google Analytics, Mixpanel, or any other metrics platform automatically. Our API supports authenticated sessions, so you can capture behind-login dashboards securely. Schedule captures to run before your weekly meetings, and the latest metrics are always ready.
+This use case is specifically about SaaS business reporting — Stripe MRR, Google Analytics traffic, Mixpanel funnels, and internal KPI dashboards. Our API supports authenticated sessions so you can capture behind-login dashboards securely. Schedule captures to run before your Monday stand-up or Friday investor email, and the latest metrics snapshots are always ready.
 
-For SaaS founders especially, this is a game-changer. Instead of spending Friday afternoon on reporting, you get consistent, professional dashboard snapshots delivered automatically. Include them in your investor update emails, Notion pages, or presentation decks.`,
+The output goes into investor update emails, Notion pages, or Google Slides decks. Instead of spending Friday afternoon screenshotting dashboards, you get consistent, professional snapshots delivered automatically. Founders running monthly investor updates use this to include visual proof of metrics growth without manual effort.`,
     icon: 'BarChart',
     keywords: [
-      'dashboard screenshots',
-      'SaaS metrics capture',
-      'automated reporting',
-      'analytics screenshots',
-      'investor reports screenshots',
+      'SaaS dashboard screenshots',
+      'investor update automation',
+      'Stripe dashboard capture',
+      'automated investor reports',
+      'SaaS metrics screenshots',
     ],
     benefits: [
-      'Automate investor updates',
-      'Capture metrics dashboards',
-      'Build visual reports',
-      'Track KPIs over time',
+      'Automate investor update visuals',
+      'Capture Stripe, Analytics, and Mixpanel dashboards',
+      'Consistent weekly/monthly report format',
+      'Track MRR and KPI trends visually over time',
     ],
     steps: [
-      'Identify dashboards to capture (Stripe, Analytics, internal metrics)',
-      'Set up authentication (cookies or session tokens) for protected dashboards',
-      'Schedule captures for your reporting cadence (weekly, monthly)',
-      'Compile captured images into your report template automatically',
-      'Distribute reports via email, Slack, or document updates',
+      'List SaaS dashboards to capture (Stripe, Analytics, Mixpanel, internal)',
+      'Pass session cookies to authenticate into each dashboard',
+      'Schedule weekly or monthly captures before your reporting cadence',
+      'Embed screenshot URLs into your investor email or Notion template',
+      'Distribute reports via email, Slack, or Notion automations',
     ],
     metrics: [
       { stat: '2 hours', label: 'saved per weekly report' },
@@ -616,9 +698,28 @@ const response = await fetch('https://api.screenshotly.app/screenshot', {
     ],
   }),
 });`,
+    faqs: [
+      {
+        question: "How do I capture authenticated dashboards without exposing credentials?",
+        answer: "Pass session cookies via the cookies parameter instead of embedding credentials in URLs. Generate short-lived session tokens specifically for screenshot capture, and rotate them regularly for security."
+      },
+      {
+        question: "What viewport size works best for dashboard screenshots?",
+        answer: "Use 1920x1080 for standard dashboards. For dashboards with many panels, consider 2560x1440 or use fullPage: true to capture all panels in a single image regardless of viewport height."
+      },
+      {
+        question: "Can I automate weekly investor report screenshots?",
+        answer: "Yes. Use a cron job or GitHub Actions to call the API every Monday morning, capture each dashboard panel, and attach the images to an email template or Slack message sent to stakeholders."
+      },
+      {
+        question: "How do I handle dashboards that require login?",
+        answer: "Generate an authenticated session token server-side and pass it as a cookie in the API request. Alternatively, use a service account with read-only access and inject its session cookie at capture time."
+      }
+    ],
   },
   {
     slug: 'link-preview-services',
+    metaDescription: 'Build link preview services for Slack, Discord, and messaging apps. Generate rich URL previews via API. Start free.',
     title: 'Link Preview Services',
     shortTitle: 'Link Previews',
     description: 'Build link preview services for messaging apps, social platforms, and content aggregators. Generate rich previews for any URL.',
@@ -667,9 +768,28 @@ const response = await fetch('https://api.screenshotly.app/screenshot', {
     quality: 80,
   }),
 });`,
+    faqs: [
+      {
+        question: "How do I build a link preview service like Slack's unfurl?",
+        answer: "Intercept pasted URLs in your app, call the Screenshotly API with the URL and a small viewport (e.g. 1200x630), then display the resulting thumbnail alongside the page title and description extracted via Open Graph tags."
+      },
+      {
+        question: "What image size is best for link previews?",
+        answer: "1200x630 pixels (1.91:1 ratio) is the universal standard used by Facebook, Twitter, Slack, and Discord. Use JPEG at 80% quality for fast loading. For higher-density displays, capture at 2x and resize."
+      },
+      {
+        question: "How do I cache link preview images efficiently?",
+        answer: "Cache by URL hash with a TTL of 24-72 hours. Serve cached images from a CDN. Implement stale-while-revalidate to refresh previews in the background without blocking user requests."
+      },
+      {
+        question: "Can I generate link previews in real time?",
+        answer: "For user-facing inline previews, pre-generate and cache rather than calling the API in real time. Average capture takes 2-5 seconds, which is too slow for inline display. Queue captures asynchronously and show a placeholder until ready."
+      }
+    ],
   },
   {
     slug: 'real-estate-listings',
+    metaDescription: 'Capture property listings for real estate portals. Archive MLS pages and monitor price changes. Try Screenshotly free.',
     title: 'Real Estate Listings',
     shortTitle: 'Real Estate',
     description: 'Capture property listing pages for real estate portals. Archive listings and create visual property catalogs.',
@@ -719,9 +839,28 @@ const response = await fetch('https://api.screenshotly.app/screenshot', {
     delay: 2000,
   }),
 });`,
+    faqs: [
+      {
+        question: "Can I capture MLS listing pages automatically?",
+        answer: "Yes. Feed MLS listing URLs into the API via a script or workflow tool. Capture each listing with fullPage: true to get all photos, details, and maps. Store results by listing ID for easy retrieval."
+      },
+      {
+        question: "How do I capture property listings with all images loaded?",
+        answer: "Use the delay parameter (3-5 seconds) or waitForNetworkIdle: true to ensure all high-resolution property photos finish loading before the screenshot is taken. Lazy-loaded images are handled by the full-page scroll."
+      },
+      {
+        question: "What format is best for real estate listing screenshots?",
+        answer: "PNG for archival quality, JPEG at 85% quality for sharing with clients. Full-page captures in PNG can be large for image-heavy listings, so JPEG or WebP is more practical for email attachments."
+      },
+      {
+        question: "Can I use screenshots for virtual property tours?",
+        answer: "Screenshots capture a static snapshot of the listing page. For virtual tours, capture multiple sections of the page or combine full-page screenshots with annotations to create visual walkthroughs."
+      }
+    ],
   },
   {
     slug: 'ai-vision-analysis',
+    metaDescription: 'Feed website screenshots to GPT-4 Vision and Claude for AI analysis. Automate page insights at scale. Start free.',
     title: 'AI Vision Web Page Analysis',
     shortTitle: 'AI Vision',
     description: 'Capture screenshots for AI-powered visual analysis. Feed website screenshots to GPT-4 Vision, Claude, or other AI models for automated insights.',
@@ -791,38 +930,47 @@ const analysis = await openai.chat.completions.create({
         question: "How do I reduce AI API costs when analyzing many pages?",
         answer: "Use smaller image sizes (1280px width is usually sufficient), capture only the visible viewport instead of full page when possible, and batch your requests. Our AI element removal also reduces visual noise, helping AI models focus on relevant content."
       },
+      {
+        question: "Can I feed screenshot output directly to GPT-4 Vision?",
+        answer: "Yes. Screenshotly returns images as URLs or base64-encoded data, both of which GPT-4 Vision accepts natively in the image_url content block. You can pipe the API response directly into your OpenAI call without any intermediate conversion step."
+      },
+      {
+        question: "What resolution should I use for AI image analysis?",
+        answer: "A viewport width of 1280px at 2x device scale factor gives the best balance between detail and token cost. Higher resolutions provide marginal gains for layout analysis but significantly increase vision API costs. For text-heavy pages where OCR accuracy matters, use 2x scale; for layout-only analysis, 1x is sufficient."
+      },
     ],
   },
   {
     slug: 'competitor-monitoring',
-    title: 'Competitor Price & Design Monitoring',
+    metaDescription: 'Automated pipeline to detect competitor website changes. Visual diffs, threshold alerts, and Slack notifications. Try free.',
+    title: 'Automated Competitor Change Detection',
     shortTitle: 'Competitor Monitoring',
-    description: 'Track competitor websites for pricing changes, design updates, and content modifications. Build automated competitive intelligence systems.',
-    longDescription: `Staying ahead of competitors requires constant vigilance. Manual checking is tedious and error-prone. Automated screenshot monitoring captures changes the moment they happen, giving you a competitive edge.
+    description: 'Build an automated change-detection pipeline with scheduled screenshots and visual diffs. Get Slack or email alerts when competitor sites change.',
+    longDescription: `This is not a one-time analysis — it is a continuous, automated pipeline. Screenshotly captures competitor pages on a schedule, and your pipeline diffs each new capture against the previous one to detect meaningful changes in real time.
 
-With Screenshotly, you can schedule daily or hourly captures of competitor pricing pages, product listings, and landing pages. Store these screenshots for historical comparison, or pipe them through image diff tools to detect changes automatically.
+The technical workflow: a cron job or serverless function calls the Screenshotly API on a cadence (hourly, daily, weekly). Each capture is stored with a timestamp. An image-diff library like pixelmatch or resemble.js compares the new capture against the baseline, producing a diff score (0-100%). When the score exceeds your threshold — say 5% to ignore ad rotations and minor layout shifts — the pipeline fires an alert via Slack webhook, email, or PagerDuty.
 
-This is invaluable for e-commerce businesses tracking competitor pricing, SaaS companies monitoring feature page changes, and agencies keeping tabs on client competitors. Combined with AI vision analysis, you can even automate the interpretation of changes.`,
+E-commerce teams use this to detect competitor price drops within hours. SaaS product managers catch new feature launches before the press release. Agencies run monitoring across dozens of competitor domains for their clients — all hands-free. The key difference from competitive analysis is that this runs autonomously and continuously, while analysis is a deliberate, point-in-time exercise.`,
     icon: 'Eye',
     keywords: [
-      'competitor monitoring',
-      'price tracking screenshots',
-      'competitive intelligence',
-      'website change monitoring',
-      'competitor analysis automation',
+      'competitor website monitoring',
+      'website change detection',
+      'visual diff alerts',
+      'automated competitor tracking',
+      'price change detection',
     ],
     benefits: [
-      'Capture competitor sites automatically on schedule',
-      'Detect pricing and content changes',
-      'Build historical records for trend analysis',
-      'React quickly to competitive moves',
+      'Continuous automated monitoring on any cadence',
+      'Pixel-level visual diff with configurable thresholds',
+      'Instant Slack or email alerts on meaningful changes',
+      'Historical timeline of competitor page evolution',
     ],
     steps: [
-      'Define the list of competitor URLs to monitor',
-      'Set up scheduled API calls (cron, serverless functions)',
-      'Capture screenshots at regular intervals',
-      'Compare with previous captures to detect changes',
-      'Alert your team when significant changes are found',
+      'Register competitor URLs and set a capture cadence (hourly/daily)',
+      'Deploy a cron job or serverless function to call the Screenshotly API',
+      'Store each capture with a timestamp in S3, R2, or a database',
+      'Run pixelmatch or resemble.js to diff new vs previous capture',
+      'Fire Slack webhook or email when diff score exceeds your threshold',
     ],
     metrics: [
       { stat: '24/7', label: 'automated monitoring' },
@@ -855,24 +1003,43 @@ const monitorCompetitor = async (competitorUrl) => {
     await sendAlert(changes);
   }
 };`,
+    faqs: [
+      {
+        question: "How do I detect changes between competitor screenshots?",
+        answer: "Use image comparison libraries like pixelmatch or resemble.js to compute a pixel-level diff. Set a threshold (e.g. 5% change) to filter out noise like ad rotations and focus on meaningful updates like pricing or layout changes."
+      },
+      {
+        question: "Can I monitor competitor pages behind login walls?",
+        answer: "If you have legitimate access to competitor portals (e.g. public pricing after signup), you can pass session cookies via the API. Never use this to access content you are not authorized to view."
+      },
+      {
+        question: "What's the best schedule for competitor monitoring?",
+        answer: "Monitor pricing pages daily, feature and landing pages weekly, and blog/content pages monthly. Adjust frequency based on how often competitors update — fast-moving SaaS companies may warrant more frequent checks."
+      },
+      {
+        question: "How many competitor pages can I monitor at scale?",
+        answer: "The API handles thousands of captures per day depending on your plan. Batch URLs and process them sequentially with small delays to stay within rate limits. The Growth plan supports up to 10,000 captures per month."
+      }
+    ],
   },
   {
     slug: 'brand-monitoring',
+    metaDescription: 'Capture timestamped evidence of trademark infringement and counterfeit listings. Protect your brand with Screenshotly. Try free.',
     title: 'Brand & IP Monitoring',
     shortTitle: 'Brand Monitoring',
-    description: 'Monitor the web for unauthorized use of your brand assets, logos, and intellectual property. Capture evidence for enforcement.',
-    longDescription: `Protecting your brand online requires vigilance. Counterfeit products, unauthorized resellers, and trademark infringement can damage your reputation and revenue. Screenshots provide timestamped evidence for legal action.
+    description: 'Protect your brand by capturing timestamped evidence of unauthorized logo use, trademark infringement, and counterfeit listings for legal enforcement.',
+    longDescription: `Counterfeit products, unauthorized resellers, and trademark infringement erode revenue and reputation. Screenshotly turns brand-protection alerts into legally defensible evidence packages — timestamped, full-page screenshots with URL metadata that hold up in enforcement proceedings.
 
-Screenshotly enables automated capture of suspected infringing pages. When your monitoring tools detect potential brand misuse, trigger a screenshot capture to document the violation. Full-page captures with timestamps create evidence that holds up in legal proceedings.
+Connect Google Alerts, brand-protection services, or marketplace scrapers to trigger automatic captures whenever a suspected violation surfaces. Each screenshot records the exact page state along with the URL, timestamp, and HTTP metadata you need for takedown requests or litigation.
 
-Legal teams, brand protection agencies, and e-commerce brands use this approach to build cases against infringers, document patterns of abuse, and track enforcement success over time.`,
+Legal teams compile evidence portfolios across dozens of infringing sites. Brand protection agencies document patterns of repeat offenders. E-commerce brands scan Amazon, eBay, and Etsy listings for counterfeits and capture the proof before listings disappear. Track enforcement outcomes over time to demonstrate ROI on brand protection efforts.`,
     icon: 'Shield',
     keywords: [
-      'brand monitoring',
-      'IP protection screenshots',
+      'brand protection screenshots',
       'trademark monitoring',
-      'counterfeit detection',
-      'brand protection evidence',
+      'brand reputation tracking',
+      'unauthorized brand use detection',
+      'counterfeit evidence capture',
     ],
     benefits: [
       'Document brand violations with timestamped screenshots',
@@ -917,9 +1084,28 @@ const documentViolation = async (violatingUrl) => {
     caseId: generateCaseId(),
   });
 };`,
+    faqs: [
+      {
+        question: "Are screenshots legally admissible as evidence of brand infringement?",
+        answer: "Timestamped full-page screenshots with URL metadata are widely accepted as evidence. Strengthen your case by capturing HTTP response headers, storing screenshots in tamper-proof storage, and using consistent naming conventions."
+      },
+      {
+        question: "How do I automate brand monitoring with screenshots?",
+        answer: "Connect Google Alerts or a brand monitoring service to a webhook that triggers Screenshotly API calls. When a new mention is detected, automatically capture the page and store the evidence with metadata."
+      },
+      {
+        question: "Can I monitor marketplace listings for counterfeit products?",
+        answer: "Yes. Feed marketplace search result URLs (Amazon, eBay, Etsy) into the API to capture listings. Use AI vision analysis on the screenshots to identify unauthorized use of your brand name, logo, or product images."
+      },
+      {
+        question: "What metadata should I store alongside brand monitoring screenshots?",
+        answer: "Store the full URL, capture timestamp (ISO 8601), HTTP status code, page title, IP address of the server, and a SHA-256 hash of the screenshot file. This creates a complete evidence chain for legal proceedings."
+      }
+    ],
   },
   {
     slug: 'website-archival',
+    metaDescription: 'Create permanent web records for compliance and legal. Build your own Wayback Machine with Screenshotly. Try free.',
     title: 'Website Archival & Historical Records',
     shortTitle: 'Archival',
     description: 'Create permanent records of web content for compliance, legal, or historical purposes. Build your own Wayback Machine.',
@@ -983,21 +1169,22 @@ const archivePage = async (url, category) => {
   },
   {
     slug: 'invoice-pdf-generation',
+    metaDescription: 'Generate pixel-perfect PDF invoices from HTML templates. Automate billing documents with Screenshotly. Start free.',
     title: 'Dynamic Invoice & Receipt PDF Generation',
     shortTitle: 'Invoices & PDFs',
-    description: 'Generate beautiful PDF invoices, receipts, and documents from HTML templates. No complex PDF libraries required.',
-    longDescription: `Generating PDFs programmatically is notoriously difficult. Complex libraries, inconsistent rendering, and font handling issues make it a developer headache. Screenshotly offers a simpler approach: render HTML, capture as PDF.
+    description: 'Generate pixel-perfect PDF invoices, receipts, and billing documents from HTML templates. Automate your financial document pipeline.',
+    longDescription: `Billing documents need to be flawless. A misaligned column or broken currency symbol on an invoice erodes customer trust. Screenshotly lets you design invoices and receipts as HTML/CSS templates and convert them to pixel-perfect PDFs — no complex PDF libraries required.
 
-Design your invoices, receipts, and documents as HTML templates with full CSS support. When you need a PDF, render the template server-side and capture it with Screenshotly. The result is a pixel-perfect PDF that looks exactly like your HTML design.
+Render your invoice template server-side with dynamic data (line items, taxes, totals, customer details), then pass the HTML to the Screenshotly API. The result is a production-ready PDF that matches your design exactly, complete with correct fonts, currency formatting, and page breaks.
 
-This approach is particularly powerful for SaaS billing systems, e-commerce order confirmations, and any application that needs to generate professional documents dynamically. Use your existing HTML/CSS skills instead of learning complex PDF libraries.`,
+SaaS billing systems use this to generate monthly subscription invoices at scale. E-commerce platforms produce order confirmations and packing slips. Freelancers and agencies automate recurring invoice generation. Support multi-currency, RTL text, and locale-specific number formatting using standard HTML and CSS.`,
     icon: 'Receipt',
     keywords: [
-      'PDF invoice generator',
-      'HTML to PDF',
-      'dynamic receipt generation',
-      'automated invoicing',
-      'PDF from HTML',
+      'invoice PDF API',
+      'receipt generator API',
+      'billing document automation',
+      'HTML invoice to PDF',
+      'automated invoicing API',
     ],
     benefits: [
       'Generate PDFs from HTML templates',
@@ -1042,9 +1229,28 @@ const generateInvoice = async (invoiceData) => {
   
   return pdfResponse;
 };`,
+    faqs: [
+      {
+        question: "How does HTML-to-PDF generation compare to using wkhtmltopdf or Puppeteer?",
+        answer: "Screenshotly handles browser rendering, fonts, and CSS support in the cloud — no need to install or maintain Puppeteer/Chromium on your server. The output matches what you see in a modern browser, unlike wkhtmltopdf which uses an older engine."
+      },
+      {
+        question: "Can I customize PDF page margins and paper size?",
+        answer: "Yes. Use CSS @page rules in your HTML template to set margins, paper size (A4, Letter), and orientation. The API's fullPage option captures the complete document, and the output respects your print-specific CSS."
+      },
+      {
+        question: "How do I add page numbers and headers to PDF invoices?",
+        answer: "Use CSS @page margin areas and position: fixed elements for headers/footers. The rendering engine supports CSS paged media features including page counters, running headers, and forced page breaks."
+      },
+      {
+        question: "What's the best approach for generating invoices in multiple currencies?",
+        answer: "Render each invoice as an HTML template with the correct currency symbol and formatting, then capture as PDF. Since you're using HTML, you have full control over locale-specific number formatting, RTL text, and font support."
+      }
+    ],
   },
   {
     slug: 'seo-audit-screenshots',
+    metaDescription: 'Capture screenshots for SEO audits and SERP tracking. Document rankings and competitor positions. Try Screenshotly free.',
     title: 'SEO Audit & Performance Tracking',
     shortTitle: 'SEO Audits',
     description: 'Capture screenshots for SEO audits and track visual changes over time. Document SERP rankings and competitor positions.',
@@ -1105,9 +1311,28 @@ const captureForAudit = async (clientUrl) => {
   
   return { mobile, desktop };
 };`,
+    faqs: [
+      {
+        question: "How do I document SERP rankings with screenshots?",
+        answer: "Capture Google search results pages for your target keywords using the geolocation parameter to specify the country. Store screenshots with the keyword, date, and location for a historical ranking record."
+      },
+      {
+        question: "Can I capture mobile vs desktop versions for mobile-first indexing audits?",
+        answer: "Yes. Make two API calls per URL — one with device: 'mobile' (375px) and one with device: 'desktop' (1920px). Compare the outputs to identify content, layout, or CTA differences that may affect mobile-first indexing."
+      },
+      {
+        question: "How do I create before/after comparisons for client reports?",
+        answer: "Capture the client's pages before making changes, implement fixes, then capture again. Use image diff tools or place screenshots side-by-side in your report to visually demonstrate the improvements."
+      },
+      {
+        question: "What's the best way to scale SEO audits across many client sites?",
+        answer: "Build a queue of URLs per client, process them in batches via the API, and store results organized by client, URL, and date. Automate weekly captures for ongoing monitoring and generate visual reports from the stored screenshots."
+      }
+    ],
   },
   {
     slug: 'email-campaign-previews',
+    metaDescription: 'Embed dynamic website previews in email campaigns. Show recipients fresh content with automated screenshots. Try free.',
     title: 'Email Marketing Campaign Previews',
     shortTitle: 'Email Marketing',
     description: 'Embed dynamic website previews in email campaigns. Show recipients what\'s new on your site with fresh screenshots.',
@@ -1165,6 +1390,7 @@ const generateEmailPreview = async (contentUrl) => {
   },
   {
     slug: 'customer-support-documentation',
+    metaDescription: 'Capture support ticket screenshots automatically. Document customer issues with visual evidence. Start free today.',
     title: 'Customer Support & Ticket Screenshots',
     shortTitle: 'Support Tickets',
     description: 'Capture screenshots to document customer issues and streamline support workflows. Reduce back-and-forth with visual evidence.',
@@ -1220,9 +1446,28 @@ const documentTicketIssue = async (ticketUrl, ticketId) => {
   
   return screenshot;
 };`,
+    faqs: [
+      {
+        question: "How do I automatically capture what a customer sees on their screen?",
+        answer: "Embed a 'Report Issue' button in your app that sends the current page URL to your backend. Your backend calls the Screenshotly API with that URL, the user's viewport size, and any relevant cookies to capture exactly what they see."
+      },
+      {
+        question: "Can I capture authenticated customer views for support tickets?",
+        answer: "Yes. Pass the customer's session cookie via the API to capture their authenticated view. Use a short-lived, read-only session token generated specifically for the capture to maintain security."
+      },
+      {
+        question: "How do I integrate screenshot capture with Zendesk or Intercom?",
+        answer: "Use webhooks to trigger screenshot captures when new tickets are created. Call the API with the reported URL, then attach the resulting image to the ticket via the Zendesk/Intercom API."
+      },
+      {
+        question: "What's the best way to annotate support screenshots?",
+        answer: "Capture the screenshot via the API, then overlay annotations (arrows, highlights, text) using a canvas library like Fabric.js or a service like Cloudinary. Attach the annotated version to the support ticket for clarity."
+      }
+    ],
   },
   {
     slug: 'directory-submissions',
+    metaDescription: 'Generate professional thumbnails for Product Hunt, directories, and startup listings. Stand out with polished previews. Try free.',
     title: 'Web Directory & Listing Submissions',
     shortTitle: 'Directory Listings',
     description: 'Generate professional thumbnails for directory submissions and product listings. Stand out with polished preview images.',
@@ -1282,34 +1527,35 @@ const generateListingThumbnail = async (siteUrl) => {
   },
   {
     slug: 'report-generation',
-    title: 'Automated Report & Dashboard Capture',
+    metaDescription: 'Export Grafana, Metabase, and Looker dashboards as pixel-perfect PDF reports. Capture chart panels with CSS selectors. Try free.',
+    title: 'BI Dashboard to PDF Report Export',
     shortTitle: 'Report Generation',
-    description: 'Capture dashboards and reports for automated distribution. Send stakeholders visual updates on schedule.',
-    longDescription: `Executives and stakeholders want visual updates, not raw data. Capturing dashboards and reports as images enables automated distribution to people who don't have system access or time to log in.
+    description: 'Export Grafana, Metabase, Looker, and custom BI dashboards as pixel-perfect PDF or PNG reports with CSS selector targeting.',
+    longDescription: `This use case focuses on the technical challenge of turning BI tool dashboards into polished, distributable report documents. Unlike SaaS metrics reporting (which is about capturing simple dashboards for investor updates), BI report export involves rendering complex chart libraries, targeting individual panels, and composing multi-panel PDF documents.
 
-Screenshotly can capture authenticated dashboards (pass session cookies), investor decks, analytics views, and operational reports. Schedule these captures and deliver them via email, Slack, or other channels on a regular cadence.
+Grafana, Metabase, Looker, and custom dashboards built with Chart.js, D3, or Highcharts require a delay parameter so the renderer waits for async data fetching and chart animation to complete before capture. Use CSS selectors to target individual panels — capture just the revenue chart or the user funnel, not the entire dashboard. Compose multiple panel captures into a single PDF document for formal distribution.
 
-Finance teams, operations managers, and executives receive visual updates without needing dashboard access. The automation saves time for the teams who would otherwise manually export and distribute reports.`,
+Export as PNG for Slack and presentations, or PDF for compliance and finance teams. The key technical differentiator is the delay and selector parameters: without them, you get half-rendered charts and loading spinners. Screenshotly waits for the page to reach visual stability before capture, producing pixel-perfect output even from the most complex data visualizations.`,
     icon: 'BarChart',
     keywords: [
-      'dashboard screenshot automation',
-      'automated report capture',
-      'analytics distribution',
-      'investor report screenshots',
-      'scheduled report generation',
+      'Grafana dashboard PDF export',
+      'Metabase report screenshot',
+      'BI dashboard to PDF',
+      'chart panel capture API',
+      'Looker dashboard export',
     ],
     benefits: [
-      'Capture authenticated dashboards',
-      'Schedule automated distribution',
-      'Visual updates for stakeholders',
-      'No dashboard access required for recipients',
+      'Pixel-perfect chart rendering with delay parameter',
+      'Target individual panels via CSS selectors',
+      'Compose multi-panel PDF reports',
+      'No BI tool access needed for report recipients',
     ],
     steps: [
-      'Identify reports and dashboards to capture',
-      'Set up authenticated capture with session cookies',
-      'Schedule captures at reporting intervals',
-      'Distribute via email, Slack, or other channels',
-      'Archive for historical comparison',
+      'Authenticate into the BI tool (Grafana, Metabase, Looker) with session cookies',
+      'Use the delay parameter (3-10s) to wait for chart libraries to render',
+      'Target individual panels with CSS selectors for focused captures',
+      'Export as PNG for chat/presentations or PDF for formal distribution',
+      'Schedule recurring captures and auto-distribute via email or Slack',
     ],
     metrics: [
       { stat: 'Scheduled', label: 'automated delivery' },
@@ -1340,9 +1586,28 @@ const captureDashboard = async (dashboardUrl, sessionCookie) => {
   
   return report;
 };`,
+    faqs: [
+      {
+        question: "How do I automate daily or weekly report screenshot distribution?",
+        answer: "Use a cron job or serverless function (AWS Lambda, Vercel Cron) to trigger API calls on a schedule. Capture each dashboard URL, then distribute via email, Slack, or Teams using their respective APIs."
+      },
+      {
+        question: "How do I handle dashboards with charts that take time to render?",
+        answer: "Use the delay parameter (3-5 seconds) to wait for chart libraries like Chart.js, D3, or Highcharts to finish rendering. For complex dashboards, use waitForSelector targeting a specific chart element."
+      },
+      {
+        question: "Can I capture multiple dashboard panels into a single report?",
+        answer: "Use fullPage: true to capture the entire dashboard in one image. Alternatively, capture individual panels using the selector or clip parameter and combine them into a composite report image or PDF."
+      },
+      {
+        question: "What's the best format for stakeholder reports — PNG or PDF?",
+        answer: "PDF is best for formal reports distributed via email since it includes metadata and prints well. PNG works better for Slack/Teams messages and embedding in presentations. Capture both formats for maximum flexibility."
+      }
+    ],
   },
   {
     slug: 'font-detection',
+    metaDescription: 'Identify fonts used on any website. Capture typography specimens for design reference and brand audits. Try Screenshotly free.',
     title: 'Website Font Detection & Analysis',
     shortTitle: 'Font Detection',
     description: 'Identify and analyze fonts used on any website. Capture typography specimens for design reference and brand audits.',
@@ -1409,6 +1674,7 @@ const captureTypography = async (url) => {
   },
   {
     slug: 'news-archival',
+    metaDescription: 'Archive news articles and press coverage with timestamped screenshots. Preserve content before it changes. Try free.',
     title: 'News Article & Media Archival',
     shortTitle: 'News Archival',
     description: 'Archive news articles, press coverage, and media mentions with timestamped screenshots. Preserve content before it changes or disappears.',
@@ -1482,43 +1748,44 @@ const archiveArticle = async (articleUrl) => {
   },
   {
     slug: 'price-tracking',
-    title: 'Competitor Price & Product Tracking',
+    metaDescription: 'Extract competitor pricing data from screenshots using OCR and AI vision. Build price history databases and trend reports. Start free.',
+    title: 'Price Data Extraction & Tracking',
     shortTitle: 'Price Tracking',
-    description: 'Monitor competitor pricing, product changes, and market positioning with automated screenshot comparison.',
-    longDescription: `In competitive markets, pricing changes fast. Competitors launch promotions, adjust tiers, add features, and reposition products constantly. Manual monitoring doesn't scale—you need automated visual tracking.
+    description: 'Extract structured pricing data from competitor screenshots using AI vision and OCR. Build price history databases and integrate with spreadsheets.',
+    longDescription: `Competitor pricing pages are designed for humans, not APIs—dynamic layouts, JavaScript rendering, and anti-scraping measures make traditional HTML scraping unreliable. Screenshot-based extraction sidesteps all of that by capturing the fully rendered page and pulling structured data from the visual output.
 
-Screenshotly captures competitor pricing pages, product listings, and feature comparisons on schedule. By comparing screenshots over time, you can detect changes in pricing structure, new features, removed offerings, and market positioning shifts.
+Screenshotly captures competitor pricing pages as high-fidelity images, which you then feed into OCR or AI vision models (GPT-4 Vision, Claude Vision) to extract plan names, price points, feature lists, and promotional banners into structured JSON. Store the parsed data in a spreadsheet, Airtable base, or database to build a living price-history timeline.
 
-E-commerce teams use this for price matching, SaaS companies track competitor feature launches, and market researchers monitor industry trends. Visual comparison catches changes that simple text scraping misses—including layout changes, promotional banners, and visual emphasis.`,
+E-commerce teams use this to build competitor price databases, SaaS companies track tier changes over time, and market researchers compile cross-industry pricing benchmarks. For the visual-diff and alerting pipeline itself, see the competitor-monitoring use case.`,
     icon: 'TrendingUp',
     keywords: [
-      'price monitoring',
-      'competitor tracking',
-      'price comparison',
-      'market intelligence',
-      'competitive pricing',
+      'price extraction from screenshots',
+      'pricing data scraping API',
+      'competitor price tracking',
+      'price history database',
+      'screenshot OCR pricing',
     ],
     benefits: [
-      'Automated competitor price monitoring',
-      'Visual change detection over time',
-      'Track feature and positioning changes',
-      'Historical pricing archive',
+      'Structured pricing data from visual captures',
+      'Price history tracking over time',
+      'Alerts on price changes via parsed data',
+      'Integration with spreadsheets and databases',
     ],
     steps: [
-      'List competitor pricing and product pages',
-      'Schedule regular screenshot captures',
-      'Compare new captures with baselines',
-      'Alert team on significant changes',
-      'Archive pricing history for analysis',
+      'Capture competitor pricing pages with Screenshotly',
+      'Extract price data using AI vision or OCR',
+      'Store results in a structured database or spreadsheet',
+      'Set threshold alerts on price changes',
+      'Generate pricing reports and trend analyses',
     ],
     metrics: [
-      { stat: 'Automated', label: 'competitor monitoring' },
-      { stat: 'Visual', label: 'change detection' },
-      { stat: 'Historical', label: 'pricing archive' },
+      { stat: 'Structured', label: 'pricing data extraction' },
+      { stat: 'AI-powered', label: 'OCR & vision parsing' },
+      { stat: 'Historical', label: 'price history database' },
     ],
-    codeExample: `// Monitor competitor pricing
-const monitorPricing = async (competitorUrl) => {
-  const current = await fetch('https://api.screenshotly.app/screenshot', {
+    codeExample: `// Extract pricing data from competitor screenshots
+const extractPricing = async (competitorUrl) => {
+  const screenshot = await fetch('https://api.screenshotly.app/screenshot', {
     method: 'POST',
     headers: {
       'Authorization': 'Bearer YOUR_API_KEY',
@@ -1531,28 +1798,29 @@ const monitorPricing = async (competitorUrl) => {
     }),
   });
 
-  const baseline = await getBaseline(competitorUrl);
-  const changes = await compareImages(current, baseline);
+  const imageBuffer = await screenshot.arrayBuffer();
+  const pricingData = await parseWithVision(imageBuffer);
 
-  if (changes.detected) {
-    await notifyTeam('Pricing change detected', changes);
+  await saveToPriceHistory(competitorUrl, pricingData);
+
+  if (await exceedsThreshold(competitorUrl, pricingData)) {
+    await notifyTeam('Price change detected', pricingData);
   }
-
-  await updateBaseline(competitorUrl, current);
 };`,
     faqs: [
       {
-        question: "How often should I capture competitor pricing pages?",
-        answer: "Daily captures work well for most markets. High-competition markets like e-commerce or travel may benefit from more frequent monitoring. Set up alerts for significant changes."
+        question: "How do I extract pricing data from a screenshot?",
+        answer: "Capture the pricing page with Screenshotly, then pass the image to an AI vision model (GPT-4 Vision, Claude Vision) or an OCR service. Prompt the model to return plan names, prices, and feature lists as structured JSON. Store the result in your database or spreadsheet."
       },
       {
-        question: "Can I track changes across multiple competitors?",
-        answer: "Yes. Set up batch captures for all competitor URLs and compare each against its own baseline. Our concurrent capture supports monitoring dozens of competitors simultaneously."
+        question: "Can I build a price history database with this approach?",
+        answer: "Yes. Schedule daily or weekly captures, extract the pricing data each time, and append it to a database table or Airtable base with a timestamp. Over time this gives you a complete price-history timeline for each competitor."
       },
     ],
   },
   {
     slug: 'certificate-generation',
+    metaDescription: 'Generate certificates and diplomas from HTML templates. Perfect for courses, events, and recognition. Try Screenshotly free.',
     title: 'Certificate & Award Generation',
     shortTitle: 'Certificates',
     description: 'Generate professional certificates, awards, and diplomas from HTML templates. Perfect for online courses, events, and recognition programs.',
@@ -1622,6 +1890,7 @@ const generateCertificate = async (recipientData) => {
   },
   {
     slug: 'portfolio-showcase',
+    metaDescription: 'Showcase client work with professional screenshots. Build agency portfolios automatically. Start free today.',
     title: 'Portfolio & Agency Showcase',
     shortTitle: 'Portfolio',
     description: 'Showcase client websites and projects with professional screenshots. Build impressive agency portfolios automatically.',
@@ -1685,13 +1954,18 @@ const captureProject = async (projectUrl) => {
         answer: "Pass authentication cookies or credentials with your API request to capture behind logins. Alternatively, capture during the staging phase when the site is publicly accessible."
       },
       {
-        question: "Can I add device frames to screenshots?",
-        answer: "Yes! Our device mockup feature wraps screenshots in realistic browser, phone, or tablet frames for professional portfolio presentation."
+        question: "Can I add device mockup frames to portfolio screenshots?",
+        answer: "Absolutely. Pass the mockup parameter (e.g., iphone, macbook, or browser) in your API request and Screenshotly returns the screenshot wrapped in a photorealistic device frame. This is ideal for hero images on portfolio pages and case study decks."
+      },
+      {
+        question: "How do I capture responsive designs at multiple breakpoints?",
+        answer: "Loop through an array of device presets — desktop (1440px), laptop (1280px), tablet (768px), and mobile (375px) — in a single script. Screenshotly captures each viewport independently, so you get a complete responsive showcase for every project in one batch."
       },
     ],
   },
   {
     slug: 'ad-verification',
+    metaDescription: 'Verify ad placements and brand safety with automated screenshots. Monitor creative rendering across publishers. Try free.',
     title: 'Ad Creative & Placement Verification',
     shortTitle: 'Ad Verification',
     description: 'Verify ad placements, creative rendering, and brand safety across publisher websites with automated screenshots.',
@@ -1749,17 +2023,26 @@ const verifyAdPlacement = async (publisherUrl, adSelector) => {
 };`,
     faqs: [
       {
-        question: "Can I verify ads across different geographic regions?",
-        answer: "Yes. Use geo-targeting options to capture pages from different locations, verifying that geo-targeted ads are displaying correctly in each market."
+        question: "How do I detect non-rendering or blank ad creatives?",
+        answer: "Capture the page and compare the ad slot dimensions against your expected creative size. If the screenshot shows a blank rectangle or a fallback image where your ad should be, the creative failed to render. Automate this by diffing the ad region against a reference image of the expected creative."
       },
       {
         question: "How do I detect broken ad creatives?",
         answer: "Compare captured screenshots against expected creative mockups using visual comparison. Significant differences indicate rendering issues that need attention."
       },
+      {
+        question: "How often should I capture ads for compliance?",
+        answer: "For regulatory compliance, capture at least daily during active campaigns. High-spend campaigns or those in regulated industries (pharma, finance) benefit from multiple captures per day to document that ad content remained compliant throughout the flight."
+      },
+      {
+        question: "Can I capture ads from specific geographic locations?",
+        answer: "Yes. Use Screenshotly's geo-targeting proxy options to capture pages as they appear in different regions. This is critical for verifying geo-targeted ad placements and ensuring region-specific creatives render correctly in each market."
+      },
     ],
   },
   {
     slug: 'travel-listings',
+    metaDescription: 'Capture hotel listings and booking pages for OTA comparison and compliance. Monitor rate parity across channels. Try free.',
     title: 'Travel & Hospitality Listing Capture',
     shortTitle: 'Travel Listings',
     description: 'Capture hotel listings, travel deals, and booking pages for comparison, archival, and competitive analysis.',
@@ -1835,6 +2118,7 @@ const captureListings = async (hotelName) => {
   },
   {
     slug: 'education-platforms',
+    metaDescription: 'Capture course content and student work for LMS platforms. Generate certificates and document progress. Try Screenshotly free.',
     title: 'Education & LMS Content Capture',
     shortTitle: 'Education',
     description: 'Capture course content, student work, and learning materials for education platforms. Document progress and generate certificates.',
@@ -1901,21 +2185,22 @@ const generateCourseThumbnail = async (courseUrl) => {
   },
   {
     slug: 'legal-compliance',
+    metaDescription: 'Legal screenshot evidence for court-admissible web capture. Compliance screenshot automation for regulatory proof. Try Screenshotly free.',
     title: 'Legal & Regulatory Compliance Documentation',
     shortTitle: 'Legal Compliance',
-    description: 'Document website compliance with timestamped screenshots. Capture consent flows, terms pages, and regulatory disclosures.',
-    longDescription: `Regulatory compliance requires documented evidence. When regulators ask "what did your website say on this date?", you need a verifiable answer. Screenshots with timestamps provide legally useful documentation of website content at specific points in time.
+    description: 'Legal evidence capture, regulatory compliance, and court-admissible web screenshots. Document consent flows and regulatory disclosures.',
+    longDescription: `Legal proceedings and regulatory audits demand verifiable evidence. When asked "what did this webpage show on this date?", you need court-admissible web capture—screenshots with timestamps, metadata, and chain-of-custody documentation.
 
-Screenshotly captures terms of service, privacy policies, consent flows, cookie banners, and regulatory disclosures. Set up scheduled captures to maintain a continuous compliance record. Full-page captures ensure you document every disclaimer and disclosure.
+Screenshotly provides legal screenshot evidence suitable for litigation and compliance. Capture terms of service, privacy policies, consent flows, cookie banners, and regulatory disclosures. Full-page captures with AI removal disabled preserve the exact user experience. Compliance screenshot automation ensures continuous documentation without manual effort.
 
-GDPR, CCPA, HIPAA, and industry-specific regulations all require demonstrable compliance. Visual documentation supplements technical logs and provides clear evidence that required elements were present and properly displayed.`,
+GDPR, CCPA, and industry regulations require demonstrable proof. Timestamped, metadata-rich captures supplement technical logs and provide clear evidence for auditors and courts. Store with hashes and immutable storage for maximum legal weight.`,
     icon: 'Scale',
     keywords: [
-      'compliance screenshots',
-      'legal documentation',
-      'regulatory compliance',
-      'GDPR documentation',
-      'terms of service archival',
+      'legal screenshot evidence',
+      'compliance screenshot automation',
+      'court-admissible web capture',
+      'regulatory proof documentation',
+      'legal web evidence API',
     ],
     benefits: [
       'Timestamped compliance evidence',
@@ -1973,10 +2258,19 @@ const captureCompliance = async (pages) => {
         question: "How often should compliance pages be captured?",
         answer: "Weekly captures work for most organizations. Capture immediately after any policy changes. High-regulation industries may benefit from daily captures."
       },
+      {
+        question: "What metadata should I store alongside compliance screenshots?",
+        answer: "At minimum, store the URL, capture timestamp (ISO 8601), HTTP response headers, and a SHA-256 hash of the image file. For court-admissible evidence, also record the requesting IP, DNS resolution, and TLS certificate details to establish authenticity."
+      },
+      {
+        question: "How do I maintain chain of custody for screenshot evidence?",
+        answer: "Write each capture to immutable storage (e.g., AWS S3 Object Lock or Azure immutable blobs) immediately after generation. Log the SHA-256 hash to a tamper-evident audit trail. This creates a verifiable chain of custody that auditors and legal teams can trust."
+      },
     ],
   },
   {
     slug: 'healthcare-documentation',
+    metaDescription: 'Capture patient portals and telehealth interfaces for compliance. Document workflows with PHI-safe screenshots. Try free.',
     title: 'Healthcare & Telehealth Documentation',
     shortTitle: 'Healthcare Docs',
     description: 'Capture patient portal interfaces, telehealth sessions, and medical documentation for records and compliance.',
@@ -2049,6 +2343,7 @@ const captureWorkflow = async (systemUrl, steps) => {
   },
   {
     slug: 'marketplace-listings',
+    metaDescription: 'Generate consistent screenshots for marketplace and directory listings. Auto-capture when sellers submit. Try Screenshotly free.',
     title: 'Marketplace & Directory Listing Screenshots',
     shortTitle: 'Marketplace',
     description: 'Capture and display website screenshots for marketplace listings, business directories, and app stores.',
@@ -2119,6 +2414,7 @@ const generateListingPreview = async (listingUrl) => {
   },
   {
     slug: 'bug-tracking',
+    metaDescription: 'Attach context-rich screenshots to bug reports automatically. Integrate with Jira, Linear, and GitHub. Start free today.',
     title: 'Visual Bug Tracking & Issue Reporting',
     shortTitle: 'Bug Tracking',
     description: 'Capture visual bugs with context-rich screenshots for developers. Attach screenshots to bug reports automatically.',
@@ -2187,13 +2483,22 @@ const captureBugReport = async (pageUrl, errorDetails) => {
         question: "How do I integrate with Jira or Linear?",
         answer: "Use their REST APIs to create tickets with screenshot attachments. Capture the screenshot, upload it, and reference it in the ticket creation payload."
       },
+      {
+        question: "How do I attach screenshots to Jira tickets automatically?",
+        answer: "After capturing the screenshot via the Screenshotly API, upload it as an attachment using Jira's REST API (/rest/api/3/issue/{key}/attachments) with the screenshot binary. You can wire this into your error handler so every unhandled exception automatically creates a Jira ticket with a full-page screenshot attached."
+      },
+      {
+        question: "Can I annotate screenshots before filing a bug?",
+        answer: "Screenshotly provides clean capture; for annotations, pipe the returned image through a lightweight canvas library (like Sharp or Jimp in Node.js) to add arrows, highlights, or bounding boxes before attaching to the ticket. This keeps bug reports clear without requiring a separate annotation tool."
+      },
     ],
   },
   {
     slug: 'accessibility-audit',
-    title: 'Accessibility & WCAG Compliance Auditing',
+    metaDescription: 'Document WCAG compliance with visual evidence screenshots. Capture focus states, contrast, and zoom levels. Try Screenshotly free.',
+    title: 'Accessibility Documentation & Visual Evidence',
     shortTitle: 'Accessibility',
-    description: 'Capture and document accessibility compliance across your website. Visual audit of WCAG conformance.',
+    description: 'Capture and document accessibility states across your website. Build visual evidence for WCAG compliance reviews.',
     longDescription: `Web accessibility compliance requires visual documentation. WCAG audits need screenshots showing focus states, color contrast, text sizing, and keyboard navigation paths. Manual capture is tedious and inconsistent.
 
 Screenshotly captures pages in specific states needed for accessibility audits: high-contrast mode, zoomed views, keyboard focus states, and screen reader outlines. These captures document current compliance and track improvements over time.
@@ -2201,10 +2506,10 @@ Screenshotly captures pages in specific states needed for accessibility audits: 
 Accessibility consultants use automated captures to efficiently audit large sites. Development teams capture before-and-after states to document fixes. Legal teams maintain compliance records for ADA and similar regulations.`,
     icon: 'Eye',
     keywords: [
-      'accessibility audit',
-      'WCAG compliance',
+      'accessibility documentation screenshots',
+      'WCAG visual evidence',
       'a11y screenshots',
-      'accessibility testing',
+      'accessibility compliance capture',
       'ADA compliance',
     ],
     benefits: [
@@ -2263,13 +2568,22 @@ const auditAccessibility = async (url) => {
         question: "How do I document color contrast compliance?",
         answer: "Capture at standard and high-contrast modes. Combine with automated contrast analysis tools for comprehensive WCAG 1.4.3 compliance documentation."
       },
+      {
+        question: "What zoom levels should I capture for WCAG documentation?",
+        answer: "WCAG 1.4.4 requires content to be usable at 200% zoom. Capture at 100%, 150%, and 200% (deviceScaleFactor 1, 1.5, and 2) to document that layout does not break and text remains readable. Some auditors also request 400% evidence for WCAG 1.4.10 reflow compliance."
+      },
+      {
+        question: "How do I capture keyboard focus state screenshots?",
+        answer: "Use Screenshotly's JavaScript injection to programmatically move focus to each interactive element before capture. This documents the visual focus indicator required by WCAG 2.4.7 and lets you verify that focus rings are visible against all background colors."
+      },
     ],
   },
   {
     slug: 'social-proof-widgets',
-    title: 'Social Proof & Testimonial Widgets',
+    metaDescription: 'Capture reviews, tweets, and testimonials as screenshot-based social proof for landing pages and campaigns. Try free.',
+    title: 'Social Proof Screenshot Capture',
     shortTitle: 'Social Proof',
-    description: 'Capture customer reviews, social media mentions, and testimonials as visual social proof for your website.',
+    description: 'Capture customer reviews, social media mentions, and testimonials as visual social proof screenshots for marketing.',
     longDescription: `Social proof drives conversions. Screenshots of real customer reviews, social media mentions, and case study results provide more credible proof than text testimonials alone. A screenshot of a genuine tweet, G2 review, or support ticket carries more weight.
 
 Screenshotly captures social media posts, review platform entries, and customer communications as visual testimonials. Embed these screenshots in landing pages, email campaigns, and sales collateral. The visual format is more credible and engaging than copy-pasted text.
@@ -2278,9 +2592,9 @@ Automate the capture of mentions and reviews as they appear. Build a library of 
     icon: 'ThumbsUp',
     keywords: [
       'social proof screenshots',
-      'testimonial capture',
+      'testimonial screenshot capture',
       'review screenshots',
-      'social media proof',
+      'social media proof capture',
       'customer review widget',
     ],
     benefits: [
@@ -2329,25 +2643,34 @@ const captureTweet = async (tweetUrl) => {
         question: "How do I keep social proof screenshots updated?",
         answer: "Schedule periodic recaptures. If the original content is deleted, you'll still have the screenshot as a record of the testimonial."
       },
+      {
+        question: "Can I capture tweets and G2 reviews without login?",
+        answer: "Public tweets and G2 reviews are accessible without authentication. Use the CSS selector parameter to isolate the review card or tweet article element, and Screenshotly's AI removal strips surrounding navigation and cookie banners for a clean social proof asset."
+      },
+      {
+        question: "What dimensions work best for testimonial screenshots on landing pages?",
+        answer: "For landing page testimonial carousels, capture at a viewport width of 600-800px to get a compact, card-friendly aspect ratio. Use the selector parameter to crop to just the review content, producing images that fit neatly into testimonial grids without excessive whitespace."
+      },
     ],
   },
   {
     slug: 'api-documentation-images',
+    metaDescription: 'Automate screenshots for Swagger UI and OpenAPI docs. Keep API documentation visually current. Start free today.',
     title: 'API Documentation Visual Guides',
     shortTitle: 'API Docs',
-    description: 'Generate visual guides for API documentation with endpoint screenshots, response previews, and interactive examples.',
-    longDescription: `Good API documentation goes beyond text. Visual guides showing response previews, dashboard views, and playground interfaces help developers understand your API faster. Screenshots of API playgrounds, Postman collections, and response formats make documentation more accessible.
+    description: 'Automate screenshots for API reference docs — Swagger UI, OpenAPI explorers, and endpoint response previews. Keep API docs visually current.',
+    longDescription: `API reference documentation is easier to follow with visuals. Screenshotly captures Swagger UI pages, OpenAPI explorer interfaces, and endpoint response previews so developers see exactly what your API looks like in action.
 
-Screenshotly captures your API playground, admin dashboards, and integration examples for documentation. Keep images automatically updated as your API evolves. This ensures developers always see current interface states and response formats.
+Point the API at your Swagger or Redoc URL to capture the full endpoint reference. Screenshot individual endpoint sections using CSS selectors. Capture Postman collection screenshots showing request/response pairs. Keep all images version-tagged so your v1 and v2 docs each show the correct interface.
 
-Technical writers use automated captures to maintain visual consistency across large documentation sets. Product teams ensure that screenshots reflect the latest API version without manual updates.`,
+Trigger automated captures in your CI/CD pipeline whenever the OpenAPI spec changes. Technical writers no longer need to manually screenshot every endpoint after each release. Product teams maintain accurate, version-specific API documentation images without lifting a finger.`,
     icon: 'Code',
     keywords: [
       'API documentation screenshots',
-      'developer docs images',
-      'API playground capture',
-      'technical documentation',
-      'API visual guide',
+      'Swagger UI screenshots',
+      'OpenAPI documentation images',
+      'REST API docs automation',
+      'endpoint documentation capture',
     ],
     benefits: [
       'Auto-update documentation images',
@@ -2398,10 +2721,19 @@ const captureApiDocs = async (pages) => {
         question: "How do I handle API version-specific documentation images?",
         answer: "Tag captures with version numbers and maintain separate image sets for each API version. Serve the appropriate images based on the documentation version being viewed."
       },
+      {
+        question: "How do I keep documentation screenshots up to date automatically?",
+        answer: "Add a Screenshotly capture step to your CI/CD pipeline that triggers whenever your OpenAPI spec or docs site is deployed. The script compares new screenshots against the previous set and commits only the changed images, so documentation stays current without manual effort."
+      },
+      {
+        question: "What viewport size is best for API documentation screenshots?",
+        answer: "Use 1280×800px for Swagger UI and Redoc captures — it mirrors most developer laptop screens and avoids horizontal scrolling. For Postman-style request/response screenshots, 1440×900px provides extra width for side-by-side panels without making the image too large to embed."
+      },
     ],
   },
   {
     slug: 'dashboard-snapshots',
+    metaDescription: 'Deliver BI dashboards to stakeholders without system access. Schedule automated screenshot distribution. Try Screenshotly free.',
     title: 'Dashboard & Analytics Snapshot Delivery',
     shortTitle: 'Dashboard Snapshots',
     description: 'Capture BI dashboards and analytics views for automated delivery to stakeholders who lack system access.',
@@ -2472,25 +2804,34 @@ const deliverDashboard = async (config) => {
         question: "Can I combine multiple dashboard views into one report?",
         answer: "Yes! Capture multiple dashboard pages and combine them into a single PDF report. This gives stakeholders a comprehensive view from a single document."
       },
+      {
+        question: "How do I schedule automatic dashboard snapshots?",
+        answer: "Use a cron job, GitHub Actions schedule, or workflow tools like Zapier/n8n to trigger captures at set intervals — daily, weekly, or after data refresh. Attach the captured images to email reports or Slack notifications."
+      },
+      {
+        question: "What viewport size works best for dashboard captures?",
+        answer: "Use 1920x1080 for standard dashboards. For dashboards with many panels, consider 2560x1440 or capture with fullPage enabled to get all panels in a single image."
+      },
     ],
   },
   {
     slug: 'design-system-docs',
+    metaDescription: 'Capture Storybook stories and component variants for docs. Keep design system documentation in sync. Try free.',
     title: 'Design System Documentation & Component Library',
     shortTitle: 'Design Systems',
-    description: 'Document design system components with live screenshots. Keep visual documentation synchronized with your component library.',
-    longDescription: `Design systems need visual documentation that stays current. When components update, documentation screenshots should update too. Manual screenshot maintenance creates documentation drift that confuses developers and designers.
+    description: 'Capture Storybook stories, component variants, and design token previews automatically. Keep your component library docs always in sync.',
+    longDescription: `Component libraries evolve fast — and their documentation falls behind just as quickly. Screenshotly captures individual Storybook stories, component variants, and design token previews so your design system docs stay current without manual screenshots.
 
-Screenshotly captures individual components from Storybook, Figma embeds, or your component playground. Automated captures ensure documentation always shows the current component state, including variants, sizes, themes, and interactive states.
+Point the API at your Storybook iframe URLs to capture isolated components. Use CSS selectors to target the story root element for clean, cropped images. Capture every variant — sizes, states, themes (light/dark) — in a single automated pass. Generate visual changelogs by diffing current captures against previous versions.
 
-Design teams use this for style guides, component catalogs, and visual changelogs. When a component changes, new screenshots are captured automatically, and the visual diff highlights what changed.`,
+Design system teams integrate captures into their CI pipeline: on every component library release, fresh screenshots are generated and published to the documentation site. Designers and developers always see the real, rendered component — not an outdated static image.`,
     icon: 'Palette',
     keywords: [
       'design system documentation',
-      'component library screenshots',
-      'Storybook capture',
-      'style guide automation',
-      'visual design docs',
+      'Storybook screenshots',
+      'component library docs',
+      'UI component documentation',
+      'design token previews',
     ],
     benefits: [
       'Auto-sync docs with component changes',
@@ -2543,10 +2884,19 @@ const captureComponents = async (storybookUrl, components) => {
         question: "How do I generate visual changelogs?",
         answer: "Compare current component screenshots against previous versions. Generate diff images highlighting visual changes and include them in release notes."
       },
+      {
+        question: "Does this work with Figma or other design tools?",
+        answer: "You can capture Figma embed URLs or any browser-accessible design tool. For private Figma files, use Figma's API to export frames directly, then compare against your live component screenshots."
+      },
+      {
+        question: "How do I capture components in different themes (light/dark)?",
+        answer: "Append theme parameters to your Storybook URL or use custom CSS injection to toggle themes before capture. Run two capture passes — one for light mode, one for dark — to document both variants."
+      },
     ],
   },
   {
     slug: 'website-migration',
+    metaDescription: 'Validate migrations with page-by-page visual comparison. Catch layout issues before go-live. Try Screenshotly free.',
     title: 'Website Migration Visual Validation',
     shortTitle: 'Migration',
     description: 'Validate website migrations visually. Compare old and new sites page-by-page to catch issues before going live.',
@@ -2618,6 +2968,14 @@ const validateMigration = async (urlMap) => {
       {
         question: "Can I automate pre-launch migration checks?",
         answer: "Yes! Run migration comparison in your CI/CD pipeline. Block deployment if visual differences exceed your configured threshold, ensuring quality before going live."
+      },
+      {
+        question: "What level of visual difference should trigger a flag?",
+        answer: "A 1-2% pixel difference threshold catches real layout issues while ignoring minor rendering variations. Adjust based on your tolerance — tighter for brand-critical pages, looser for content-heavy pages with dynamic elements."
+      },
+      {
+        question: "Should I compare on multiple devices?",
+        answer: "Yes. Capture desktop (1920x1080), tablet (768x1024), and mobile (375x812) viewports for each page. Responsive layout bugs often appear only at specific breakpoints and would be missed with a single viewport."
       },
     ],
   },

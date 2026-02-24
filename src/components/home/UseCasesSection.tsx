@@ -1,29 +1,34 @@
 'use client';
 
+import Link from "next/link";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Database, Eye, Wand2, Target } from 'lucide-react';
+import { Database, Eye, Wand2, Target, ArrowRight } from 'lucide-react';
 
 const useCases = [
   {
     icon: Database,
     title: "API Integration",
-    description: "Seamless screenshot capture directly in your applications and workflows"
+    description: "Embed screenshot capture into SaaS platforms, internal tools, and CI/CD pipelines via REST API",
+    href: "/integrations",
   },
   {
     icon: Eye,
     title: "Automated Testing",
-    description: "Visual regression testing and quality assurance automation"
+    description: "Visual regression testing and quality assurance automation across devices",
+    href: "/use-cases/automated-testing",
   },
   {
     icon: Wand2,
     title: "Documentation",
-    description: "Generate product screenshots and user guides programmatically"
+    description: "Generate product screenshots and user guides programmatically with AI cleanup",
+    href: "/use-cases/documentation-screenshots",
   },
   {
     icon: Target,
     title: "Content Creation",
-    description: "Professional marketing assets and social media content at scale"
+    description: "Professional marketing assets and social media content with device mockups at scale",
+    href: "/use-cases/social-media-previews",
   }
 ];
 
@@ -36,7 +41,7 @@ export const UseCasesSection = () => {
             Use Cases
           </Badge>
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4">
-            Built for Developer Workflows
+            Automate Any Screenshot Workflow
           </h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
             Integrate screenshot capture directly into your applications, testing pipelines, 
@@ -44,22 +49,37 @@ export const UseCasesSection = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
           {useCases.map((useCase, index) => (
-            <Card key={index} className="text-center shadow-lg hover:shadow-xl transition-all duration-300 group">
-              <CardHeader>
-                <div className="mx-auto p-3 rounded-full bg-muted group-hover:bg-primary/10 transition-colors duration-300 w-fit">
-                  <useCase.icon className="w-8 h-8 text-foreground" />
-                </div>
-                <CardTitle className="text-lg">{useCase.title}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <CardDescription className="text-base">
-                  {useCase.description}
-                </CardDescription>
-              </CardContent>
-            </Card>
+            <Link key={index} href={useCase.href}>
+              <Card className="text-center shadow-lg hover:shadow-xl hover:border-primary/50 transition-all duration-300 group h-full">
+                <CardHeader>
+                  <div className="mx-auto p-3 rounded-full bg-muted group-hover:bg-primary/10 transition-colors duration-300 w-fit">
+                    <useCase.icon className="w-8 h-8 text-foreground" />
+                  </div>
+                  <CardTitle className="text-lg">{useCase.title}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription className="text-base">
+                    {useCase.description}
+                  </CardDescription>
+                </CardContent>
+              </Card>
+            </Link>
           ))}
+        </div>
+        <div className="flex flex-wrap gap-4 justify-center mb-16">
+          <Link href="/use-cases" className="text-sm text-primary hover:underline flex items-center gap-1">
+            Browse all 40+ use cases <ArrowRight className="w-3 h-3" />
+          </Link>
+          <span className="text-muted-foreground">·</span>
+          <Link href="/tools" className="text-sm text-primary hover:underline flex items-center gap-1">
+            Try free screenshot tools <ArrowRight className="w-3 h-3" />
+          </Link>
+          <span className="text-muted-foreground">·</span>
+          <Link href="/compare" className="text-sm text-primary hover:underline flex items-center gap-1">
+            Compare with alternatives <ArrowRight className="w-3 h-3" />
+          </Link>
         </div>
 
         {/* Detailed Use Case Examples */}
@@ -79,7 +99,7 @@ export const UseCasesSection = () => {
                 <div>
                   <div className="font-medium mb-1">SaaS Integration</div>
                   <div className="text-sm text-muted-foreground">
-                    Add screenshot functionality to your platform with simple API calls
+                    Embed screenshot capture into your SaaS platform — a single POST returns PNG, JPEG, or PDF with no Chrome infrastructure needed
                   </div>
                 </div>
               </div>
@@ -89,7 +109,7 @@ export const UseCasesSection = () => {
                 <div>
                   <div className="font-medium mb-1">Webhook Automation</div>
                   <div className="text-sm text-muted-foreground">
-                    Trigger screenshot capture from your existing workflows and tools
+                    Trigger captures from CI/CD pipelines, Zapier, or custom webhooks. Screenshotly handles rendering and returns the image URL
                   </div>
                 </div>
               </div>
@@ -99,7 +119,7 @@ export const UseCasesSection = () => {
                 <div>
                   <div className="font-medium mb-1">Batch Processing</div>
                   <div className="text-sm text-muted-foreground">
-                    Process multiple URLs efficiently with rate limiting and queuing
+                    Submit an array of URLs and receive screenshots in parallel. Built-in rate limiting ensures you stay within plan quotas
                   </div>
                 </div>
               </div>
@@ -121,7 +141,7 @@ export const UseCasesSection = () => {
                 <div>
                   <div className="font-medium mb-1">Automated Testing</div>
                   <div className="text-sm text-muted-foreground">
-                    Visual regression testing with clean, consistent screenshots
+                    Capture baseline and current screenshots, then diff them. AI cleanup removes cookie banners so diffs only show real layout changes
                   </div>
                 </div>
               </div>
@@ -131,7 +151,7 @@ export const UseCasesSection = () => {
                 <div>
                   <div className="font-medium mb-1">Product Documentation</div>
                   <div className="text-sm text-muted-foreground">
-                    Professional screenshots for user guides and help documentation
+                    Generate annotated screenshots with AI element removal for clean help docs. Supports desktop, tablet, and mobile viewports
                   </div>
                 </div>
               </div>
@@ -141,7 +161,7 @@ export const UseCasesSection = () => {
                 <div>
                   <div className="font-medium mb-1">Marketing Assets</div>
                   <div className="text-sm text-muted-foreground">
-                    App store screenshots and promotional materials with device mockups
+                    Wrap screenshots in iPhone, MacBook, or browser frames automatically. Export at 2x or 3x DPR for retina-quality assets
                   </div>
                 </div>
               </div>

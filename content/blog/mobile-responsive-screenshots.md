@@ -15,7 +15,7 @@ keywords:
   - "responsive design testing"
   - "mobile app screenshot automation"
   - "viewport screenshot API"
-  - "cross-device screenshot testing"
+  - "responsive screenshot tutorial"
 readingTime: 11
 featured: false
 image: "/images/blog/mobile-screenshots/hero.jpg"

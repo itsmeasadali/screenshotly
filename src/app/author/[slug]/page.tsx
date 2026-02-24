@@ -1,11 +1,12 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getAllAuthors, getAuthorBySlug } from "@/lib/markdown";
+import { getAllAuthors, getAuthorBySlug, getAllBlogPosts } from "@/lib/markdown";
 import GuestLayout from "@/components/layouts/GuestLayout";
 import { JsonLd } from "@/components/seo";
-import { getPersonSchema } from "@/lib/seo/structured-data";
+import { getPersonSchema, getBreadcrumbSchema } from "@/lib/seo/structured-data";
 import Image from "next/image";
 import Link from "next/link";
+import { Calendar, Clock } from "lucide-react";
 
 interface AuthorPageProps {
   params: Promise<{
@@ -31,25 +32,27 @@ export async function generateMetadata({ params }: AuthorPageProps): Promise<Met
   }
 
   return {
-    title: `${author.name} - Author at Screenshotly`,
+    title: `Articles by ${author.name} - Screenshot API Author`,
     description: author.bio,
     alternates: {
       canonical: `/author/${slug}`,
     },
     openGraph: {
-      title: `${author.name} - Technical Author`,
+      title: `Articles by ${author.name} - Screenshot API Author`,
       description: author.bio,
       type: "profile",
       images: author.avatar ? [author.avatar] : [],
     },
     twitter: {
       card: "summary",
-      title: `${author.name} - Technical Author`,
+      title: `Articles by ${author.name} - Screenshot API Author`,
       description: author.bio,
       images: author.avatar ? [author.avatar] : [],
     },
   };
 }
+
+const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://screenshotly.app';
 
 export default async function AuthorPage({ params }: AuthorPageProps) {
   const { slug } = await params;
@@ -59,9 +62,21 @@ export default async function AuthorPage({ params }: AuthorPageProps) {
     notFound();
   }
 
+  const allPosts = await getAllBlogPosts();
+  const authorPosts = allPosts.filter(
+    (post) => post.author.toLowerCase() === author.name.toLowerCase()
+  );
+
+  const breadcrumbs = [
+    { name: "Home", url: BASE_URL },
+    { name: "Blog", url: `${BASE_URL}/blog` },
+    { name: author.name, url: `${BASE_URL}/author/${slug}` },
+  ];
+
   return (
     <GuestLayout>
       <JsonLd data={getPersonSchema(author)} />
+      <JsonLd data={getBreadcrumbSchema(breadcrumbs)} />
       
       <div className="container mx-auto px-4 py-12 max-w-4xl">
         <div className="bg-white dark:bg-gray-900 rounded-lg shadow-lg p-8">
@@ -163,6 +178,41 @@ export default async function AuthorPage({ params }: AuthorPageProps) {
           <div className="prose dark:prose-invert max-w-none">
             <div dangerouslySetInnerHTML={{ __html: author.content }} />
           </div>
+
+          {/* Published Articles */}
+          {authorPosts.length > 0 && (
+            <div className="mt-12">
+              <h2 className="text-2xl font-semibold mb-6 text-gray-900 dark:text-white">
+                Published Articles ({authorPosts.length})
+              </h2>
+              <div className="grid gap-4">
+                {authorPosts.map((post) => (
+                  <Link
+                    key={post.slug}
+                    href={`/blog/${post.slug}`}
+                    className="block p-4 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-600 hover:shadow-md transition-all"
+                  >
+                    <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-1">
+                      {post.title}
+                    </h3>
+                    <p className="text-sm text-muted-foreground line-clamp-2 mb-2">
+                      {post.excerpt}
+                    </p>
+                    <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                      <span className="flex items-center gap-1">
+                        <Calendar className="w-3 h-3" />
+                        {new Date(post.publishedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <Clock className="w-3 h-3" />
+                        {post.readingTime} min read
+                      </span>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* Call to Action */}
           <div className="mt-12 p-6 bg-gray-50 dark:bg-gray-800 rounded-lg">

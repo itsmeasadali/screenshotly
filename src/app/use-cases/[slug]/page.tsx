@@ -11,6 +11,54 @@ import { useCases } from "@/data/use-cases";
 
 const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://screenshotly.app';
 
+const relatedBlogPosts: Record<string, { title: string; slug: string }> = {
+    'documentation-screenshots': { title: "Documentation Screenshot Automation Guide", slug: "documentation-screenshot-automation-guide" },
+    'social-media-previews': { title: "Dynamic OG Image Generation Guide", slug: "dynamic-og-image-generation-guide" },
+    'e-commerce-product-images': { title: "E-Commerce Screenshot Testing Guide", slug: "ecommerce-screenshot-testing-guide" },
+    'automated-testing': { title: "Visual Regression Testing Guide", slug: "visual-regression-testing-guide" },
+    'website-thumbnails': { title: "Website Thumbnail Generation Guide", slug: "website-thumbnail-generation-guide" },
+    'pdf-generation': { title: "PDF Generation Complete Guide", slug: "pdf-generation-complete-guide" },
+    'web-archiving': { title: "Website Archival & Compliance Guide", slug: "website-archival-compliance-guide" },
+    'competitive-analysis': { title: "Website Monitoring Screenshots Guide", slug: "website-monitoring-screenshots-guide" },
+    'saas-reporting': { title: "SaaS Screenshot API Integration Guide", slug: "saas-screenshot-api-integration-guide" },
+    'link-preview-services': { title: "Link Preview Generation Guide", slug: "link-preview-generation-guide" },
+    'competitor-monitoring': { title: "Website Monitoring Screenshots Guide", slug: "website-monitoring-screenshots-guide" },
+    'brand-monitoring': { title: "Website Monitoring Screenshots Guide", slug: "website-monitoring-screenshots-guide" },
+    'invoice-pdf-generation': { title: "Invoice & Report Generation Guide", slug: "invoice-report-generation-guide" },
+    'report-generation': { title: "Invoice & Report Generation Guide", slug: "invoice-report-generation-guide" },
+    'bug-tracking': { title: "Visual Regression Testing Guide", slug: "visual-regression-testing-guide" },
+    'api-documentation-images': { title: "Documentation Screenshot Automation Guide", slug: "documentation-screenshot-automation-guide" },
+    'design-system-docs': { title: "Documentation Screenshot Automation Guide", slug: "documentation-screenshot-automation-guide" },
+    'website-migration': { title: "Website Archival & Compliance Guide", slug: "website-archival-compliance-guide" },
+};
+
+const useCaseCategories: Record<string, string[]> = {
+    documentation: ['documentation-screenshots', 'api-documentation-images', 'design-system-docs', 'customer-support-documentation'],
+    media: ['social-media-previews', 'social-proof-widgets', 'email-marketing', 'email-campaign-previews'],
+    commerce: ['e-commerce-product-images', 'real-estate-listings', 'travel-listings', 'marketplace-listings', 'directory-submissions'],
+    testing: ['automated-testing', 'bug-tracking', 'accessibility-audit', 'website-migration'],
+    generation: ['pdf-generation', 'invoice-pdf-generation', 'report-generation', 'certificate-generation', 'website-thumbnails', 'link-preview-services'],
+    monitoring: ['competitive-analysis', 'competitor-monitoring', 'brand-monitoring', 'price-tracking', 'seo-audit-screenshots', 'ad-verification'],
+    archiving: ['web-archiving', 'website-archival', 'news-archival', 'legal-compliance'],
+    saas: ['saas-reporting', 'dashboard-snapshots', 'ai-vision-analysis', 'portfolio-showcase'],
+    industry: ['healthcare-documentation', 'education-platforms', 'font-detection'],
+};
+
+function getRelatedUseCases(currentSlug: string) {
+    const category = Object.entries(useCaseCategories).find(
+        ([, slugs]) => slugs.includes(currentSlug)
+    );
+    const siblings = category
+        ? category[1].filter((s) => s !== currentSlug)
+        : [];
+    const related = useCases.filter((uc) => siblings.includes(uc.slug));
+    if (related.length >= 3) return related.slice(0, 3);
+    const remaining = useCases.filter(
+        (uc) => uc.slug !== currentSlug && !siblings.includes(uc.slug)
+    );
+    return [...related, ...remaining].slice(0, 3);
+}
+
 interface Props {
     params: Promise<{ slug: string }>;
 }
@@ -20,6 +68,21 @@ export async function generateStaticParams() {
         slug: useCase.slug,
     }));
 }
+
+const NOINDEX_SLUGS = new Set([
+    'font-detection',
+    'certificate-generation',
+    'travel-listings',
+    'healthcare-documentation',
+    'education-platforms',
+    'price-tracking',
+    'email-campaign-previews',
+    'marketplace-listings',
+    'dashboard-snapshots',
+    'news-archival',
+    'website-archival',
+    'directory-submissions',
+]);
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const { slug } = await params;
@@ -31,19 +94,29 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         };
     }
 
+    const shouldNoindex = NOINDEX_SLUGS.has(slug);
+
+    const metaDesc = useCase.metaDescription ?? (
+        useCase.description.length > 155
+            ? useCase.description.slice(0, 152) + '...'
+            : useCase.description
+    );
+
     return {
         title: `${useCase.title} - Screenshot API Use Case`,
-        description: useCase.description,
-        keywords: useCase.keywords,
+        description: metaDesc,
         alternates: {
             canonical: `/use-cases/${slug}`,
         },
         openGraph: {
-            title: `${useCase.title} | Screenshotly`,
-            description: useCase.description,
+            title: useCase.title,
+            description: metaDesc,
             url: `${BASE_URL}/use-cases/${slug}`,
             type: "article",
         },
+        ...(shouldNoindex && {
+            robots: { index: false, follow: true },
+        }),
     };
 }
 
@@ -84,10 +157,7 @@ export default async function UseCasePage({ params }: Props) {
         { name: "Use your screenshot", text: "Download or process the returned image in your application." },
     ];
 
-    // Get related use cases (excluding current)
-    const relatedUseCases = useCases
-        .filter((uc) => uc.slug !== slug)
-        .slice(0, 3);
+    const relatedUseCases = getRelatedUseCases(slug);
 
     return (
         <GuestLayout>
@@ -216,6 +286,19 @@ export default async function UseCasePage({ params }: Props) {
                             ))}
                         </div>
                     </section>
+
+                    {/* Deep Dive Blog Link */}
+                    {relatedBlogPosts[slug] && (
+                        <section className="mb-12 p-5 bg-muted/50 rounded-xl border">
+                            <p className="text-sm text-muted-foreground mb-2">Want a step-by-step walkthrough?</p>
+                            <Link
+                                href={`/blog/${relatedBlogPosts[slug].slug}`}
+                                className="text-primary hover:underline font-medium"
+                            >
+                                Read: {relatedBlogPosts[slug].title} →
+                            </Link>
+                        </section>
+                    )}
 
                     {/* CTA */}
                     <section className="bg-primary/10 rounded-xl p-8 text-center mb-12">

@@ -35,35 +35,6 @@ export function getOrganizationSchema() {
             'https://github.com/screenshotly',
             'https://www.linkedin.com/in/itsmeasadali/'
         ],
-        softwareRequirements: 'HTTP client library',
-        softwareVersion: '2.0',
-        releaseNotes: 'Enhanced AI element detection and improved performance',
-        downloadUrl: BASE_URL,
-        installUrl: `${BASE_URL}/sign-up`,
-        screenshot: `${BASE_URL}/og-image.png`,
-        softwareHelp: `${BASE_URL}/help`,
-        supportingData: `${BASE_URL}/help`,
-        applicationSuite: 'Developer Tools',
-        permissions: 'Internet access required',
-        memoryRequirements: 'Minimal - API-based service',
-        processorRequirements: 'Any modern device with internet connection',
-        storageRequirements: 'No local storage required',
-        interactionType: 'REST API',
-        availableOnDevice: ['Desktop', 'Mobile', 'Tablet', 'Server'],
-        countriesSupported: ['US', 'EU', 'CA', 'AU', 'JP', 'Global'],
-        inLanguage: ['en'],
-        datePublished: '2024-01-01',
-        dateModified: new Date().toISOString().split('T')[0],
-        creator: {
-            '@type': 'Person',
-            name: 'Asad Ali',
-            url: `${BASE_URL}/author/asad-ali`,
-        },
-        maintainer: {
-            '@type': 'Organization',
-            name: 'Screenshotly',
-            url: BASE_URL,
-        },
     };
 }
 
@@ -127,8 +98,8 @@ export function getSoftwareApplicationSchema() {
             'Rate limiting protection',
         ],
         softwareRequirements: 'HTTP client library',
-        softwareVersion: '2.0',
-        releaseNotes: 'Enhanced AI element detection and improved performance',
+        softwareVersion: '2.5.0',
+        releaseNotes: 'Enhanced AI element detection with 15+ language support and 30% faster processing',
         downloadUrl: BASE_URL,
         installUrl: `${BASE_URL}/sign-up`,
         screenshot: `${BASE_URL}/og-image.png`,
@@ -142,21 +113,18 @@ export function getSoftwareApplicationSchema() {
     };
 }
 
-// WebSite Schema with SearchAction
+// WebSite Schema
 export function getWebSiteSchema() {
     return {
         '@context': 'https://schema.org',
         '@type': 'WebSite',
         name: 'Screenshotly',
         url: BASE_URL,
-        description: 'Screenshot API for developers',
-        potentialAction: {
-            '@type': 'SearchAction',
-            target: {
-                '@type': 'EntryPoint',
-                urlTemplate: `${BASE_URL}/search?q={search_term_string}`,
-            },
-            'query-input': 'required name=search_term_string',
+        description: 'Screenshot API for developers - automated website captures with AI-powered element removal',
+        publisher: {
+            '@type': 'Organization',
+            name: 'Screenshotly',
+            url: BASE_URL,
         },
     };
 }
@@ -242,14 +210,10 @@ export interface ArticleData {
             github?: string;
         };
     };
-    faqs?: Array<{
-        question: string;
-        answer: string;
-    }>;
 }
 
 export function getArticleSchema(article: ArticleData) {
-    const schema: Record<string, unknown> = {
+    return {
         '@context': 'https://schema.org',
         '@type': 'Article',
         headline: article.title,
@@ -279,20 +243,6 @@ export function getArticleSchema(article: ArticleData) {
             '@id': article.url,
         },
     };
-
-    // Add FAQ schema if FAQs exist
-    if (article.faqs && article.faqs.length > 0) {
-        schema.mainEntity = article.faqs.map((faq) => ({
-            '@type': 'Question',
-            name: faq.question,
-            acceptedAnswer: {
-                '@type': 'Answer',
-                text: faq.answer,
-            },
-        }));
-    }
-
-    return schema;
 }
 
 // HowTo Schema for tutorials
@@ -321,47 +271,6 @@ export function getHowToSchema(data: {
             text: step.text,
             ...(step.image && { image: step.image }),
         })),
-    };
-}
-
-// API Documentation Schema
-export function getAPIDocumentationSchema() {
-    return {
-        '@context': 'https://schema.org',
-        '@type': 'TechArticle',
-        name: 'Screenshotly API Documentation',
-        description: 'Complete API reference for the Screenshotly screenshot capture service',
-        url: `${BASE_URL}/help`,
-        author: {
-            '@type': 'Organization',
-            name: 'Screenshotly',
-            url: BASE_URL,
-        },
-        publisher: {
-            '@type': 'Organization',
-            name: 'Screenshotly',
-            logo: {
-                '@type': 'ImageObject',
-                url: `${BASE_URL}/logo.svg`,
-            },
-        },
-        datePublished: '2024-01-01',
-        dateModified: new Date().toISOString().split('T')[0],
-        proficiencyLevel: 'Beginner',
-        dependencies: 'HTTP client library',
-        codeRepository: 'https://github.com/screenshotly/examples',
-        programmingLanguage: ['JavaScript', 'Python', 'PHP', 'Ruby', 'Go', 'Java'],
-        runtimePlatform: ['Web Browser', 'Node.js', 'Server'],
-        targetProduct: {
-            '@type': 'SoftwareApplication',
-            name: 'Screenshotly API',
-            url: BASE_URL,
-        },
-        about: {
-            '@type': 'Thing',
-            name: 'Screenshot API',
-            description: 'RESTful API for programmatic website screenshot capture',
-        },
     };
 }
 
@@ -549,42 +458,6 @@ export function getVideoSchema(video: VideoData) {
                 '@type': 'ImageObject',
                 url: `${BASE_URL}/logo.svg`,
             },
-        },
-    };
-}
-
-// Dataset Schema for API responses and examples
-export function getDatasetSchema() {
-    return {
-        '@context': 'https://schema.org',
-        '@type': 'Dataset',
-        name: 'Screenshot API Examples',
-        description: 'Collection of code examples and API responses for Screenshotly',
-        url: `${BASE_URL}/help`,
-        creator: {
-            '@type': 'Organization',
-            name: 'Screenshotly',
-            url: BASE_URL,
-        },
-        datePublished: '2024-01-01',
-        dateModified: new Date().toISOString().split('T')[0],
-        license: 'https://creativecommons.org/licenses/by/4.0/',
-        keywords: [
-            'screenshot API',
-            'code examples',
-            'REST API',
-            'developer tools',
-            'automation',
-        ],
-        distribution: {
-            '@type': 'DataDownload',
-            encodingFormat: 'application/json',
-            contentUrl: `${BASE_URL}/api/examples`,
-        },
-        includedInDataCatalog: {
-            '@type': 'DataCatalog',
-            name: 'Developer Resources',
-            url: `${BASE_URL}/help`,
         },
     };
 }

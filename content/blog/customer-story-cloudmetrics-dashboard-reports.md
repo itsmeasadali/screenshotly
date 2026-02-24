@@ -361,4 +361,4 @@ The investment in automation paid for itself within the first month. Now, the te
 
 [Get your free API key →](/sign-up) - 100 free screenshots to get started.
 
-Learn more about [automated report generation →](/use-cases/dashboard-screenshots)
+Learn more about [automated report generation →](/use-cases/report-generation)

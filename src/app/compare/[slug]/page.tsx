@@ -1,15 +1,51 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, Check, X, AlertCircle } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, X, AlertCircle, Star } from "lucide-react";
 import GuestLayout from "@/components/layouts/GuestLayout";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { JsonLd } from "@/components/seo";
 import { getBreadcrumbSchema, getFAQSchema } from "@/lib/seo/structured-data";
 import { comparisons } from "@/data/comparisons";
+import { BookOpen } from "lucide-react";
 
 const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://screenshotly.app';
+
+const relatedBlogPosts: Record<string, Array<{ title: string; slug: string }>> = {
+    screenshotapi: [
+        { title: "Best Screenshot API in 2026", slug: "best-screenshot-api-comparison-2026" },
+        { title: "Screenshot API Pricing Comparison", slug: "screenshot-api-pricing-comparison" },
+    ],
+    urlbox: [
+        { title: "Best Screenshot API in 2026", slug: "best-screenshot-api-comparison-2026" },
+        { title: "Screenshot API ROI Calculator", slug: "screenshot-api-pricing-guide" },
+    ],
+    puppeteer: [
+        { title: "Migrating from Puppeteer to a Screenshot API", slug: "puppeteer-playwright-practical-guide" },
+        { title: "Puppeteer vs Screenshot API", slug: "puppeteer-vs-screenshot-api-comparison" },
+    ],
+    playwright: [
+        { title: "Migrating from Puppeteer to a Screenshot API", slug: "puppeteer-playwright-practical-guide" },
+        { title: "Visual Regression Testing Guide", slug: "visual-regression-testing-guide" },
+    ],
+    selenium: [
+        { title: "Screenshot API vs Browser Extensions", slug: "screenshot-api-vs-browser-extension" },
+        { title: "Visual Regression Testing Guide", slug: "visual-regression-testing-guide" },
+    ],
+    browserstack: [
+        { title: "Mobile Responsive Screenshot Testing", slug: "mobile-responsive-screenshot-testing" },
+        { title: "Visual Regression Testing Guide", slug: "visual-regression-testing-guide" },
+    ],
+    apiflash: [
+        { title: "Best Screenshot API in 2026", slug: "best-screenshot-api-comparison-2026" },
+        { title: "Screenshot API Pricing Comparison", slug: "screenshot-api-pricing-comparison" },
+    ],
+    htmlcsstoimage: [
+        { title: "Dynamic OG Image Generation Guide", slug: "dynamic-og-image-generation-guide" },
+        { title: "Device Mockups for Marketing", slug: "device-mockups-for-marketing" },
+    ],
+};
 
 interface Props {
     params: Promise<{ slug: string }>;
@@ -31,16 +67,21 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         };
     }
 
+    const metaDesc = 'metaDescription' in comparison && comparison.metaDescription
+        ? comparison.metaDescription
+        : comparison.description.length > 155
+            ? comparison.description.slice(0, 152) + '...'
+            : comparison.description;
+
     return {
-        title: `Screenshotly vs ${comparison.name} - Screenshot API Comparison`,
-        description: comparison.description,
-        keywords: comparison.keywords,
+        title: `${comparison.name} Alternative - Screenshot API Comparison (${new Date().getFullYear()})`,
+        description: metaDesc,
         alternates: {
             canonical: `/compare/${slug}`,
         },
         openGraph: {
             title: `Screenshotly vs ${comparison.name}`,
-            description: comparison.description,
+            description: metaDesc,
             url: `${BASE_URL}/compare/${slug}`,
             type: "article",
         },
@@ -125,18 +166,18 @@ export default async function ComparisonPage({ params }: Props) {
                     <section className="mb-12 p-6 bg-primary/5 rounded-xl border border-primary/20">
                         <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
                             <AlertCircle className="w-5 h-5 text-primary" />
-                            Quick Summary
+                            Screenshotly vs {comparison.name}: At a Glance
                         </h2>
                         <p className="text-muted-foreground">
-                            While {comparison.name} is a {comparison.competitor.pros[0].toLowerCase()},
-                            Screenshotly stands out with its {comparison.screenshotly.advantages[0].toLowerCase()} and {comparison.screenshotly.advantages[1].toLowerCase()}.
-                            If you need a modern, feature-rich screenshot API, Screenshotly is the better choice.
+                            {'quickSummary' in comparison && comparison.quickSummary
+                                ? comparison.quickSummary
+                                : `Compare Screenshotly and ${comparison.name} across features, pricing, and developer experience.`}
                         </p>
                     </section>
 
                     {/* Comparison Table */}
                     <section className="mb-12">
-                        <h2 className="text-2xl font-semibold mb-6">Feature Comparison</h2>
+                        <h2 className="text-2xl font-semibold mb-6">Feature Comparison: Screenshotly vs {comparison.name}</h2>
                         <div className="border rounded-lg overflow-hidden">
                             <table className="w-full">
                                 <thead>
@@ -147,6 +188,13 @@ export default async function ComparisonPage({ params }: Props) {
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    {'pricing' in comparison.competitor && comparison.competitor.pricing && (
+                                        <tr className="border-t">
+                                            <td className="p-4">Pricing</td>
+                                            <td className="p-4 text-center">From $14/mo</td>
+                                            <td className="p-4 text-center">{comparison.competitor.pricing}</td>
+                                        </tr>
+                                    )}
                                     {comparison.comparisonTable.map((row, index) => (
                                         <tr key={index} className="border-t">
                                             <td className="p-4">{row.feature}</td>
@@ -172,6 +220,21 @@ export default async function ComparisonPage({ params }: Props) {
                         </div>
                     </section>
 
+                    {/* Where Competitor Excels */}
+                    {comparison.competitor.pros && comparison.competitor.pros.length > 0 && (
+                        <section className="mb-12">
+                            <h2 className="text-2xl font-semibold mb-6">Where {comparison.name} Stands Out</h2>
+                            <div className="space-y-3">
+                                {comparison.competitor.pros.map((pro, index) => (
+                                    <div key={index} className="flex items-start gap-3">
+                                        <Star className="w-5 h-5 text-amber-500 mt-0.5 flex-shrink-0" />
+                                        <span>{pro}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        </section>
+                    )}
+
                     {/* Competitor Limitations */}
                     <section className="mb-12">
                         <h2 className="text-2xl font-semibold mb-6">{comparison.name} Limitations</h2>
@@ -184,6 +247,54 @@ export default async function ComparisonPage({ params }: Props) {
                             ))}
                         </div>
                     </section>
+
+                    {/* When to Choose Each */}
+                    <section className="mb-12">
+                        <h2 className="text-2xl font-semibold mb-6">When to Choose Which</h2>
+                        <div className="grid md:grid-cols-2 gap-6">
+                            <div className="p-5 border rounded-xl">
+                                <h3 className="font-semibold text-primary mb-3">Choose Screenshotly if&hellip;</h3>
+                                <ul className="space-y-2 text-muted-foreground text-sm">
+                                    {'screenshotlyAdvantagesVs' in comparison && comparison.screenshotlyAdvantagesVs ? (
+                                        comparison.screenshotlyAdvantagesVs.map((adv, i) => (
+                                            <li key={i} className="flex items-start gap-2"><Check className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />{adv}</li>
+                                        ))
+                                    ) : (
+                                        <>
+                                            <li className="flex items-start gap-2"><Check className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />You need AI-powered element removal (cookie banners, popups)</li>
+                                            <li className="flex items-start gap-2"><Check className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />You want built-in device mockups without a separate tool</li>
+                                            <li className="flex items-start gap-2"><Check className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />You need a simple REST API that returns images in seconds</li>
+                                        </>
+                                    )}
+                                </ul>
+                            </div>
+                            <div className="p-5 border rounded-xl">
+                                <h3 className="font-semibold mb-3">Choose {comparison.name} if&hellip;</h3>
+                                {'whenToChoose' in comparison && comparison.whenToChoose ? (
+                                    <p className="text-muted-foreground text-sm leading-relaxed">{comparison.whenToChoose}</p>
+                                ) : (
+                                    <ul className="space-y-2 text-muted-foreground text-sm">
+                                        {comparison.competitor.pros.slice(0, 3).map((pro, i) => (
+                                            <li key={i} className="flex items-start gap-2">
+                                                <Check className="w-4 h-4 text-muted-foreground mt-0.5 flex-shrink-0" />
+                                                {pro}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                )}
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* Verdict */}
+                    {'verdict' in comparison && comparison.verdict && (
+                        <section className="mb-12 p-6 bg-primary/5 rounded-xl border border-primary/20">
+                            <h2 className="text-2xl font-semibold mb-4">Screenshotly vs {comparison.name}: The Verdict</h2>
+                            <p className="text-muted-foreground leading-relaxed">
+                                {comparison.verdict}
+                            </p>
+                        </section>
+                    )}
 
                     {/* FAQs */}
                     <section className="mb-12">
@@ -220,6 +331,25 @@ export default async function ComparisonPage({ params }: Props) {
                             </Button>
                         </div>
                     </section>
+
+                    {/* Related Blog Posts */}
+                    {relatedBlogPosts[slug] && relatedBlogPosts[slug].length > 0 && (
+                        <section className="mb-12">
+                            <h2 className="text-2xl font-semibold mb-6">Related Reading</h2>
+                            <div className="space-y-3">
+                                {relatedBlogPosts[slug].map((post, index) => (
+                                    <Link
+                                        key={index}
+                                        href={`/blog/${post.slug}`}
+                                        className="flex items-center gap-3 p-4 border rounded-lg hover:border-primary hover:bg-muted/30 transition-all"
+                                    >
+                                        <BookOpen className="w-5 h-5 text-primary flex-shrink-0" />
+                                        <span className="font-medium">{post.title}</span>
+                                    </Link>
+                                ))}
+                            </div>
+                        </section>
+                    )}
 
                     {/* Other Comparisons */}
                     <section>

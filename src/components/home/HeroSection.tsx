@@ -19,7 +19,7 @@ export const HeroSection = ({ userId }: HeroSectionProps) => {
         </Badge>
 
         <h1 className="mb-6 text-4xl font-bold tracking-tight sm:text-6xl">
-          API Screenshots for{" "}
+          Screenshot API for{" "}
           <span className="relative inline-block">
             <span className="bg-primary text-primary-foreground px-2 py-1 rounded">
               Developers
@@ -28,14 +28,15 @@ export const HeroSection = ({ userId }: HeroSectionProps) => {
         </h1>
 
         <p className="mb-8 text-xl text-muted-foreground max-w-3xl mx-auto">
-          RESTful API for capturing website screenshots programmatically. Integrate screenshot functionality 
-          directly into your applications, testing pipelines, and automation workflows.
+          Screenshotly is a REST API that captures website screenshots programmatically with AI-powered
+          element removal and device mockups. Integrate directly into your applications, testing pipelines,
+          and automation workflows.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
           <Button size="lg" asChild>
             <Link href={userId ? "/dashboard" : "/sign-up"}>
-              {userId ? "Go to Dashboard" : "Start Free Trial"}
+              {userId ? "Go to Dashboard" : "Get 100 Free Screenshots"}
               <ArrowRight className="w-4 h-4 ml-2" />
             </Link>
           </Button>
@@ -47,12 +48,35 @@ export const HeroSection = ({ userId }: HeroSectionProps) => {
           </Button>
         </div>
 
+        {/* Social Proof */}
+        <div className="flex flex-wrap items-center justify-center gap-8 text-sm text-muted-foreground">
+          <div className="flex items-center gap-2">
+            <span className="text-2xl font-bold text-foreground">10M+</span>
+            <span>Screenshots captured</span>
+          </div>
+          <div className="w-px h-8 bg-border hidden sm:block" />
+          <div className="flex items-center gap-2">
+            <span className="text-2xl font-bold text-foreground">1,000+</span>
+            <span>Developers</span>
+          </div>
+          <div className="w-px h-8 bg-border hidden sm:block" />
+          <div className="flex items-center gap-2">
+            <span className="text-2xl font-bold text-foreground">99.9%</span>
+            <span>Uptime target</span>
+          </div>
+          <div className="w-px h-8 bg-border hidden sm:block" />
+          <div className="flex items-center gap-2">
+            <span className="text-2xl font-bold text-foreground">2–5s</span>
+            <span>Typical capture</span>
+          </div>
+        </div>
+
         <div className="relative mx-auto max-w-4xl">
           <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-muted/20 blur-3xl"></div>
           <div className="relative bg-card/80 backdrop-blur-sm border rounded-xl p-8 shadow-2xl">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
               <div className="space-y-4">
-                <h3 className="text-2xl font-semibold text-left">Simple API Integration</h3>
+                <h2 className="text-2xl font-semibold text-left">Simple API Integration</h2>
                 <p className="text-muted-foreground text-left">
                   Add screenshot functionality to your application with a single API call. 
                   Perfect for testing automation, documentation generation, and content creation workflows.

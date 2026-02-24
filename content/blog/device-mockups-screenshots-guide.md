@@ -1,448 +1,464 @@
 ---
-title: "Device Mockups for Screenshots: Browser Frames, Phone Mockups, and More"
-description: "Learn how to add professional device mockups to your screenshots. Covers browser frames, MacBook mockups, iPhone mockups, and custom frames."
-excerpt: "Transform plain screenshots into professional marketing assets with device mockups. Browser frames, laptops, phones, and more."
+title: "Device Mockup API Reference: Parameters, Automation & CI/CD Integration"
+description: "Complete API reference for device mockups. Parameters for every mockup type, batch generation, CI/CD pipelines, and automated app store screenshot workflows."
+excerpt: "Technical reference for the Screenshotly device mockup API. Parameter documentation, batch automation, GitHub Actions integration, and programmatic mockup selection."
 author: "asad-ali"
 publishedAt: "2025-12-12"
-category: "guide"
-tags: ["mockups", "design", "marketing", "screenshots"]
-keywords: ["screenshot mockup", "browser frame", "device mockup", "macbook mockup", "iphone mockup", "screenshot frame"]
+category: "reference"
+tags: ["mockups", "api", "automation", "ci-cd", "reference"]
+keywords: ["device mockup API", "screenshot mockup parameters", "automate device mockups", "CI/CD screenshot mockups", "mockup API reference"]
 featured: false
-readingTime: 6
+readingTime: 13
 ---
 
-Plain screenshots work for documentation, but marketing and presentations demand more polish. Device mockups transform flat screenshots into professional visuals that showcase your product in context.
+Developers who need to generate device mockups at scale—app store screenshots, documentation assets, or visual regression suites—often struggle to find a consolidated API reference. This guide covers the Screenshotly device mockup API from a technical perspective: every parameter, automation patterns, and CI/CD integration.
 
-This guide covers how to add mockups to your screenshots, from simple browser frames to full device compositions.
+If you want to automate mockup generation in pipelines, batch thousands of captures, or programmatically select mockup frames, this is the reference.
 
-## Why Use Device Mockups?
+## API Overview
 
-### Marketing Impact
+The Screenshotly screenshot endpoint accepts a `mockup` parameter (device frame identifier) and optional `mockupOptions` for styling. Mockups are applied as post-processing overlays; the underlying screenshot resolution is preserved.
 
-| Presentation | Perceived Quality | Use Case |
-|--------------|-------------------|----------|
-| Raw screenshot | Basic/technical | Bug reports, docs |
-| Browser frame | Professional | Blog posts, features |
-| Device mockup | Premium | Landing pages, ads |
-| Multi-device | Enterprise | Sales decks |
-
-### When to Use Each
-
-**Raw screenshots:**
-- Documentation
-- Support tickets
-- Internal communication
-
-**Browser frames:**
-- Blog posts
-- Feature announcements
-- Social media
-
-**Device mockups:**
-- Landing pages
-- App store listings
-- Marketing campaigns
-
-## Browser Frame Mockups
-
-### API Implementation
+**Base request structure:**
 
 ```javascript
 const response = await fetch('https://api.screenshotly.app/screenshot', {
   method: 'POST',
   headers: {
-    'Authorization': `Bearer ${API_KEY}`,
+    'x-api-key': process.env.SCREENSHOTLY_API_KEY,
     'Content-Type': 'application/json',
   },
   body: JSON.stringify({
     url: 'https://example.com',
-    device: 'desktop',
-    format: 'png',
-    mockup: {
-      type: 'browser',
-      theme: 'light',  // or 'dark'
+    mockup: 'browser-light',      // Frame identifier
+    mockupOptions: {               // Optional styling
       shadow: true,
-      rounded: true,
+      background: 'white',
     },
+    format: 'png',
   }),
 });
 ```
 
-### Available Browser Styles
+## Complete Parameter Reference
 
-| Style | Description | Best For |
-|-------|-------------|----------|
-| `browser` | Standard browser chrome | General use |
-| `browser-minimal` | Minimal URL bar only | Clean look |
-| `browser-dark` | Dark theme browser | Dark mode apps |
-| `safari` | macOS Safari style | Apple ecosystem |
-| `chrome` | Chrome browser style | Familiar look |
+### `mockup` (required for mockup output)
 
-### Browser Frame Examples
+The frame identifier. Case-sensitive. Valid values by category:
 
-**Light browser with shadow:**
+| Category | Identifiers |
+|----------|-------------|
+| **Browsers** | `browser-light`, `browser-dark`, `browser-minimal`, `safari-light`, `safari-dark`, `chrome-light`, `chrome-dark` |
+| **Phones** | `iphone-15-pro`, `iphone-15-pro-max`, `iphone-15`, `iphone-14-pro`, `iphone-14`, `iphone-13`, `android-generic` |
+| **Tablets** | `ipad-pro-12.9`, `ipad-pro-11`, `ipad-air`, `ipad-mini` |
+| **Laptops** | `macbook-pro`, `macbook-air`, `laptop-generic` |
+| **Other** | `desktop-monitor`, `minimal-frame-light`, `minimal-frame-dark` |
+
+### `mockupOptions` (optional object)
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `color` | string | device default | Device color variant. Apple: `space-black`, `natural-titanium`, `blue`, `white`, `silver`, `space-gray`, `starlight`, `midnight`, `gold`. Laptops: `space-gray`, `silver`, `gold`. |
+| `orientation` | string | `portrait` | `portrait` or `landscape`. Applies to phones and tablets. |
+| `shadow` | boolean | `true` | Enable drop shadow under the device/frame. |
+| `background` | string | `transparent` | Background behind mockup: `transparent`, `white`, `black`, or hex (e.g. `#f5f5f5`). PNG required for transparency. |
+| `showUrl` | boolean | `true` | For browser frames: show URL in the address bar. |
+| `showControls` | boolean | `true` | For browser frames: show traffic-light / minimize/maximize buttons. |
+| `padding` | object | auto | `{ top, bottom, left, right }` in pixels. Controls spacing around the mockup. |
+
+### Device ↔ Viewport Mapping
+
+| Device Type | Recommended `device` | Typical Viewport |
+|-------------|---------------------|------------------|
+| Phone mockup | `mobile` or `iphone-14-pro` | 390×844 or 430×932 |
+| Tablet mockup | `tablet` or `ipad-pro-12.9` | 1024×1366 (portrait) or 1366×1024 (landscape) |
+| Laptop/Browser | `desktop` | 1440×900, 1920×1080, or custom |
+
+Use `viewport: { width, height }` for pixel-perfect control when the default device presets don't match your target frame.
+
+## Batch Mockup Generation
+
+Generate multiple mockups in parallel with controlled concurrency to avoid rate limits.
+
 ```javascript
-mockup: {
-  type: 'browser',
-  theme: 'light',
-  shadow: true,
-  rounded: true,
+async function batchMockups(urls, baseOptions = {}) {
+  const BATCH_SIZE = 5;  // Concurrent requests
+  const results = [];
+
+  for (let i = 0; i < urls.length; i += BATCH_SIZE) {
+    const batch = urls.slice(i, i + BATCH_SIZE);
+    const batchResults = await Promise.all(
+      batch.map(url => captureWithMockup(url, baseOptions))
+    );
+    results.push(...batchResults);
+  }
+
+  return results;
 }
-```
 
-**Minimal dark browser:**
-```javascript
-mockup: {
-  type: 'browser-minimal',
-  theme: 'dark',
-  shadow: false,
-}
-```
-
-## Laptop Mockups
-
-### MacBook Style
-
-```javascript
-mockup: {
-  type: 'macbook',
-  color: 'silver',  // 'silver', 'space-gray', 'gold'
-  shadow: true,
-  perspective: 'front',  // 'front', 'angled'
-}
-```
-
-### Windows Laptop
-
-```javascript
-mockup: {
-  type: 'laptop',
-  style: 'modern',
-  shadow: true,
-}
-```
-
-## Phone Mockups
-
-### iPhone Mockups
-
-```javascript
-// First capture at mobile viewport
-const response = await fetch('https://api.screenshotly.app/screenshot', {
-  method: 'POST',
-  headers: {
-    'Authorization': `Bearer ${API_KEY}`,
-    'Content-Type': 'application/json',
-  },
-  body: JSON.stringify({
-    url: 'https://example.com',
-    device: 'mobile',  // Sets appropriate viewport
-    format: 'png',
-    mockup: {
-      type: 'iphone',
-      model: '15-pro',  // '15', '15-pro', '14', '13'
-      color: 'natural',  // 'natural', 'blue', 'white', 'black'
-      shadow: true,
-    },
-  }),
-});
-```
-
-### Android Mockups
-
-```javascript
-mockup: {
-  type: 'android',
-  model: 'pixel',  // 'pixel', 'samsung'
-  shadow: true,
-}
-```
-
-## Tablet Mockups
-
-### iPad Mockups
-
-```javascript
-const response = await fetch('https://api.screenshotly.app/screenshot', {
-  method: 'POST',
-  headers: {
-    'Authorization': `Bearer ${API_KEY}`,
-    'Content-Type': 'application/json',
-  },
-  body: JSON.stringify({
-    url: 'https://example.com',
-    device: 'tablet',
-    format: 'png',
-    mockup: {
-      type: 'ipad',
-      model: 'pro',  // 'pro', 'air', 'mini'
-      orientation: 'landscape',  // 'portrait', 'landscape'
-      shadow: true,
-    },
-  }),
-});
-```
-
-## Customization Options
-
-### Shadows
-
-```javascript
-mockup: {
-  type: 'browser',
-  shadow: true,
-  shadowIntensity: 0.3,  // 0-1, default 0.2
-  shadowBlur: 40,  // pixels
-  shadowOffset: { x: 0, y: 10 },
-}
-```
-
-### Backgrounds
-
-```javascript
-mockup: {
-  type: 'macbook',
-  background: {
-    type: 'gradient',
-    from: '#667eea',
-    to: '#764ba2',
-    angle: 135,
-  },
-}
-```
-
-Or solid color:
-```javascript
-mockup: {
-  background: {
-    type: 'solid',
-    color: '#f5f5f5',
-  },
-}
-```
-
-Or transparent:
-```javascript
-mockup: {
-  background: {
-    type: 'transparent',
-  },
-}
-format: 'png',  // PNG required for transparency
-```
-
-### Padding
-
-```javascript
-mockup: {
-  type: 'browser',
-  padding: {
-    top: 40,
-    bottom: 40,
-    left: 40,
-    right: 40,
-  },
-}
-```
-
-## Use Case Examples
-
-### Blog Post Header
-
-```javascript
-// Capture for blog featured image
-async function captureBlogImage(url) {
+async function captureWithMockup(url, options) {
   const response = await fetch('https://api.screenshotly.app/screenshot', {
     method: 'POST',
     headers: {
-      'Authorization': `Bearer ${API_KEY}`,
+      'x-api-key': process.env.SCREENSHOTLY_API_KEY,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
       url,
-      device: 'desktop',
-      viewport: { width: 1200, height: 800 },
+      device: options.device || 'desktop',
       format: 'png',
-      mockup: {
-        type: 'browser',
-        theme: 'dark',
-        shadow: true,
-        rounded: true,
-        background: {
-          type: 'gradient',
-          from: '#1a1a2e',
-          to: '#16213e',
-          angle: 135,
+      mockup: options.mockup || 'browser-light',
+      mockupOptions: options.mockupOptions || { shadow: true },
+      ...options,
+    }),
+  });
+
+  if (!response.ok) throw new Error(`Failed: ${url} (${response.status})`);
+  return { url, buffer: await response.arrayBuffer() };
+}
+
+// Example: 10 URLs, MacBook mockup
+const urls = ['https://app.com/page1', 'https://app.com/page2', /* ... */];
+const images = await batchMockups(urls, {
+  mockup: 'macbook-pro',
+  mockupOptions: { color: 'space-gray', shadow: true },
+});
+```
+
+### Batch with Multiple Mockup Variants
+
+Capture the same URL with different mockup frames for A/B testing or asset variants:
+
+```javascript
+async function generateMockupVariants(url, mockupIds) {
+  return Promise.all(
+    mockupIds.map(async (mockupId) => {
+      const response = await fetch('https://api.screenshotly.app/screenshot', {
+        method: 'POST',
+        headers: {
+          'x-api-key': process.env.SCREENSHOTLY_API_KEY,
+          'Content-Type': 'application/json',
         },
-        padding: { top: 60, bottom: 60, left: 60, right: 60 },
+        body: JSON.stringify({
+          url,
+          device: mockupId.startsWith('iphone') ? 'mobile' : 'desktop',
+          format: 'png',
+          mockup: mockupId,
+          mockupOptions: { shadow: true, background: 'transparent' },
+        }),
+      });
+      return { mockupId, buffer: await response.arrayBuffer() };
+    })
+  );
+}
+
+// Output: browser-light, browser-dark, iphone-15-pro, macbook-pro
+const variants = await generateMockupVariants('https://app.com', [
+  'browser-light',
+  'browser-dark',
+  'iphone-15-pro',
+  'macbook-pro',
+]);
+```
+
+## CI/CD Integration: GitHub Actions
+
+Automate mockup generation on every deploy or release. Example: generate app store screenshots when the app’s marketing pages change.
+
+```yaml
+# .github/workflows/screenshots.yml
+name: Generate Screenshots
+
+on:
+  push:
+    paths:
+      - 'app/marketing/**'
+      - 'landing/**'
+  workflow_dispatch:
+
+jobs:
+  screenshots:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Generate mockup screenshots
+        env:
+          SCREENSHOTLY_API_KEY: ${{ secrets.SCREENSHOTLY_API_KEY }}
+        run: |
+          npm run generate:screenshots
+
+      - name: Upload screenshots artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: mockup-screenshots
+          path: output/screenshots/
+```
+
+**`generate:screenshots` script** (Node.js):
+
+```javascript
+// scripts/generate-screenshots.js
+const fs = require('fs');
+const path = require('path');
+
+const PAGES = [
+  { url: 'https://staging.myapp.com/features', mockup: 'macbook-pro' },
+  { url: 'https://staging.myapp.com/mobile', mockup: 'iphone-15-pro' },
+  { url: 'https://staging.myapp.com/dashboard', mockup: 'browser-dark' },
+];
+
+async function main() {
+  const outputDir = path.join(process.cwd(), 'output', 'screenshots');
+  fs.mkdirSync(outputDir, { recursive: true });
+
+  for (const { url, mockup } of PAGES) {
+    const res = await fetch('https://api.screenshotly.app/screenshot', {
+      method: 'POST',
+      headers: {
+        'x-api-key': process.env.SCREENSHOTLY_API_KEY,
+        'Content-Type': 'application/json',
       },
-    }),
-  });
+      body: JSON.stringify({
+        url,
+        device: mockup.includes('iphone') ? 'mobile' : 'desktop',
+        format: 'png',
+        mockup,
+        mockupOptions: { shadow: true, background: 'transparent' },
+      }),
+    });
 
-  return response.arrayBuffer();
+    const slug = url.split('/').slice(-1)[0] || 'home';
+    const filename = `${slug}-${mockup}.png`;
+    fs.writeFileSync(
+      path.join(outputDir, filename),
+      Buffer.from(await res.arrayBuffer())
+    );
+    console.log(`Saved ${filename}`);
+  }
 }
+
+main().catch(console.error);
 ```
 
-### Landing Page Hero
+Run with `node scripts/generate-screenshots.js`. Add `"generate:screenshots": "node scripts/generate-screenshots.js"` to `package.json` scripts.
+
+## Automated App Store Screenshot Generation
+
+App stores require specific resolutions per device. Map device slots to mockup + viewport, then batch-generate.
 
 ```javascript
-// Premium MacBook mockup for hero section
-async function captureHeroImage(url) {
-  return await captureScreenshot(url, {
-    device: 'desktop',
-    viewport: { width: 1440, height: 900 },
-    mockup: {
-      type: 'macbook',
-      color: 'space-gray',
-      perspective: 'angled',
-      shadow: true,
-      shadowIntensity: 0.4,
-      background: { type: 'transparent' },
-    },
-  });
-}
-```
-
-### App Store Screenshots
-
-```javascript
-// iPhone mockup for App Store
-async function captureAppStoreImage(url) {
-  return await captureScreenshot(url, {
-    device: 'mobile',
-    viewport: { width: 390, height: 844 },  // iPhone 14 Pro
-    mockup: {
-      type: 'iphone',
-      model: '15-pro',
-      color: 'natural',
-      shadow: false,  // App Store provides own context
-      background: { type: 'transparent' },
-    },
-  });
-}
-```
-
-### Social Media Preview
-
-```javascript
-// 1200x630 OG image with browser mockup
-async function captureOGImage(url) {
-  return await captureScreenshot(url, {
-    device: 'desktop',
-    viewport: { width: 1000, height: 600 },  // Smaller to fit in frame
-    mockup: {
-      type: 'browser-minimal',
-      theme: 'dark',
-      shadow: true,
-      background: {
-        type: 'gradient',
-        from: '#667eea',
-        to: '#764ba2',
-      },
-      padding: { top: 80, bottom: 80, left: 100, right: 100 },
-    },
-    outputSize: { width: 1200, height: 630 },  // Final OG dimensions
-  });
-}
-```
-
-### Multi-Device Composition
-
-For landing pages showing multiple devices:
-
-```javascript
-async function captureMultiDevice(url) {
-  // Capture each device separately
-  const [desktop, tablet, mobile] = await Promise.all([
-    captureScreenshot(url, {
-      device: 'desktop',
-      mockup: { type: 'macbook', background: { type: 'transparent' } },
-    }),
-    captureScreenshot(url, {
-      device: 'tablet',
-      mockup: { type: 'ipad', background: { type: 'transparent' } },
-    }),
-    captureScreenshot(url, {
-      device: 'mobile',
-      mockup: { type: 'iphone', background: { type: 'transparent' } },
-    }),
-  ]);
-  
-  // Compose using image processing library
-  return await composeDevices([desktop, tablet, mobile]);
-}
-```
-
-## Best Practices
-
-### 1. Match Context
-
-- **Dark apps** → Dark browser frames
-- **Light apps** → Light or minimal frames
-- **Apple ecosystem** → Safari/MacBook/iPhone
-- **General audience** → Chrome/generic laptop
-
-### 2. Consider Final Dimensions
-
-Account for mockup frame sizes in final output:
-
-| Mockup Type | Approximate Added Size |
-|-------------|------------------------|
-| Browser frame | +60px height |
-| MacBook | +200px height, +100px width |
-| iPhone | +80px height, +30px width |
-
-### 3. Quality Settings
-
-Use high resolution for marketing materials:
-
-```javascript
-viewport: { width: 1920, height: 1080 },
-format: 'png',  // Lossless for mockups
-```
-
-### 4. Consistent Styling
-
-Create presets for brand consistency:
-
-```javascript
-const mockupPresets = {
-  blogPost: {
-    type: 'browser',
-    theme: 'dark',
-    shadow: true,
-    background: { type: 'gradient', from: '#1a1a2e', to: '#16213e' },
+const APP_STORE_SPECS = {
+  'iphone-6.7': {
+    mockup: 'iphone-15-pro-max',
+    viewport: { width: 430, height: 932 },
   },
-  landingPage: {
-    type: 'macbook',
-    color: 'space-gray',
-    shadow: true,
-    background: { type: 'transparent' },
+  'iphone-6.5': {
+    mockup: 'iphone-14-pro-max',
+    viewport: { width: 428, height: 926 },
   },
-  socialMedia: {
-    type: 'browser-minimal',
-    theme: 'light',
-    shadow: true,
-    padding: { top: 60, bottom: 60, left: 60, right: 60 },
+  'iphone-5.5': {
+    mockup: 'iphone-14',
+    viewport: { width: 414, height: 736 },
+  },
+  'ipad-12.9': {
+    mockup: 'ipad-pro-12.9',
+    viewport: { width: 1024, height: 1366 },
   },
 };
+
+async function generateAppStoreScreenshots(screenUrls, options = {}) {
+  const results = {};
+
+  for (const [deviceSlot, spec] of Object.entries(APP_STORE_SPECS)) {
+    results[deviceSlot] = [];
+
+    for (let i = 0; i < screenUrls.length; i++) {
+      const url = screenUrls[i];
+      const response = await fetch('https://api.screenshotly.app/screenshot', {
+        method: 'POST',
+        headers: {
+          'x-api-key': process.env.SCREENSHOTLY_API_KEY,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          url,
+          viewport: spec.viewport,
+          format: 'png',
+          mockup: spec.mockup,
+          mockupOptions: {
+            shadow: false,
+            background: 'transparent',
+            ...options.mockupOptions,
+          },
+          ...options,
+        }),
+      });
+
+      results[deviceSlot].push({
+        index: i,
+        buffer: await response.arrayBuffer(),
+      });
+    }
+  }
+
+  return results;
+}
+
+// Usage
+const screens = [
+  'https://app.com/screen1',
+  'https://app.com/screen2',
+  'https://app.com/screen3',
+];
+const assets = await generateAppStoreScreenshots(screens);
+// assets['iphone-6.7'] = [buffer0, buffer1, buffer2], etc.
 ```
 
-## Conclusion
+## Dynamic Mockup Selection
 
-Device mockups transform basic screenshots into professional marketing assets:
+Choose mockup and options based on device detection, page type, or feature flags.
 
-- **Browser frames** add polish with minimal effort
-- **Laptop mockups** create premium visuals
-- **Phone mockups** showcase mobile experiences
-- **Custom backgrounds** reinforce brand identity
+```javascript
+function selectMockup(userAgent, pageType) {
+  // Detect mobile from User-Agent
+  const isMobile = /iPhone|Android|Mobile/i.test(userAgent || '');
 
-Automate mockup generation to maintain consistency across all your marketing materials.
+  if (pageType === 'dashboard') {
+    return { mockup: 'browser-dark', device: 'desktop' };
+  }
+  if (pageType === 'landing') {
+    return isMobile
+      ? { mockup: 'iphone-15-pro', device: 'mobile' }
+      : { mockup: 'macbook-pro', device: 'desktop' };
+  }
+
+  return { mockup: 'browser-light', device: 'desktop' };
+}
+
+// In your OG image or screenshot route
+export async function GET(request) {
+  const url = new URL(request.url).searchParams.get('url');
+  const pageType = request.headers.get('x-page-type') || 'general';
+  const userAgent = request.headers.get('user-agent');
+
+  const { mockup, device } = selectMockup(userAgent, pageType);
+
+  const response = await fetch('https://api.screenshotly.app/screenshot', {
+    method: 'POST',
+    headers: {
+      'x-api-key': process.env.SCREENSHOTLY_API_KEY,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      url,
+      device,
+      mockup,
+      viewport: { width: 1200, height: 630 },
+      format: 'png',
+      mockupOptions: { shadow: true, background: '#f8f9fa' },
+    }),
+  });
+
+  return new Response(await response.arrayBuffer(), {
+    headers: { 'Content-Type': 'image/png' },
+  });
+}
+```
+
+## Testing Mockup Frames Programmatically
+
+Use a test suite to ensure each mockup type renders without errors and meets minimum size expectations.
+
+```javascript
+// test/mockup-frames.test.js
+const MOCKUP_IDS = [
+  'browser-light',
+  'browser-dark',
+  'iphone-15-pro',
+  'macbook-pro',
+  'ipad-pro-12.9',
+];
+
+describe('Mockup API', () => {
+  for (const mockupId of MOCKUP_IDS) {
+    it(`renders ${mockupId} without error`, async () => {
+      const res = await fetch('https://api.screenshotly.app/screenshot', {
+        method: 'POST',
+        headers: {
+          'x-api-key': process.env.SCREENSHOTLY_API_KEY,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          url: 'https://example.com',
+          device: mockupId.includes('iphone') ? 'mobile' : 'desktop',
+          format: 'png',
+          mockup: mockupId,
+          mockupOptions: { shadow: false, background: 'white' },
+        }),
+      });
+
+      expect(res.ok).toBe(true);
+      const buffer = await res.arrayBuffer();
+      expect(buffer.byteLength).toBeGreaterThan(10000);
+      // Optionally validate PNG header
+      expect(new Uint8Array(buffer)[0]).toBe(0x89);
+      expect(new Uint8Array(buffer)[1]).toBe(0x50);
+    });
+  }
+});
+```
+
+Run with Jest or similar. Add `SCREENSHOTLY_API_KEY` to your test environment.
+
+## Rate Limits and Retries
+
+For batch and CI workflows, implement retries with exponential backoff:
+
+```javascript
+async function captureWithRetry(params, maxRetries = 3) {
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    const res = await fetch('https://api.screenshotly.app/screenshot', {
+      method: 'POST',
+      headers: {
+        'x-api-key': process.env.SCREENSHOTLY_API_KEY,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(params),
+    });
+
+    if (res.ok) return res.arrayBuffer();
+    if (res.status === 429) {
+      const delay = Math.pow(2, attempt) * 1000;
+      await new Promise(r => setTimeout(r, delay));
+      continue;
+    }
+
+    throw new Error(`Screenshot failed: ${res.status}`);
+  }
+
+  throw new Error('Max retries exceeded');
+}
+```
+
+## Summary: Parameter Quick Reference
+
+| Parameter | Location | Purpose |
+|-----------|----------|---------|
+| `mockup` | top-level | Frame ID (`browser-light`, `iphone-15-pro`, etc.) |
+| `mockupOptions.color` | object | Device color variant |
+| `mockupOptions.orientation` | object | `portrait` / `landscape` |
+| `mockupOptions.shadow` | object | Drop shadow on/off |
+| `mockupOptions.background` | object | `transparent`, `white`, hex |
+| `mockupOptions.showUrl` | object | Browser address bar |
+| `mockupOptions.showControls` | object | Browser window controls |
+| `viewport` | top-level | Screenshot dimensions before mockup |
+| `device` | top-level | Preset viewport (desktop, mobile, tablet) |
+
+Combine these with the batch and CI patterns above to automate mockup generation across your pipeline.
 
 ---
 
-**Ready to create professional mockups?**
+**Need mockups in your pipeline?**
 
-[Get your free API key →](/sign-up) - 100 free screenshots to get started.
-
-Explore mockup options in our [API Playground →](/playground)
+[Get your API key →](/sign-up) — 100 free screenshots. Try parameters live in the [API Playground →](/playground) or see the [full API docs →](/help).

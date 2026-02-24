@@ -4,7 +4,7 @@ description: "DesignStudio Pro uses Screenshotly to power their social media pre
 excerpt: "DesignStudio Pro needed to generate thousands of dynamic social media previews. Here's how they scaled to 10,000+ daily with Screenshotly."
 author: "asad-ali"
 publishedAt: "2026-02-04"
-category: "guide"
+category: "case-study"
 tags: ["customer story", "social media", "og images", "case study", "high volume"]
 keywords: ["social media previews", "og image generation", "dynamic og images", "social sharing automation"]
 featured: false

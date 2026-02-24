@@ -1,3 +1,4 @@
+import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
 import { Metadata, Viewport } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
@@ -12,23 +13,10 @@ const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://screenshotly.app';
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
   title: {
-    default: "Screenshotly - Screenshot API for Developers | Automated Website Captures",
+    default: "Screenshot API for Developers - AI-Powered Captures | Screenshotly",
     template: "%s | Screenshotly",
   },
-  description: "Powerful REST API for capturing website screenshots programmatically. Clean screenshots with AI-powered element removal, device mockups, and multiple formats. Perfect for testing automation, documentation, and content creation.",
-  keywords: [
-    "screenshot API",
-    "website screenshot",
-    "automated screenshots",
-    "screenshot service",
-    "URL to image",
-    "webpage capture",
-    "screenshot tool",
-    "developer API",
-    "screenshot automation",
-    "headless browser",
-    "puppeteer alternative",
-  ],
+  description: "REST API for automated website screenshots. AI-powered element removal, device mockups, and PNG/JPEG/PDF output. 100 free screenshots — no credit card required.",
   authors: [{ name: "Screenshotly" }],
   creator: "Screenshotly",
   publisher: "Screenshotly",
@@ -51,21 +39,21 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: BASE_URL,
     siteName: "Screenshotly",
-    title: "Screenshotly - Screenshot API for Developers",
-    description: "Powerful REST API for capturing website screenshots with AI-powered element removal and device mockups.",
+    title: "Screenshot API for Developers | Screenshotly",
+    description: "REST API for automated website screenshots with AI-powered element removal and device mockups.",
     images: [
       {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Screenshotly - Screenshot API for Developers",
+        alt: "Screenshot API for Developers | Screenshotly",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Screenshotly - Screenshot API for Developers",
-    description: "Powerful REST API for capturing website screenshots with AI-powered element removal and device mockups.",
+    title: "Screenshot API for Developers | Screenshotly",
+    description: "REST API for automated website screenshots with AI-powered element removal and device mockups.",
     images: ["/og-image.png"],
     creator: "@screenshotly",
     site: "@screenshotly",
@@ -83,6 +71,10 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: BASE_URL,
+    languages: {
+      'en': BASE_URL,
+      'x-default': BASE_URL,
+    },
   },
   category: "Technology",
   verification: {
@@ -126,7 +118,7 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
         <link rel="dns-prefetch" href="https://api.screenshotly.app" />
       </head>
-      <body className={GeistMono.className}>
+      <body className={`${GeistSans.className} ${GeistMono.variable}`}>
         <ClerkProvider>
           <GoogleAnalytics />
           <WebVitalsReporter />

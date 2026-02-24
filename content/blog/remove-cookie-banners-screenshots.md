@@ -6,7 +6,7 @@ author: "asad-ali"
 publishedAt: "2026-01-20"
 category: "tutorial"
 tags: ["ai removal", "cookie banners", "gdpr", "screenshots", "automation"]
-keywords: ["remove cookie banner screenshot", "clean screenshots", "hide popup screenshot", "ai element removal"]
+keywords: ["remove cookie banner screenshot", "hide GDPR consent banner", "clean screenshot without popups", "cookie popup removal API"]
 featured: false
 readingTime: 6
 ---

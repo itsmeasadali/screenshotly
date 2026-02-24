@@ -59,12 +59,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'yearly',
       priority: 0.2,
     },
-    {
-      url: `${BASE_URL}/status`,
-      lastModified: now,
-      changeFrequency: 'daily',
-      priority: 0.5,
-    },
+    // status page excluded (noindexed)
   ];
 
   // Index pages for pSEO sections
@@ -140,12 +135,28 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Use case pages (pSEO) - from data with priority based on importance
   const highPriorityUseCases = ['documentation-screenshots', 'social-media-previews', 'automated-testing'];
-  const useCasePages: MetadataRoute.Sitemap = useCases.map((useCase) => ({
-    url: `${BASE_URL}/use-cases/${useCase.slug}`,
-    lastModified: now,
-    changeFrequency: 'monthly' as const,
-    priority: highPriorityUseCases.includes(useCase.slug) ? 0.8 : 0.7,
-  }));
+  const noindexUseCases = new Set([
+    'font-detection',
+    'certificate-generation',
+    'travel-listings',
+    'healthcare-documentation',
+    'education-platforms',
+    'price-tracking',
+    'email-campaign-previews',
+    'marketplace-listings',
+    'dashboard-snapshots',
+    'news-archival',
+    'website-archival',
+    'directory-submissions',
+  ]);
+  const useCasePages: MetadataRoute.Sitemap = useCases
+    .filter((useCase) => !noindexUseCases.has(useCase.slug))
+    .map((useCase) => ({
+      url: `${BASE_URL}/use-cases/${useCase.slug}`,
+      lastModified: now,
+      changeFrequency: 'monthly' as const,
+      priority: highPriorityUseCases.includes(useCase.slug) ? 0.8 : 0.7,
+    }));
 
   // Integration pages (pSEO) - from data with priority based on popularity
   const allIntegrations = [...integrations.languages, ...integrations.platforms];

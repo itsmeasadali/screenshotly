@@ -4,32 +4,37 @@ import { Calendar, Clock } from "lucide-react";
 import GuestLayout from "@/components/layouts/GuestLayout";
 import { Badge } from "@/components/ui/badge";
 import { JsonLd } from "@/components/seo";
-import { getBreadcrumbSchema } from "@/lib/seo/structured-data";
+import { getBreadcrumbSchema, getFAQSchema, getCollectionPageSchema } from "@/lib/seo/structured-data";
 import { getAllBlogPosts, getFeaturedBlogPosts } from "@/lib/markdown";
 
 const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://screenshotly.app';
 
 export const metadata: Metadata = {
-    title: "Blog - Screenshot API Tutorials, Tips & Best Practices",
+    title: "Screenshot API Tutorials, Tips & Best Practices",
     description: "Learn how to automate screenshots, integrate APIs, and build powerful workflows. Expert tutorials and industry insights from the Screenshotly team.",
-    keywords: [
-        "screenshot API blog",
-        "screenshot tutorials",
-        "web automation tips",
-        "screenshot best practices",
-        "developer tutorials",
-    ],
     alternates: {
         canonical: "/blog",
     },
+    openGraph: {
+        title: "Screenshot API Tutorials, Tips & Best Practices",
+        description: "Learn how to automate screenshots, integrate APIs, and build powerful workflows. Expert tutorials and industry insights from the Screenshotly team.",
+        type: "website",
+    },
+    twitter: {
+        card: "summary_large_image",
+        title: "Screenshot API Tutorials, Tips & Best Practices",
+        description: "Learn how to automate screenshots, integrate APIs, and build powerful workflows. Expert tutorials and industry insights from the Screenshotly team.",
+    },
 };
 
-const categoryLabels = {
+const categoryLabels: Record<string, string> = {
     tutorial: 'Tutorial',
     guide: 'Guide',
     news: 'News',
     comparison: 'Comparison',
     tips: 'Tips & Tricks',
+    'case-study': 'Case Study',
+    reference: 'Reference',
 };
 
 export default async function BlogIndexPage() {
@@ -40,7 +45,7 @@ export default async function BlogIndexPage() {
 
     const featuredPosts = await getFeaturedBlogPosts();
     const allPosts = await getAllBlogPosts();
-    const recentPosts = allPosts.slice(0, 6);
+    const recentPosts = allPosts;
 
     const formatDate = (dateString: string) => {
         return new Date(dateString).toLocaleDateString('en-US', {
@@ -50,9 +55,26 @@ export default async function BlogIndexPage() {
         });
     };
 
+    const faqs = [
+        {
+            question: "How do I get started with the Screenshotly API?",
+            answer: "Sign up for a free account to get your API key. You get 100 free screenshots with no credit card required. Our tutorials walk you through your first API call in under 5 minutes with code examples in JavaScript, Python, PHP, and more.",
+        },
+        {
+            question: "What topics does the Screenshotly blog cover?",
+            answer: "Our blog covers screenshot API integration tutorials, visual testing best practices, automation workflows, performance optimization, device mockup guides, and comparisons with other tools. All articles include working code examples.",
+        },
+        {
+            question: "How often is new content published?",
+            answer: "We publish new tutorials, guides, and best practice articles weekly. Subscribe to our newsletter to get notified when new content is available.",
+        },
+    ];
+
     return (
         <GuestLayout>
             <JsonLd data={getBreadcrumbSchema(breadcrumbs)} />
+            <JsonLd data={getFAQSchema(faqs)} />
+            <JsonLd data={getCollectionPageSchema({ name: "Screenshot API Blog", description: "Tutorials, guides, and best practices for screenshot API automation.", url: `${BASE_URL}/blog` })} />
 
             <div className="py-16">
                 <div className="container mx-auto px-4 max-w-6xl">
@@ -78,6 +100,7 @@ export default async function BlogIndexPage() {
                         <p className="text-muted-foreground leading-relaxed">
                             Each article includes working code examples, performance benchmarks, and practical tips you can implement immediately.
                             Whether you&apos;re just getting started or optimizing an existing system, you&apos;ll find actionable insights here.
+                            Browse by <Link href="/topics" className="text-primary hover:underline">topic</Link> to find guides organized by skill level and use case.
                         </p>
                     </div>
 
@@ -92,8 +115,8 @@ export default async function BlogIndexPage() {
                             <div className="text-sm text-muted-foreground">New content published</div>
                         </div>
                         <div className="text-center p-6 bg-muted/50 rounded-xl">
-                            <div className="text-3xl font-bold text-primary mb-2">5 min</div>
-                            <div className="text-sm text-muted-foreground">Average read time</div>
+                            <div className="text-3xl font-bold text-primary mb-2">5–15 min</div>
+                            <div className="text-sm text-muted-foreground">Read time per article</div>
                         </div>
                     </div>
 
@@ -161,23 +184,40 @@ export default async function BlogIndexPage() {
                         </div>
                     </section>
 
-                    {/* Newsletter CTA */}
+                    {/* FAQ Section */}
+                    <section className="mt-16 max-w-3xl mx-auto">
+                        <h2 className="text-2xl font-bold mb-8 text-center">Frequently Asked Questions</h2>
+                        <div className="space-y-6">
+                            {faqs.map((faq, index) => (
+                                <div key={index} className="border rounded-xl p-6">
+                                    <h3 className="font-semibold mb-2">{faq.question}</h3>
+                                    <p className="text-muted-foreground">{faq.answer}</p>
+                                </div>
+                            ))}
+                        </div>
+                    </section>
+
+                    {/* CTA */}
                     <div className="mt-16 p-8 bg-muted/50 rounded-xl text-center">
                         <h2 className="text-2xl font-bold mb-4">
-                            Stay Updated
+                            Try the Screenshot API Free
                         </h2>
                         <p className="text-muted-foreground mb-6">
-                            Get the latest tutorials and best practices delivered to your inbox.
+                            100 free screenshots — no credit card required. Capture any URL in seconds.
                         </p>
-                        <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
-                            <input
-                                type="email"
-                                placeholder="Enter your email"
-                                className="flex-1 px-4 py-2 border rounded-lg bg-background"
-                            />
-                            <button className="px-6 py-2 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition-colors">
-                                Subscribe
-                            </button>
+                        <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                            <Link
+                                href="/sign-up"
+                                className="px-6 py-2 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition-colors"
+                            >
+                                Get Free API Key
+                            </Link>
+                            <Link
+                                href="/help"
+                                className="px-6 py-2 border rounded-lg font-medium hover:bg-muted transition-colors"
+                            >
+                                Read the Docs
+                            </Link>
                         </div>
                     </div>
                 </div>

@@ -1,559 +1,394 @@
 ---
-title: "How to Generate PDF from HTML with a Screenshot API"
-description: "Learn how to convert HTML pages to PDF documents using a screenshot API. Covers styling, pagination, headers/footers, and production implementation."
-excerpt: "A practical guide to HTML-to-PDF conversion using screenshot APIs. From basic exports to print-ready documents with headers and footers."
+title: "CSS Print Styling for PDF Generation: Page Breaks, Headers & Layouts"
+description: "Master @media print CSS for PDF generation: page breaks, orphan/widow control, headers, footers, A4 vs Letter sizing, and print-specific layouts."
+excerpt: "Deep dive into CSS print stylesheets for PDF output. Page breaks, margins, headers/footers, and layout control so your PDFs look professional on paper."
 author: "asad-ali"
 publishedAt: "2026-01-12"
 category: "tutorial"
-tags: ["pdf generation", "html to pdf", "automation", "api"]
-keywords: ["html to pdf", "screenshot to pdf", "generate pdf api", "convert webpage pdf", "pdf generation api"]
+tags: ["pdf", "css", "print", "styling", "page-breaks", "layout"]
+keywords: ["CSS print styles PDF", "PDF page breaks CSS", "print stylesheet", "@media print guide", "orphans widows CSS", "page-break CSS", "CSS @page size"]
 featured: false
-readingTime: 9
+readingTime: 12
 ---
 
-Converting web pages to PDF is a common requirement for invoices, reports, documentation, and data exports. While browser-based solutions exist, they're inconsistent across environments and difficult to automate.
+Web pages are designed for screens—fluid layouts, hover states, fixed headers. When you generate a PDF, the output often looks wrong: elements cut across pages, navigation appears in the document, backgrounds vanish, and text breaks awkwardly. The fix is **CSS print styling**: `@media print` rules that control how your content renders on paper. This guide focuses exclusively on the **CSS design and formatting** side of PDF generation—page breaks, orphan/widow control, `@page` margins, paper sizes, and print-specific layouts.
 
-A screenshot API with PDF support provides reliable, server-side HTML-to-PDF conversion that works consistently anywhere.
+For the PDF API itself (endpoints, options, headers/footers via JavaScript), see our [PDF Generation API Guide](/blog/pdf-generation-guide). For invoice-specific templates and currency formatting, see our [Invoice & Financial PDF Generation](/blog/pdf-generation-complete-guide) guide.
 
-## Why Use an API for PDF Generation?
+## The PDF Formatting Challenge
 
-### Browser Limitations
+Why do PDFs often look different from the screen version?
 
-Client-side PDF generation (using window.print() or libraries like html2pdf) has problems:
+1. **Pagination** – Continuous scroll becomes discrete pages; content can split mid-paragraph or mid-table.
+2. **Print media** – Browsers and PDF engines apply different CSS (or none) when "printing" vs displaying.
+3. **Backgrounds** – Colors and images may be suppressed by default to save ink.
+4. **Screen-only elements** – Navigation, sidebars, and ads clutter the document.
 
-- **Inconsistent rendering** across browsers
-- **No server-side processing** for automation
-- **User interaction required** in many cases
-- **Limited styling control** for print media
-- **Memory constraints** for large documents
+`@media print` lets you override screen styles and define rules that apply only when generating PDFs or printing.
 
-### API Advantages
+## @media print Basics
 
-Server-side PDF generation offers:
-
-- **Consistent output** regardless of client
-- **Full automation** via REST API
-- **Print-optimized rendering** with Chromium
-- **Headers, footers, and page numbers** automatically
-- **Large document support** without memory issues
-
-## Basic PDF Generation
-
-The simplest PDF generation is a single API call:
-
-```javascript
-async function generatePDF(url) {
-  const response = await fetch('https://api.screenshotly.app/screenshot', {
-    method: 'POST',
-    headers: {
-      'Authorization': 'Bearer YOUR_API_KEY',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      url,
-      format: 'pdf',
-    }),
-  });
-
-  return response.arrayBuffer();
-}
-
-// Usage
-const pdfBuffer = await generatePDF('https://example.com/invoice/123');
-fs.writeFileSync('invoice.pdf', Buffer.from(pdfBuffer));
-```
-
-## PDF Options
-
-### Page Size and Orientation
-
-```javascript
-{
-  url: 'https://example.com/report',
-  format: 'pdf',
-  pdfOptions: {
-    pageSize: 'A4',          // A4, Letter, Legal, Tabloid, etc.
-    landscape: false,         // true for landscape orientation
-  }
-}
-```
-
-**Available page sizes:**
-- `A3`, `A4`, `A5`, `A6`
-- `Letter`, `Legal`, `Tabloid`
-- Custom: `{ width: '8.5in', height: '11in' }`
-
-### Margins
-
-```javascript
-{
-  url: 'https://example.com/document',
-  format: 'pdf',
-  pdfOptions: {
-    pageSize: 'A4',
-    margin: {
-      top: '20mm',
-      bottom: '20mm',
-      left: '15mm',
-      right: '15mm',
-    }
-  }
-}
-```
-
-### Background Graphics
-
-Include background colors and images:
-
-```javascript
-{
-  url: 'https://example.com/colorful-report',
-  format: 'pdf',
-  pdfOptions: {
-    printBackground: true,  // Include background colors/images
-  }
-}
-```
-
-### Headers and Footers
-
-Add dynamic headers and footers:
-
-```javascript
-{
-  url: 'https://example.com/document',
-  format: 'pdf',
-  pdfOptions: {
-    pageSize: 'A4',
-    margin: {
-      top: '50mm',    // Extra space for header
-      bottom: '30mm', // Extra space for footer
-    },
-    headerTemplate: `
-      <div style="font-size: 10px; width: 100%; text-align: center; color: #666;">
-        <span>Your Company Name</span>
-        <span style="float: right;">Page <span class="pageNumber"></span> of <span class="totalPages"></span></span>
-      </div>
-    `,
-    footerTemplate: `
-      <div style="font-size: 9px; width: 100%; text-align: center; color: #888;">
-        Generated on <span class="date"></span>
-      </div>
-    `,
-    displayHeaderFooter: true,
-  }
-}
-```
-
-**Available template variables:**
-- `pageNumber` - Current page number
-- `totalPages` - Total page count
-- `date` - Current date
-- `title` - Document title
-- `url` - Document URL
-
-## Use Case Implementations
-
-### Invoice Generation
-
-```javascript
-async function generateInvoice(invoiceId) {
-  // Your app renders the invoice at this URL
-  const invoiceUrl = `https://app.yoursite.com/invoices/${invoiceId}/render`;
-  
-  const response = await fetch('https://api.screenshotly.app/screenshot', {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${API_KEY}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      url: invoiceUrl,
-      format: 'pdf',
-      pdfOptions: {
-        pageSize: 'A4',
-        margin: {
-          top: '15mm',
-          bottom: '15mm',
-          left: '15mm',
-          right: '15mm',
-        },
-        printBackground: true,
-      },
-      // Wait for invoice to fully render
-      delay: 500,
-    }),
-  });
-
-  return response.arrayBuffer();
-}
-
-// Express endpoint
-app.get('/api/invoices/:id/pdf', async (req, res) => {
-  const pdf = await generateInvoice(req.params.id);
-  
-  res.setHeader('Content-Type', 'application/pdf');
-  res.setHeader('Content-Disposition', `attachment; filename="invoice-${req.params.id}.pdf"`);
-  res.send(Buffer.from(pdf));
-});
-```
-
-### Report Export
-
-```javascript
-async function generateReport(reportId, options = {}) {
-  const reportUrl = `https://app.yoursite.com/reports/${reportId}/export`;
-  
-  const response = await fetch('https://api.screenshotly.app/screenshot', {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${API_KEY}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      url: reportUrl,
-      format: 'pdf',
-      pdfOptions: {
-        pageSize: options.landscape ? 'A4' : 'A4',
-        landscape: options.landscape || false,
-        margin: {
-          top: '20mm',
-          bottom: '25mm',
-          left: '15mm',
-          right: '15mm',
-        },
-        printBackground: true,
-        headerTemplate: `
-          <div style="font-size: 10px; margin-left: 15mm;">
-            <strong>${options.title || 'Report'}</strong>
-          </div>
-        `,
-        footerTemplate: `
-          <div style="font-size: 9px; width: 100%; text-align: center;">
-            Page <span class="pageNumber"></span> of <span class="totalPages"></span>
-          </div>
-        `,
-        displayHeaderFooter: true,
-      },
-      // Reports may have charts that need time to render
-      delay: 2000,
-    }),
-  });
-
-  return response.arrayBuffer();
-}
-```
-
-### Documentation Export
-
-```javascript
-async function exportDocumentation(pages) {
-  const pdfs = [];
-  
-  for (const page of pages) {
-    const response = await fetch('https://api.screenshotly.app/screenshot', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${API_KEY}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        url: page.url,
-        format: 'pdf',
-        pdfOptions: {
-          pageSize: 'A4',
-          margin: {
-            top: '25mm',
-            bottom: '25mm',
-            left: '20mm',
-            right: '20mm',
-          },
-          printBackground: true,
-          headerTemplate: `
-            <div style="font-size: 10px; margin-left: 20mm;">
-              ${page.title}
-            </div>
-          `,
-          footerTemplate: `
-            <div style="font-size: 9px; width: 100%; text-align: center;">
-              <span class="pageNumber"></span>
-            </div>
-          `,
-          displayHeaderFooter: true,
-        },
-        aiRemoval: {
-          enabled: true,
-          types: ['cookie-banner', 'chat-widget'],
-        },
-      }),
-    });
-
-    pdfs.push({
-      title: page.title,
-      buffer: await response.arrayBuffer(),
-    });
-  }
-
-  // Use pdf-lib or similar to merge PDFs
-  return mergePDFs(pdfs);
-}
-```
-
-## Styling for PDF
-
-### Print-Specific CSS
-
-Create CSS rules specifically for PDF export:
+Wrap all print-specific rules in a media query:
 
 ```css
-/* styles.css */
 @media print {
-  /* Hide navigation and interactive elements */
-  nav, .sidebar, .chat-widget, footer {
+  /* These styles apply only when generating PDF or printing */
+  body {
+    font-size: 12pt;
+    line-height: 1.5;
+    color: black;
+    background: white;
+  }
+}
+```
+
+### Hiding Screen-Only Elements
+
+Remove navigation, sidebars, ads, and interactive widgets from PDF output:
+
+```css
+@media print {
+  .navigation,
+  .sidebar,
+  .chat-widget,
+  .cookie-banner,
+  .ads,
+  .footer-nav,
+  .no-print {
     display: none !important;
   }
-  
-  /* Avoid page breaks inside elements */
-  .card, .table-row, .section {
-    page-break-inside: avoid;
-  }
-  
-  /* Force page breaks before sections */
-  .page-break, h1 {
-    page-break-before: always;
-  }
-  
-  /* Ensure backgrounds print */
-  body {
+}
+```
+
+### Forcing Backgrounds to Print
+
+By default, browsers may omit backgrounds. Ensure logos, colored headers, and watermarks appear:
+
+```css
+@media print {
+  body,
+  .header,
+  .invoice-logo,
+  .watermark {
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
   }
-  
-  /* Adjust font sizes for print */
-  body {
-    font-size: 12pt;
-    line-height: 1.4;
+}
+```
+
+## Page Break Control
+
+The most common formatting issue is content splitting across pages. CSS provides properties to control where breaks occur.
+
+### page-break-before
+
+Force a new page before an element (e.g., each chapter):
+
+```css
+@media print {
+  .chapter,
+  .section-start,
+  h1 {
+    page-break-before: always;
   }
-  
-  /* Full width on print */
+}
+```
+
+### page-break-after
+
+Force a page break after an element:
+
+```css
+@media print {
+  .cover-page,
+  .executive-summary {
+    page-break-after: always;
+  }
+}
+```
+
+### page-break-inside: avoid
+
+Prevent an element from being split across pages. Critical for tables, cards, and invoice rows:
+
+```css
+@media print {
+  table,
+  tr,
+  .card,
+  .invoice-row,
+  .totals-block {
+    page-break-inside: avoid;
+  }
+}
+```
+
+### page-break-after: avoid (Headings)
+
+Keep headings with the content that follows them—don't let a heading appear alone at the bottom of a page:
+
+```css
+@media print {
+  h1, h2, h3 {
+    page-break-after: avoid;
+  }
+
+  p, li {
+    page-break-inside: avoid;
+  }
+}
+```
+
+### Modern Equivalents
+
+The newer `break-before`, `break-after`, and `break-inside` properties are supported in many PDF engines:
+
+```css
+@media print {
+  .chapter {
+    break-before: page;
+  }
+
+  table {
+    break-inside: avoid;
+  }
+}
+```
+
+## Orphan and Widow Control
+
+*Orphans* are lines of a paragraph left at the bottom of a page when the rest continues on the next page. *Widows* are lines left alone at the top of a page. Both look unprofessional.
+
+```css
+@media print {
+  p {
+    orphans: 3;  /* Minimum 3 lines at bottom of page */
+    widows: 3;   /* Minimum 3 lines at top of page */
+  }
+}
+```
+
+Adjust values (typically 2–3) based on font size and line height. Some engines also support `orphans` and `widows` on block-level elements.
+
+## Print Margins and @page
+
+Use `@page` to set margins for the entire document:
+
+```css
+@page {
+  margin: 20mm;
+}
+
+/* First page can have different margins (e.g., no top margin for cover) */
+@page :first {
+  margin-top: 40mm;
+}
+
+/* Left/right pages for duplex printing */
+@page :left {
+  margin-left: 25mm;
+  margin-right: 15mm;
+}
+
+@page :right {
+  margin-left: 15mm;
+  margin-right: 25mm;
+}
+```
+
+Margin units: `mm`, `cm`, `in`, `pt`, `px`. Use `mm` or `in` for consistency with physical paper.
+
+## A4 vs Letter Sizing
+
+Different regions use different paper sizes. Set explicit dimensions so layouts don't stretch or shrink unexpectedly.
+
+### A4 (International)
+
+- **Size:** 210mm × 297mm
+- Common in Europe, Asia, Africa, most of the world
+
+```css
+@page {
+  size: A4;
+  margin: 20mm;
+}
+
+body {
+  width: 210mm;
+  min-height: 297mm;
+}
+```
+
+### Letter (North America)
+
+- **Size:** 8.5in × 11in (216mm × 279mm)
+- US and Canada standard
+
+```css
+@page {
+  size: letter;
+  margin: 0.75in;
+}
+```
+
+### Landscape vs Portrait
+
+```css
+@page {
+  size: A4 landscape;  /* 297mm × 210mm */
+}
+
+/* Or portrait (default) */
+@page {
+  size: A4 portrait;
+}
+```
+
+### Custom Size
+
+```css
+@page {
+  size: 200mm 280mm;
+}
+```
+
+## Headers and Footers
+
+PDF headers and footers (company branding, page numbers, dates) are configured via the API's `headerTemplate` and `footerTemplate` options — not through CSS. When using them, ensure your `@page` or API margins reserve enough space at the top and bottom so content doesn't overlap the header/footer. For the full API implementation with template classes (`.pageNumber`, `.totalPages`, `.date`), see our [PDF Generation API Guide](/blog/pdf-generation-guide#headers-and-footers).
+
+## Connecting Print CSS to Your PDF API Call
+
+Once your print stylesheet is in place, include it in the page you pass to the PDF API. Either link it as a separate file or inline it:
+
+```html
+<link rel="stylesheet" href="print.css" media="print" />
+<!-- Or inline -->
+<style>
+  @media print {
+    nav, .sidebar { display: none !important; }
+    .section { page-break-inside: avoid; }
+    h2 { page-break-after: avoid; }
+    body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+```
+
+The API call itself is straightforward — pass the URL with `format: 'pdf'` and `printBackground: true`. For the complete API implementation with all options, see our [PDF Generation API Guide](/blog/pdf-generation-guide#basic-pdf-generation).
+
+## Print-Specific Layout Adjustments
+
+### Full-Width Content
+
+Remove max-widths and padding that constrain screen layouts:
+
+```css
+@media print {
   .container {
     max-width: 100%;
     padding: 0;
   }
+
+  .content {
+    width: 100%;
+    margin: 0;
+  }
 }
 ```
 
-### PDF-Specific Render Route
+### Fixing Links
 
-Create a dedicated route for PDF rendering:
+Append URLs after links for printed readability:
 
-```jsx
-// pages/invoices/[id]/render.jsx
-export default function InvoiceRender({ invoice }) {
-  return (
-    <html>
-      <head>
-        <style>{`
-          * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-          }
-          body {
-            font-family: 'Helvetica', sans-serif;
-            font-size: 12pt;
-            color: #333;
-          }
-          .invoice-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 40px;
-          }
-          .logo { height: 50px; }
-          .invoice-number { font-size: 24pt; font-weight: bold; }
-          table { width: 100%; border-collapse: collapse; margin: 20px 0; }
-          th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
-          th { background: #f5f5f5; }
-          .total-row { font-weight: bold; font-size: 14pt; }
-        `}</style>
-      </head>
-      <body>
-        <div className="invoice-header">
-          <img src="/logo.png" className="logo" alt="Company" />
-          <div>
-            <div className="invoice-number">Invoice #{invoice.number}</div>
-            <div>Date: {invoice.date}</div>
-          </div>
-        </div>
-        
-        {/* Invoice content... */}
-      </body>
-    </html>
-  );
+```css
+@media print {
+  a[href]:after {
+    content: " (" attr(href) ")";
+    font-size: 0.9em;
+    color: #666;
+  }
 }
 ```
 
-## Production Implementation
+### Black-and-White Optimization
 
-### Express/Node.js API
+If printing in grayscale, ensure sufficient contrast:
 
-```javascript
-const express = require('express');
-const app = express();
-
-const PDF_API_KEY = process.env.SCREENSHOTLY_API_KEY;
-
-async function generatePDF(config) {
-  const response = await fetch('https://api.screenshotly.app/screenshot', {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${PDF_API_KEY}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(config),
-  });
-
-  if (!response.ok) {
-    throw new Error(`PDF generation failed: ${response.status}`);
+```css
+@media print {
+  body {
+    color: black !important;
+    background: white !important;
   }
 
-  return response.arrayBuffer();
+  /* Avoid light gray text that may disappear */
+  .muted {
+    color: #333 !important;
+  }
 }
-
-// Invoice PDF endpoint
-app.get('/api/invoices/:id/pdf', async (req, res) => {
-  try {
-    const invoice = await Invoice.findById(req.params.id);
-    
-    if (!invoice) {
-      return res.status(404).json({ error: 'Invoice not found' });
-    }
-    
-    // Check authorization
-    if (invoice.userId !== req.user.id) {
-      return res.status(403).json({ error: 'Unauthorized' });
-    }
-    
-    const pdf = await generatePDF({
-      url: `${process.env.APP_URL}/invoices/${invoice.id}/render`,
-      format: 'pdf',
-      pdfOptions: {
-        pageSize: 'A4',
-        margin: { top: '15mm', bottom: '15mm', left: '15mm', right: '15mm' },
-        printBackground: true,
-      },
-    });
-    
-    res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader(
-      'Content-Disposition',
-      `attachment; filename="invoice-${invoice.number}.pdf"`
-    );
-    res.send(Buffer.from(pdf));
-    
-  } catch (error) {
-    console.error('PDF generation error:', error);
-    res.status(500).json({ error: 'Failed to generate PDF' });
-  }
-});
-
-app.listen(3000);
 ```
 
-### Caching Generated PDFs
+## Complete Print Stylesheet Example
 
-For frequently accessed PDFs, implement caching:
-
-```javascript
-const Redis = require('ioredis');
-const redis = new Redis();
-
-async function getOrGeneratePDF(invoiceId) {
-  const cacheKey = `pdf:invoice:${invoiceId}`;
-  
-  // Check cache
-  const cached = await redis.getBuffer(cacheKey);
-  if (cached) {
-    return cached;
+```css
+@media print {
+  /* Hide non-printable */
+  .no-print, nav, .sidebar, .ads {
+    display: none !important;
   }
-  
-  // Generate new PDF
-  const pdf = await generatePDF({
-    url: `${process.env.APP_URL}/invoices/${invoiceId}/render`,
-    format: 'pdf',
-    pdfOptions: { /* ... */ },
-  });
-  
-  // Cache for 1 hour
-  await redis.setex(cacheKey, 3600, Buffer.from(pdf));
-  
-  return pdf;
-}
 
-// Invalidate cache on invoice update
-invoiceService.on('update', async (invoiceId) => {
-  await redis.del(`pdf:invoice:${invoiceId}`);
-});
+  /* Page setup */
+  @page {
+    size: A4;
+    margin: 25mm;
+  }
+
+  /* Typography */
+  body {
+    font-size: 12pt;
+    line-height: 1.5;
+    color: black;
+    background: white;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Page breaks */
+  .chapter { page-break-before: always; }
+  table, tr, .card { page-break-inside: avoid; }
+  h1, h2, h3 { page-break-after: avoid; }
+
+  /* Orphans and widows */
+  p { orphans: 3; widows: 3; }
+
+  /* Layout */
+  .container { max-width: 100%; padding: 0; }
+}
 ```
 
 ## Best Practices
 
-### 1. Use Print-Optimized Layouts
-
-Design specifically for PDF output:
-- Fixed widths work better than responsive
-- Avoid flexbox for complex layouts
-- Test page breaks explicitly
-
-### 2. Wait for Content
-
-Ensure dynamic content is loaded:
-
-```javascript
-{
-  delay: 1000,  // Wait for JavaScript to execute
-  waitFor: '#content-loaded',  // Wait for specific element
-}
-```
-
-### 3. Handle Large Documents
-
-For multi-page documents:
-- Increase timeout settings
-- Consider chunking very large documents
-- Use pagination in your templates
-
-### 4. Secure Render Routes
-
-Protect PDF render endpoints:
-
-```javascript
-// Only allow requests from your own API
-app.get('/invoices/:id/render', (req, res, next) => {
-  const token = req.query.token;
-  if (!verifyRenderToken(token)) {
-    return res.status(403).send('Forbidden');
-  }
-  next();
-});
-```
+1. **Test with real content** – Long documents expose break issues that short samples miss.
+2. **Use `page-break-inside: avoid` on tables** – Split tables look broken.
+3. **Reserve margin for headers/footers** – Match API margin values to your template.
+4. **Choose A4 or Letter up front** – Switching later can break layouts.
+5. **Keep print CSS in a separate file or `@media print` block** – Easier to maintain.
 
 ## Conclusion
 
-HTML-to-PDF conversion via screenshot API provides consistent, reliable document generation that works in any environment. Whether for invoices, reports, or documentation, server-side rendering ensures your PDFs look exactly as intended.
+PDF output quality depends on **print-specific CSS**: `@media print` rules, page break properties, orphan/widow control, `@page` margins, and paper size. Combine these with a screenshot API's header/footer support for professional, paginated documents that look correct on screen and on paper.
 
 Key takeaways:
-
-1. **Use format: 'pdf'** for PDF output instead of image formats
-2. **Configure pdfOptions** for page size, margins, and headers/footers
-3. **Create print-specific CSS** for optimal PDF styling
-4. **Build dedicated render routes** optimized for PDF output
-5. **Cache generated PDFs** to reduce API calls
+- Use `@media print` to override screen styles
+- Control breaks with `page-break-before`, `page-break-after`, `page-break-inside`
+- Set `orphans` and `widows` for better paragraph flow
+- Use `@page` for margins and paper size (A4 vs Letter, portrait vs landscape)
+- Enable `print-color-adjust: exact` for backgrounds
+- Use API header/footer templates for repeating branding and page numbers
 
 ---
 
-**Ready to generate PDFs from HTML?**
+**Ready to style your PDFs?**
 
-[Get your free API key →](/sign-up) - 100 free requests to start.
+[Get your free API key →](/sign-up) – 100 free requests to start.
 
-Learn more about [PDF generation use cases →](/use-cases/pdf-generation)
+Learn more: [PDF Generation API Guide →](/blog/pdf-generation-guide) | [Invoice & Financial PDFs →](/blog/pdf-generation-complete-guide) | [Batch Generation & Email Delivery →](/blog/invoice-report-generation-guide)

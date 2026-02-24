@@ -4,7 +4,7 @@ description: "Compare the top screenshot APIs of 2026. We analyze features, pric
 excerpt: "A comprehensive comparison of screenshot APIs including Screenshotly, ScreenshotOne, URLBox, ScreenshotAPI, and self-hosted Puppeteer. Find the best option for your needs."
 author: "asad-ali"
 publishedAt: "2026-02-08"
-category: "guide"
+category: "comparison"
 tags: ["screenshot api", "comparison", "api comparison", "best screenshot api", "developer tools"]
 keywords: ["best screenshot api", "screenshot api comparison", "screenshotly vs", "screenshot api 2026"]
 featured: true

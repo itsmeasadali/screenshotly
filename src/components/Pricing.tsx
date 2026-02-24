@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useUser } from '@clerk/nextjs';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
@@ -131,48 +131,7 @@ const plans: PricingPlan[] = [
   },
 ];
 
-const faqs = [
-  {
-    question: "How does the free tier work?",
-    answer: "Sign up and get 100 free screenshots — no credit card required, no expiry. Use them to fully evaluate the API. Once you've used all 100, upgrade to a paid plan to continue."
-  },
-  {
-    question: "What counts as a screenshot?",
-    answer: "Each successful API call that returns a screenshot, PDF, or video counts as one screenshot. Failed requests and cached responses are not counted."
-  },
-  {
-    question: "What happens if I go over my monthly limit?",
-    answer: "On paid plans, extra screenshots are billed at the per-extra rate shown on your plan. On the free tier, once you've used your 100 lifetime screenshots, you'll need to upgrade to continue."
-  },
-  {
-    question: "Can I change or cancel my plan anytime?",
-    answer: "Yes! Upgrade, downgrade, or cancel at any time with no penalties. When upgrading, you're charged a prorated amount. Downgrades take effect at the next billing cycle."
-  },
-  {
-    question: "What payment methods do you accept?",
-    answer: "We accept all major credit cards (Visa, Mastercard, Amex) via Stripe. Annual plans get a 20% discount. Enterprise invoicing is available on Scale plans."
-  },
-  {
-    question: "How fast are screenshots rendered?",
-    answer: "Most screenshots complete in 2-5 seconds. Full-page captures and heavy JavaScript sites may take up to 15 seconds. Growth and Scale plans get priority rendering queues."
-  },
-  {
-    question: "Do you offer refunds?",
-    answer: "Yes, we offer a 14-day money-back guarantee on all paid plans. If you're not satisfied, contact support for a full refund."
-  },
-  {
-    question: "Is there an API rate limit?",
-    answer: "Yes, each plan has a requests-per-minute limit to ensure fair usage and consistent performance. Scale plans offer custom rate limits for high-throughput needs."
-  },
-  {
-    question: "Can I use screenshots commercially?",
-    answer: "Absolutely. All screenshots captured through our API can be used for any commercial purpose — websites, apps, marketing, reports — with no additional licensing."
-  },
-  {
-    question: "How does caching work?",
-    answer: "Paid plans include automatic caching. Repeated requests for the same URL return cached results instantly without counting toward your quota (within the cache TTL you configure)."
-  },
-];
+import { pricingFAQs } from "@/data/pricing-faqs";
 
 const comparisonFeatures = [
   { name: 'Screenshots', free: '100 total', basic: '2,500/mo', growth: '12,000/mo', scale: '50,000/mo' },
@@ -206,7 +165,7 @@ export default function Pricing() {
   const { user, isSignedIn } = useUser();
   const [yearly, setYearly] = useState(false);
   const [loading, setLoading] = useState<string | null>(null);
-  const [showComparison, setShowComparison] = useState(false);
+  const [showComparison, setShowComparison] = useState(true);
 
   const handleUpgrade = async (plan: PricingPlan) => {
     try {
@@ -256,12 +215,15 @@ export default function Pricing() {
           Simple, Transparent Pricing
         </Badge>
         <h1 className="text-4xl md:text-5xl font-bold mb-5 tracking-tight">
-          Start rendering for free
+          Screenshot API Pricing
         </h1>
-        <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-8">
-          100 free screenshots to get started. No credit card required.
-          <br className="hidden sm:block" />
-          Upgrade when you need more volume, features, or priority support.
+        <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-4">
+          Screenshotly screenshot API pricing starts at free (100 screenshots) and scales
+          to $199/mo for 50,000 screenshots. All plans support PNG, JPEG, and WebP. Paid plans add PDF output.
+        </p>
+        <p className="text-muted-foreground max-w-2xl mx-auto mb-8">
+          Start with 100 free screenshots — no credit card required.
+          Upgrade anytime for AI element removal, device mockups, and priority support.
         </p>
 
         <div className="flex items-center justify-center gap-4">
@@ -284,6 +246,7 @@ export default function Pricing() {
       </div>
 
       {/* Pricing Cards */}
+      <h2 className="sr-only">Pricing Plans</h2>
       <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-6 max-w-7xl mx-auto mb-16">
         {plans.map((plan) => (
           <div key={plan.id} className="relative flex">
@@ -307,7 +270,7 @@ export default function Pricing() {
                     }`}>
                     <plan.icon className={`w-5 h-5 ${plan.popular ? '' : 'text-primary'}`} />
                   </div>
-                  <CardTitle className="text-xl">{plan.name}</CardTitle>
+                  <h3 className="text-xl font-semibold leading-none tracking-tight">{plan.name}</h3>
                 </div>
 
                 <div className="space-y-1">
@@ -476,7 +439,7 @@ export default function Pricing() {
         </div>
 
         <div className="grid md:grid-cols-2 gap-6">
-          {faqs.map((faq, index) => (
+          {pricingFAQs.map((faq, index) => (
             <Card key={index} className="hover:border-primary/20 transition-colors">
               <CardContent className="p-5">
                 <h3 className="text-base font-semibold mb-2">{faq.question}</h3>
@@ -485,6 +448,16 @@ export default function Pricing() {
             </Card>
           ))}
         </div>
+      </div>
+
+      {/* Compare Section */}
+      <div className="max-w-3xl mx-auto text-center mb-16">
+        <p className="text-muted-foreground mb-3">
+          Wondering how Screenshotly stacks up against alternatives?
+        </p>
+        <Link href="/compare" className="text-primary hover:underline font-medium">
+          See detailed comparisons with Puppeteer, Playwright, Urlbox, and more →
+        </Link>
       </div>
 
       {/* Enterprise / Contact */}
@@ -511,6 +484,19 @@ export default function Pricing() {
             </div>
           </CardContent>
         </Card>
+      </div>
+
+      {/* Related Links */}
+      <div className="flex flex-wrap gap-4 justify-center mt-12 text-sm">
+        <Link href="/tools" className="text-primary hover:underline">Try free tools</Link>
+        <span className="text-muted-foreground">·</span>
+        <Link href="/use-cases" className="text-primary hover:underline">Use cases</Link>
+        <span className="text-muted-foreground">·</span>
+        <Link href="/integrations" className="text-primary hover:underline">Integration guides</Link>
+        <span className="text-muted-foreground">·</span>
+        <Link href="/help" className="text-primary hover:underline">Help center</Link>
+        <span className="text-muted-foreground">·</span>
+        <Link href="/blog" className="text-primary hover:underline">Blog</Link>
       </div>
     </div>
   );

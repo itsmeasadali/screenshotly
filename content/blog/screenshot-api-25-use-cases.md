@@ -103,13 +103,50 @@ try {
 
 Generate OG images for social sharing. When your content doesn't have a custom social image, use a screenshot API to create one automatically. Capture the page, optionally wrap it in a device mockup, and serve it as the `og:image`.
 
+```javascript
+const response = await fetch('https://api.screenshotly.app/screenshot', {
+  method: 'POST',
+  headers: { 'Authorization': 'Bearer YOUR_API_KEY', 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    url: 'https://yourblog.com/latest-post',
+    viewport: { width: 1200, height: 630 },
+    mockup: 'browser-light',
+  }),
+});
+```
+
 ### 14. Case Study Visuals
 
 Capture customer websites for testimonials and case studies. Instead of asking clients for screenshots—which often arrive in wrong sizes or outdated—capture their live site and wrap it in a device mockup for a polished, consistent look.
 
+```javascript
+const response = await fetch('https://api.screenshotly.app/screenshot', {
+  method: 'POST',
+  headers: { 'Authorization': 'Bearer YOUR_API_KEY', 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    url: 'https://customer-site.com',
+    mockup: 'macbook-pro',
+    removePopups: true,
+  }),
+});
+```
+
 ### 15. Competitor Analysis
 
 Document competitor features and designs over time. Marketing and product teams use automated screenshots to track how competitor interfaces evolve, identify new features, and benchmark design quality across the market.
+
+```javascript
+const response = await fetch('https://api.screenshotly.app/screenshot', {
+  method: 'POST',
+  headers: { 'Authorization': 'Bearer YOUR_API_KEY', 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    url: 'https://competitor.com/features',
+    fullPage: true,
+    blockAds: true,
+    removePopups: true,
+  }),
+});
+```
 
 ### 16. Portfolio Showcases
 
@@ -133,17 +170,66 @@ const mobile = await capture(clientUrl, {
 
 Create PDF invoices from HTML templates. Build your invoice as an HTML page with dynamic data, then capture it as a PDF. This gives you complete control over layout and styling, and the result is a professional document ready for download or email.
 
+```javascript
+const response = await fetch('https://api.screenshotly.app/screenshot', {
+  method: 'POST',
+  headers: { 'Authorization': 'Bearer YOUR_API_KEY', 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    url: 'https://app.yoursite.com/invoices/INV-2026-001',
+    format: 'pdf',
+    printBackground: true,
+  }),
+});
+```
+
 ### 18. Report Generation
 
 Convert dashboards to PDF reports for stakeholders who prefer static documents. Schedule monthly captures of your analytics dashboard, combine multiple screenshots into a single PDF, and distribute via email.
+
+```javascript
+const response = await fetch('https://api.screenshotly.app/screenshot', {
+  method: 'POST',
+  headers: { 'Authorization': 'Bearer YOUR_API_KEY', 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    url: 'https://app.yoursite.com/dashboard/monthly',
+    format: 'pdf',
+    delay: 3000,
+    fullPage: true,
+  }),
+});
+```
 
 ### 19. Certificate Creation
 
 Generate certificates and awards from HTML templates. Design your certificate as a web page, populate it with recipient data, and capture it as a high-resolution PNG or PDF.
 
+```javascript
+const response = await fetch('https://api.screenshotly.app/screenshot', {
+  method: 'POST',
+  headers: { 'Authorization': 'Bearer YOUR_API_KEY', 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    html: '<div style="...">Certificate of Completion<br>Awarded to: Jane Doe</div>',
+    viewport: { width: 1200, height: 800 },
+    deviceScaleFactor: 2,
+  }),
+});
+```
+
 ### 20. Contract Snapshots
 
 Capture terms at the exact time of agreement. When a user accepts your terms of service or signs a contract, capture the page as it appeared at that moment. This creates a tamper-proof record for legal purposes.
+
+```javascript
+const response = await fetch('https://api.screenshotly.app/screenshot', {
+  method: 'POST',
+  headers: { 'Authorization': 'Bearer YOUR_API_KEY', 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    url: 'https://app.yoursite.com/contracts/CTR-8842',
+    fullPage: true,
+    format: 'pdf',
+  }),
+});
+```
 
 ## Compliance & Legal
 
@@ -164,13 +250,49 @@ await archiveWithTimestamp(screenshot);
 
 Capture advertisements for regulatory compliance. Advertising regulations require evidence of what was displayed to users. Screenshot APIs create timestamped records of ad placements, landing pages, and promotional content.
 
+```javascript
+const response = await fetch('https://api.screenshotly.app/screenshot', {
+  method: 'POST',
+  headers: { 'Authorization': 'Bearer YOUR_API_KEY', 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    url: 'https://partner-site.com/promo-page',
+    fullPage: true,
+    geolocation: { latitude: 40.7128, longitude: -74.006 },
+  }),
+});
+```
+
 ### 23. GDPR Documentation
 
 Screenshot consent flows for compliance proof. Document the exact consent flow users experience—cookie banners, privacy notices, opt-in dialogs—to demonstrate GDPR compliance during audits.
 
+```javascript
+const response = await fetch('https://api.screenshotly.app/screenshot', {
+  method: 'POST',
+  headers: { 'Authorization': 'Bearer YOUR_API_KEY', 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    url: 'https://yoursite.com',
+    fullPage: true,
+    delay: 2000,
+  }),
+});
+```
+
 ### 24. Brand Monitoring
 
 Detect unauthorized brand usage online. Monitor websites that mention your brand, capture evidence of trademark violations, and maintain records for cease-and-desist or legal proceedings.
+
+```javascript
+const response = await fetch('https://api.screenshotly.app/screenshot', {
+  method: 'POST',
+  headers: { 'Authorization': 'Bearer YOUR_API_KEY', 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    url: 'https://flagged-site.com/page-using-our-brand',
+    fullPage: true,
+    blockAds: true,
+  }),
+});
+```
 
 ## Analytics & Monitoring
 

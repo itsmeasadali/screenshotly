@@ -1,49 +1,17 @@
 ---
-title: "Viewport Sizes for Screenshots: Complete Reference Guide"
-description: "The definitive guide to viewport dimensions for website screenshots. Covers desktop, tablet, mobile, and custom sizes for every use case."
-excerpt: "Choose the right viewport size for your screenshots. Covers standard devices, responsive breakpoints, and when to use each."
+title: "How to Choose the Right Screenshot Viewport: A Decision Guide"
+description: "Stop guessing viewport sizes. This decision guide explains which viewport to use for documentation, marketing, social media, and responsive testing — with aspect ratio and DPR recommendations."
+excerpt: "Not sure which viewport to use? This guide helps you pick the right size based on your screenshot's purpose — documentation, marketing, social media, or testing."
 author: "asad-ali"
 publishedAt: "2025-12-05"
 category: "reference"
 tags: ["viewport", "responsive", "devices", "technical"]
-keywords: ["screenshot viewport size", "responsive screenshot", "device viewport", "screen resolution", "screenshot dimensions"]
+keywords: ["which viewport for screenshots", "screenshot size guide", "best viewport documentation", "screenshot aspect ratio", "DPR screenshot quality"]
 featured: false
 readingTime: 5
 ---
 
-Choosing the right viewport size determines how your screenshot looks and whether it captures the content correctly. This guide covers standard dimensions and when to use each.
-
-## Quick Reference
-
-### Desktop Viewports
-
-| Name | Width × Height | Use Case |
-|------|----------------|----------|
-| HD (720p) | 1280 × 720 | Compact displays |
-| Standard | 1366 × 768 | Most common laptop |
-| Full HD | 1920 × 1080 | Standard desktop |
-| QHD | 2560 × 1440 | High-res displays |
-| 4K | 3840 × 2160 | Maximum detail |
-
-### Tablet Viewports
-
-| Device | Width × Height | Orientation |
-|--------|----------------|-------------|
-| iPad Mini | 768 × 1024 | Portrait |
-| iPad Mini | 1024 × 768 | Landscape |
-| iPad Air/Pro 11" | 820 × 1180 | Portrait |
-| iPad Pro 12.9" | 1024 × 1366 | Portrait |
-| Android Tablet | 800 × 1280 | Portrait |
-
-### Mobile Viewports
-
-| Device | Width × Height | Notes |
-|--------|----------------|-------|
-| iPhone SE | 375 × 667 | Smaller iOS |
-| iPhone 12/13/14 | 390 × 844 | Standard iOS |
-| iPhone 14/15 Pro Max | 430 × 932 | Large iOS |
-| Pixel 7 | 412 × 915 | Standard Android |
-| Samsung Galaxy S23 | 360 × 780 | Popular Android |
+Every screenshot starts with a viewport choice. Pick the wrong size and your capture looks stretched, cropped, or blurry on the target device. This guide doesn't list every device dimension — for that, see our [2026 Device Viewport Reference](/blog/mobile-responsive-screenshot-testing). Instead, it helps you **decide which viewport to use** based on your screenshot's purpose.
 
 ## Choosing the Right Size
 
@@ -205,30 +173,18 @@ Some pages are very long. Set a cap:
 }
 ```
 
-## Responsive Testing
+## When to Capture Multiple Viewports
 
-Capture at multiple viewports:
+If your goal is responsive testing or cross-device QA, you need more than one viewport. The minimum set for most projects:
 
-```javascript
-const viewports = [
-  { name: 'mobile', width: 375, height: 667 },
-  { name: 'tablet', width: 768, height: 1024 },
-  { name: 'desktop', width: 1280, height: 800 },
-  { name: 'large', width: 1920, height: 1080 },
-];
+| Band | Recommended Width | Why |
+|------|-------------------|-----|
+| Small phone | 375px | iPhone SE baseline |
+| Standard phone | 390–412px | Covers 80%+ of mobile traffic |
+| Tablet | 768px | iPad portrait breakpoint |
+| Desktop | 1920px | Full HD standard |
 
-async function captureResponsive(url) {
-  const results = {};
-  
-  for (const vp of viewports) {
-    results[vp.name] = await captureScreenshot(url, {
-      viewport: { width: vp.width, height: vp.height },
-    });
-  }
-  
-  return results;
-}
-```
+For a complete list of 50+ device dimensions with copy-paste code, see the [2026 Device Viewport Reference](/blog/mobile-responsive-screenshot-testing). For CI/CD integration and visual regression workflows, see [Mobile Screenshot Optimization](/blog/mobile-responsive-screenshots).
 
 ## Common Mistakes
 
@@ -299,14 +255,15 @@ export const viewportStandards = {
 
 New viewports may reveal unexpected layouts. Always review screenshots before publishing.
 
-## Conclusion
+## Decision Cheat Sheet
 
-Viewport selection directly impacts screenshot quality and usefulness:
-
-- **Desktop**: 1280×800 for docs, 1920×1080 for marketing
-- **Mobile**: 375×667 to 430×932 range
-- **Tablet**: 768×1024 portrait standard
-- **Full page**: Width matters, height auto-calculated
+| Your goal | Viewport | DPR | Format |
+|-----------|----------|-----|--------|
+| Docs / help center | 1280 × 800 | 1 | PNG |
+| Marketing hero | 1920 × 1080 | 2 | PNG |
+| Social / OG image | 1200 × 630 | 1 | JPEG 85% |
+| Mobile app store | 430 × 932 | 3 | PNG |
+| Full-page export | Width only + `fullPage: true` | 1 | PDF/PNG |
 
 Use device presets for convenience, custom viewports for precision.
 
@@ -316,4 +273,6 @@ Use device presets for convenience, custom viewports for precision.
 
 [Get your free API key →](/sign-up) - 100 free screenshots to get started.
 
-Try different viewports in our [API Playground →](/playground)
+- [2026 Device Viewport Reference →](/blog/mobile-responsive-screenshot-testing) — 50+ device dimensions
+- [Mobile Screenshot Optimization →](/blog/mobile-responsive-screenshots) — CI/CD, visual regression, device emulation
+- Try configurations in our [API Playground →](/playground)

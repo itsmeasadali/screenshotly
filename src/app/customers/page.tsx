@@ -10,16 +10,20 @@ import { getBreadcrumbSchema } from "@/lib/seo/structured-data";
 const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://screenshotly.app';
 
 export const metadata: Metadata = {
-    title: "Customer Testimonials & Success Stories | Screenshotly",
+    title: "Customer Testimonials & Success Stories",
     description: "See how developers and companies use Screenshotly to automate screenshot capture. Read real testimonials and success stories from our customers.",
-    keywords: [
-        "Screenshotly reviews",
-        "screenshot API testimonials",
-        "Screenshotly customers",
-        "screenshot API success stories"
-    ],
     alternates: {
         canonical: "/customers",
+    },
+    openGraph: {
+        title: "Customer Testimonials & Success Stories",
+        description: "See how developers and companies use Screenshotly to automate screenshot capture. Read real testimonials and success stories from our customers.",
+        type: "website",
+    },
+    twitter: {
+        card: "summary_large_image",
+        title: "Customer Testimonials & Success Stories",
+        description: "See how developers and companies use Screenshotly to automate screenshot capture. Read real testimonials and success stories from our customers.",
     },
 };
 
@@ -29,6 +33,7 @@ const stats = [
     { value: "10M+", label: "Screenshots captured" },
     { value: "99.9%", label: "Uptime SLA" },
     { value: "1,000+", label: "Active developers" },
+    { value: "<3s", label: "Avg response time" },
 ];
 
 export default function CustomersPage() {
@@ -48,7 +53,7 @@ export default function CustomersPage() {
                     <div className="text-center mb-16">
                         <Badge className="mb-4">Customer Stories</Badge>
                         <h1 className="text-4xl md:text-5xl font-bold mb-6">
-                            Trusted by Developers Worldwide
+                            Customer Testimonials &amp; Success Stories
                         </h1>
                         <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
                             See how teams use Screenshotly to automate screenshot workflows,
@@ -124,6 +129,60 @@ export default function CustomersPage() {
                                 </div>
                             </div>
                         ))}
+                    </div>
+
+                    {/* Case Studies */}
+                    <div className="mb-20">
+                        <h2 className="text-2xl md:text-3xl font-bold mb-8 text-center">
+                            In-Depth Case Studies
+                        </h2>
+                        <div className="grid md:grid-cols-3 gap-6">
+                            <Link
+                                href="/blog/customer-story-cloudmetrics-dashboard-reports"
+                                className="group block border rounded-xl p-6 hover:border-primary hover:shadow-lg transition-all"
+                            >
+                                <Badge variant="outline" className="mb-3">Dashboard Reporting</Badge>
+                                <h3 className="font-semibold mb-2 group-hover:text-primary transition-colors">
+                                    CloudMetrics: Automated Dashboard Reports
+                                </h3>
+                                <p className="text-sm text-muted-foreground mb-4">
+                                    How CloudMetrics automated daily dashboard screenshots for 500+ enterprise clients, reducing manual report generation by 95%.
+                                </p>
+                                <span className="text-sm text-primary font-medium flex items-center gap-1">
+                                    Read case study <ArrowRight className="w-3 h-3" />
+                                </span>
+                            </Link>
+                            <Link
+                                href="/blog/customer-story-techflow-documentation"
+                                className="group block border rounded-xl p-6 hover:border-primary hover:shadow-lg transition-all"
+                            >
+                                <Badge variant="outline" className="mb-3">Documentation</Badge>
+                                <h3 className="font-semibold mb-2 group-hover:text-primary transition-colors">
+                                    TechFlow: Automated Documentation Screenshots
+                                </h3>
+                                <p className="text-sm text-muted-foreground mb-4">
+                                    How TechFlow keeps 200+ documentation pages visually up-to-date with automated screenshot capture on every deploy.
+                                </p>
+                                <span className="text-sm text-primary font-medium flex items-center gap-1">
+                                    Read case study <ArrowRight className="w-3 h-3" />
+                                </span>
+                            </Link>
+                            <Link
+                                href="/blog/customer-story-designstudio-social-media"
+                                className="group block border rounded-xl p-6 hover:border-primary hover:shadow-lg transition-all"
+                            >
+                                <Badge variant="outline" className="mb-3">Social Media</Badge>
+                                <h3 className="font-semibold mb-2 group-hover:text-primary transition-colors">
+                                    DesignStudio: Social Media Asset Generation
+                                </h3>
+                                <p className="text-sm text-muted-foreground mb-4">
+                                    How a design agency generates hundreds of social media preview images weekly using Screenshotly&apos;s device mockup API.
+                                </p>
+                                <span className="text-sm text-primary font-medium flex items-center gap-1">
+                                    Read case study <ArrowRight className="w-3 h-3" />
+                                </span>
+                            </Link>
+                        </div>
                     </div>
 
                     {/* Use Cases Summary */}

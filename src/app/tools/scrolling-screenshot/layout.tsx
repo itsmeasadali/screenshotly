@@ -1,16 +1,9 @@
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-    title: 'Scrolling Screenshot Tool - Capture Full Page Animations | Screenshotly',
-    description: 'Create scrolling screenshots and animated GIFs of full web pages. Capture smooth scroll animations for demos, documentation, and presentations.',
+    title: 'Free Scrolling Screenshot Tool - Capture Below-Fold Content',
+    description: 'Take a scrolling screenshot of any website for free. Choose PNG, JPEG, or WebP output and set a custom viewport. No signup required.',
     alternates: { canonical: '/tools/scrolling-screenshot' },
-    keywords: [
-        'scrolling screenshot',
-        'animated screenshot',
-        'full page gif',
-        'website scroll capture',
-        'scroll animation tool',
-    ],
 };
 
 export default function ScrollingScreenshotLayout({

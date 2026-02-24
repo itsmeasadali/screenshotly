@@ -2,44 +2,52 @@ import { MetadataRoute } from 'next';
 
 const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://screenshotly.app';
 
+const PRIVATE_PATHS = [
+    '/api/',
+    '/dashboard/',
+    '/sign-in/',
+    '/sign-up/',
+    '/_next/',
+    '/private/',
+];
+
 export default function robots(): MetadataRoute.Robots {
     return {
         rules: [
             {
                 userAgent: '*',
                 allow: '/',
-                disallow: [
-                    '/api/',
-                    '/dashboard/',
-                    '/sign-in/',
-                    '/sign-up/',
-                    '/_next/',
-                    '/private/',
-                ],
+                disallow: PRIVATE_PATHS,
             },
             {
                 userAgent: 'GPTBot',
-                disallow: ['/'],
+                allow: '/',
+                disallow: PRIVATE_PATHS,
             },
             {
                 userAgent: 'ChatGPT-User',
-                disallow: ['/'],
-            },
-            {
-                userAgent: 'CCBot',
-                disallow: ['/'],
-            },
-            {
-                userAgent: 'anthropic-ai',
-                disallow: ['/'],
-            },
-            {
-                userAgent: 'Claude-Web',
-                disallow: ['/'],
+                allow: '/',
+                disallow: PRIVATE_PATHS,
             },
             {
                 userAgent: 'Google-Extended',
-                disallow: ['/'],
+                allow: '/',
+                disallow: PRIVATE_PATHS,
+            },
+            {
+                userAgent: 'anthropic-ai',
+                allow: '/',
+                disallow: PRIVATE_PATHS,
+            },
+            {
+                userAgent: 'Claude-Web',
+                allow: '/',
+                disallow: PRIVATE_PATHS,
+            },
+            {
+                userAgent: 'CCBot',
+                allow: '/',
+                disallow: PRIVATE_PATHS,
             },
         ],
         sitemap: `${BASE_URL}/sitemap.xml`,
