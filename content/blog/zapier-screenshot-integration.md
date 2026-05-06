@@ -1,5 +1,5 @@
 ---
-title: "Zapier Screenshot Integration: Build Automated Capture Workflows"
+title: "Zapier Screenshot Integration: No-Code Workflows"
 description: "Connect website screenshots to 5000+ apps with Zapier. Automate social media previews, monitoring, documentation, and more without coding."
 excerpt: "Step-by-step guide to integrating Screenshotly with Zapier. Build powerful no-code automation for screenshot capture and processing."
 author: "asad-ali"
@@ -9,6 +9,13 @@ tags: ["zapier", "no-code", "automation", "integrations"]
 keywords: ["zapier screenshot", "zapier automation", "no-code screenshot", "screenshot integration", "automate screenshots"]
 featured: false
 readingTime: 6
+faqs:
+  - question: "When is Zapier the right automation layer?"
+    answer: "When the trigger and destination are both Zapier-native apps (Typeform, Airtable, Slack, Google Sheets) and volume is low — under ~1,000 captures/month. Above that threshold, Make.com or n8n become meaningfully cheaper per operation."
+  - question: "How do I handle image responses in a Zapier Webhook action?"
+    answer: "Enable 'Pass binary file' in the action settings. Zapier then routes the raw bytes correctly into downstream modules like Google Drive, Dropbox, or Airtable attachments. Without this setting, Zapier will try to interpret the response as text and corrupt the file."
+  - question: "What happens if Screenshotly returns a 429 in the middle of a Zap?"
+    answer: "Zapier does not automatically retry 429 responses. Add a Paths branch that checks the response status: success routes to the save action, 429 routes to a Delay + retry path, other failures route to a Slack notification. Without this handling, rate-limited calls silently fail."
 ---
 
 Zapier connects 5000+ applications, making it the go-to platform for business automation. By integrating screenshot capabilities, you can automatically capture websites and connect the output to virtually any app—from Google Sheets to Slack to your CRM.

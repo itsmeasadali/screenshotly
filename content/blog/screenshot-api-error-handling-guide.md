@@ -1,5 +1,5 @@
 ---
-title: "Screenshot API Error Handling: Retries, Timeouts, and Recovery"
+title: "Screenshot API Error Handling: Retries & Recovery"
 description: "Build robust screenshot automation with proper error handling. Covers common errors, retry strategies, and graceful failure recovery."
 excerpt: "Master error handling for screenshot APIs. Retry logic, timeout configuration, and graceful degradation for production systems."
 author: "asad-ali"
@@ -9,6 +9,13 @@ tags: ["error handling", "reliability", "api", "production"]
 keywords: ["screenshot api error", "api retry logic", "screenshot timeout", "error handling", "api reliability"]
 featured: false
 readingTime: 7
+faqs:
+  - question: "Which errors should I retry and which should I surface immediately?"
+    answer: "Retry 429 (respect Retry-After), 502, 503, 504, and transient network errors — these are recoverable. Surface 400 (bad parameters), 401 (invalid key), 403 (forbidden), and 404 (target URL dead) immediately. Retrying 4xx wastes capture budget and delays the real fix."
+  - question: "What's the right retry backoff strategy?"
+    answer: "Exponential with jitter: 1s ± 250ms, 2s ± 500ms, 4s ± 1s. Max 3 attempts. Jitter prevents thundering-herd behavior where 100 simultaneous failures all retry at the exact same moment. After 3 failures, route to dead-letter queue for manual review."
+  - question: "How do I know if my retry logic is healthy?"
+    answer: "Track retry-attempt distribution in your observability layer. Healthy: 95%+ succeed on first attempt, <1% hit attempt 3. Unhealthy patterns: a spike in attempt-2 success (usually a downstream timeout too tight) or attempt-3 failures clustering (usually a real upstream outage, not a transient blip)."
 ---
 
 Production screenshot systems need robust error handling. Pages time out, networks fail, and edge cases emerge. This guide covers strategies for building reliable screenshot automation that handles failures gracefully.

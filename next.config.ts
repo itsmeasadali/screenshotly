@@ -30,6 +30,38 @@ const nextConfig: NextConfig = {
   // Optimize production builds
   productionBrowserSourceMaps: false,
 
+  async redirects() {
+    // Permanent slug renames. Each 301 maps a legacy URL to its current
+    // replacement after content was renamed to better match search intent.
+    return [
+      {
+        source: '/blog/mobile-responsive-screenshot-testing',
+        destination: '/blog/device-viewport-sizes-reference-2026',
+        permanent: true,
+      },
+      {
+        source: '/blog/viewport-sizes-reference-guide',
+        destination: '/blog/choose-screenshot-viewport',
+        permanent: true,
+      },
+      {
+        source: '/blog/screenshot-api-performance-optimization',
+        destination: '/blog/reduce-screenshot-api-costs',
+        permanent: true,
+      },
+      {
+        source: '/blog/pdf-generation-complete-guide',
+        destination: '/blog/invoice-pdf-generation-guide',
+        permanent: true,
+      },
+      {
+        source: '/blog/screenshot-api-pricing-guide',
+        destination: '/blog/screenshot-api-roi-guide',
+        permanent: true,
+      },
+    ];
+  },
+
   async headers() {
     const isDev = process.env.NODE_ENV === 'development';
 

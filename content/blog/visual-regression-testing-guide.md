@@ -9,6 +9,13 @@ tags: ["testing", "visual regression", "automation", "ci/cd", "quality assurance
 keywords: ["visual regression testing", "screenshot testing", "ui testing automation", "visual testing"]
 featured: false
 readingTime: 9
+faqs:
+  - question: "What diff threshold should I use to avoid false positives?"
+    answer: "Start at 2–3% pHash or SSIM. Tighter (0.5%) produces noise from anti-aliasing and subpixel rendering differences; looser (5%+) misses real regressions. Tune per page: hero sections can tolerate 2%, pixel-perfect marketing elements need 0.5%, long-scroll pages benefit from 3–5%."
+  - question: "How do I handle flaky tests that pass locally and fail in CI?"
+    answer: "Timing. Most flakes are lazy-loaded images that hadn't rendered when the capture fired. Set waitUntil: 'networkidle' and add a specific waitForSelector on a known post-load element. If still flaky after that, the underlying page has non-deterministic content — zone-split or disable that region."
+  - question: "Should I run VRT on every PR or only on main?"
+    answer: "Every PR. Running only on main catches regressions after they've merged — which is too late. PR-level VRT costs 30–60 seconds of CI and blocks bad merges. For expensive suites (>50 pages), run a fast smoke-test subset on PRs and the full matrix on main."
 ---
 
 Visual regression testing catches UI bugs that traditional unit and integration tests miss. A button that moved 5 pixels, a font that changed weight, a card that lost its shadow—these issues slip through code-level tests but are immediately obvious in screenshots.

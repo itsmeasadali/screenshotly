@@ -1,3 +1,4 @@
+import { Metadata } from 'next';
 import Link from 'next/link';
 import { Camera } from 'lucide-react';
 import GuestLayout from '@/components/layouts/GuestLayout';
@@ -6,6 +7,20 @@ import { getBreadcrumbSchema, getHowToSchema, getFAQSchema } from '@/lib/seo/str
 import ScrollingScreenshotClient from './ScrollingScreenshotClient';
 
 const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://screenshotly.app';
+
+export const metadata: Metadata = {
+    title: 'Free Scrolling Screenshot Tool – Capture Full Pages',
+    description: 'Capture a scrolling screenshot of any webpage as one long image. Custom viewport width and height. Download PNG, JPEG, or WebP. No signup required.',
+    alternates: {
+        canonical: '/tools/scrolling-screenshot',
+    },
+    openGraph: {
+        title: 'Free Scrolling Screenshot Tool',
+        description: 'Capture full scrollable webpages in one image. Custom viewport + PNG/JPEG/WebP output.',
+        url: `${BASE_URL}/tools/scrolling-screenshot`,
+        type: 'website',
+    },
+};
 
 const faqs = [
     {

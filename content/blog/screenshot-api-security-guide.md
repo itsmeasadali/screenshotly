@@ -1,5 +1,5 @@
 ---
-title: "Screenshot API Security Best Practices: Authentication, Rate Limiting, and Data Protection"
+title: "Screenshot API Security: Auth, Rate Limiting & Data"
 description: "Comprehensive security guide for screenshot API integration. Covers API key management, rate limiting, input validation, and data protection."
 excerpt: "Secure your screenshot automation with proper API key handling, rate limiting, and data protection strategies."
 author: "asad-ali"
@@ -9,6 +9,13 @@ tags: ["security", "api", "best practices", "authentication"]
 keywords: ["screenshot api security", "api key management", "api security best practices", "screenshot data protection", "api rate limiting"]
 featured: false
 readingTime: 8
+faqs:
+  - question: "Where should the API key live in production?"
+    answer: "Server-side environment variables, loaded from a secrets manager (AWS Secrets Manager, Vault, Doppler, GCP Secret Manager). Never in client-side JavaScript, never in frontend env vars (NEXT_PUBLIC_*, VITE_*), never committed to git. Rotate quarterly and on any suspected exposure."
+  - question: "How do I rate-limit captures per end-user without exposing my API key?"
+    answer: "Proxy through a backend endpoint. The client calls your /api/screenshot, your server validates the caller (auth, per-user rate limit via Redis sliding window), then forwards the request with the API key injected server-side. This isolates quota consumption per user and keeps the key out of browser DevTools."
+  - question: "What are the common SSRF risks when accepting user-submitted URLs?"
+    answer: "User-submitted URLs pointing at internal IPs (169.254.169.254 for AWS metadata, 10.x.x.x internal services) can exfiltrate data via the screenshot render. Validate URLs: reject private IP ranges, localhost, and cloud metadata endpoints before forwarding to capture. A managed API with isolated render workers is the safer architecture."
 ---
 
 Screenshot APIs can access any public URL and potentially capture sensitive information. Proper security practices protect your API keys, prevent abuse, and ensure data privacy.

@@ -1,6 +1,6 @@
 ---
-title: "Migrating from Puppeteer to a Screenshot API: Step-by-Step Guide"
-description: "Switch from Puppeteer or Playwright to a screenshot API without rewriting everything. Code conversion examples, gradual migration strategy, and common gotchas."
+title: "Migrating from Puppeteer to a Screenshot API"
+description: "Switch from Puppeteer or Playwright to a screenshot API. Code conversion, gradual migration, and the gotchas that trip up teams mid-transition."
 excerpt: "A practical guide for developers migrating from Puppeteer or Playwright to a screenshot API. Includes side-by-side code conversion, parallel deployment strategy, and edge case handling."
 author: "asad-ali"
 publishedAt: "2025-10-15"
@@ -10,6 +10,13 @@ tags: ["puppeteer", "playwright", "migration", "api", "screenshots"]
 keywords: ["migrate from puppeteer", "puppeteer to API migration", "replace puppeteer with API", "puppeteer migration guide", "switch from playwright to API"]
 featured: false
 readingTime: 12
+faqs:
+  - question: "Can I run Puppeteer and a managed API side-by-side during migration?"
+    answer: "Yes, and you should. Route pure-capture jobs (thumbnails, OG images, docs) to the managed API first. Keep Puppeteer in place for browser-automation workflows (form filling, OAuth, CAPTCHA flows). The two can coexist indefinitely — split by workload, not by timeline."
+  - question: "What's the most common migration gotcha?"
+    answer: "Wait conditions. Puppeteer's page.waitForSelector and page.waitForFunction have rich semantics that don't always map 1:1 to API wait parameters. Test the 10–20 highest-traffic captures specifically for rendering correctness before switching the whole pipeline."
+  - question: "How long does a typical Puppeteer-to-API migration take?"
+    answer: "Two to four hours for the capture refactor itself, plus one to two days decommissioning the Chrome container infrastructure (Dockerfile, ECS service, queue layer, monitoring, retry logic). The decommission is usually the bigger win — each of those components was engineering debt you no longer maintain."
 ---
 
 You've been capturing screenshots with Puppeteer or Playwright for months or years. It works—but you're tired of managing Chrome instances, debugging memory leaks, and scaling infrastructure. A screenshot API promises to offload that burden, but how do you actually switch? Rewriting everything from scratch isn't appealing.

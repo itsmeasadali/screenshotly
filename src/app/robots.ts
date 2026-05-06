@@ -8,7 +8,6 @@ const PRIVATE_PATHS = [
     '/sign-in/',
     '/sign-up/',
     '/_next/',
-    '/private/',
 ];
 
 export default function robots(): MetadataRoute.Robots {

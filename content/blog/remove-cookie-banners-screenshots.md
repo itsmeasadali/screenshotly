@@ -9,6 +9,13 @@ tags: ["ai removal", "cookie banners", "gdpr", "screenshots", "automation"]
 keywords: ["remove cookie banner screenshot", "hide GDPR consent banner", "clean screenshot without popups", "cookie popup removal API"]
 featured: false
 readingTime: 6
+faqs:
+  - question: "Why not just maintain a CSS selector list per site?"
+    answer: "Cookie banners change selectors weekly as sites roll out A/B tests and new consent vendors. A selector list that works today breaks next sprint. AI-based detection recognizes the pattern regardless of specific DOM structure, so captures stay clean across third-party sites you don't control."
+  - question: "Does AI removal strip content I actually want to keep?"
+    answer: "Rarely, and only when the UI is structurally ambiguous. The detection targets common cookie-consent, chat-widget, and promotional-popup shapes. Content panels, product cards, and primary CTAs are not removed. For edge cases, you can disable AI removal for a specific capture and fall back to no modification."
+  - question: "What's the latency overhead of AI element removal?"
+    answer: "Roughly 400–800 ms per capture — the AI pass runs after page render but before PNG output. On a 3-second capture, AI cleanup pushes you to about 3.5–4 seconds total. Well worth it for external-URL captures where selector maintenance would otherwise consume hours per week."
 ---
 
 Modern websites are cluttered with consent banners, chat widgets, and promotional popups. When capturing screenshots for documentation, marketing, or testing, these elements distract from the actual content you want to show.

@@ -9,6 +9,13 @@ tags: ["thumbnails", "optimization", "caching", "directories"]
 keywords: ["website thumbnail", "thumbnail generation", "link preview", "website preview image", "url thumbnail"]
 featured: false
 readingTime: 6
+faqs:
+  - question: "What's the right thumbnail size?"
+    answer: "1280×720 as the default. It's the same aspect ratio as YouTube thumbnails (16:9), renders cleanly as a link-preview card, and downsizes gracefully for smaller contexts. WebP output gives ~75% smaller file size than PNG at equivalent perceived quality."
+  - question: "How do I handle pages that block headless browsers?"
+    answer: "Two-stage fallback. Try live capture first; on failure (anti-bot blocks, paywalls), fall back to the page's og:image meta tag; final fallback to a branded placeholder. This pattern catches ~99% of the long tail without trying to defeat anti-bot protection (which is a losing arms race)."
+  - question: "What cache TTL should I use for thumbnails?"
+    answer: "7 days keyed on URL + Last-Modified of the target page. Pages don't change in ways that affect thumbnails that often. Check Last-Modified via HEAD request before serving — if newer than cached version, re-capture; otherwise serve cached. Compresses a 10k-request month to ~500 real captures."
 ---
 
 Website thumbnails are small preview images that represent a webpage. They're used in link previews, web directories, bookmarking apps, and portfolio displays. This guide covers how to generate them efficiently at scale.

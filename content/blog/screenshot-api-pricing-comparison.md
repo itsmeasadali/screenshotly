@@ -1,5 +1,5 @@
 ---
-title: "Screenshot API Pricing Comparison: Find the Best Value for Your Needs"
+title: "Screenshot API Pricing Compared: Find the Best Value"
 slug: "screenshot-api-pricing-comparison"
 excerpt: "Compare screenshot API pricing across major providers. Understand cost structures, hidden fees, and find the best value for your screenshot automation needs."
 publishedAt: "2025-01-10T10:00:00Z"

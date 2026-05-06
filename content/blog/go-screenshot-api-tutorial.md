@@ -9,6 +9,13 @@ tags: ["go", "golang", "tutorial", "api", "integration"]
 keywords: ["go screenshot api", "golang screenshot", "go website screenshot", "golang capture url", "go http screenshot"]
 featured: false
 readingTime: 8
+faqs:
+  - question: "Should I reuse http.Client across Go capture calls?"
+    answer: "Yes — always. Each new http.Client creates its own connection pool; creating one per request defeats keep-alive and triggers unnecessary TLS handshakes. Instantiate once at package or service level and share. Tune Transport.MaxIdleConnsPerHost to 10–20 for capture workloads."
+  - question: "How do I bound concurrency in goroutines without overwhelming the API?"
+    answer: "Use a buffered channel as a semaphore: `sem := make(chan struct{}, 10)` — then each goroutine sends to sem before the capture and receives after. Goroutines are cheap but rate limits are not; 5–10 concurrent captures is the right default."
+  - question: "Why use io.Copy instead of io.ReadAll on the response body?"
+    answer: "ReadAll buffers the entire image in memory. At 8 MB per capture × 50 concurrent = 400 MB of avoidable RAM. io.Copy streams the body directly to disk, S3, or any io.Writer — same one-line API, dramatically lower memory footprint."
 ---
 
 Go's simplicity and excellent concurrency support make it ideal for screenshot automation tasks. Whether you're building a CLI tool or a high-throughput service, Go handles screenshot API integration efficiently.

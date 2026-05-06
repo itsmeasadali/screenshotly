@@ -2,257 +2,115 @@
 
 ![Screenshotly](public/demo-screenshot.png)
 
-Screenshotly is an AI-powered screenshot API that automatically removes unwanted elements like cookie banners, ads, and popups to create clean, professional screenshots.
+**Screenshot API for developers.** Capture any URL as a PNG, JPEG, WebP, or PDF
+with a single HTTP call. AI-assisted element removal strips cookie banners
+and chat widgets; device-mockup frames wrap captures in browser / phone /
+laptop chrome server-side; a hosted Chromium pipeline keeps latency
+predictable.
 
-## Features
+Built on **Next.js 15**, **Puppeteer**, **Prisma / Postgres**, **Clerk**,
+and **Redis**.
 
-### 🤖 AI-Powered Cleaning
-- Automatic detection and removal of:
-  - Cookie consent banners
-  - Advertisement elements
-  - Chat widgets
-  - Newsletter popups
-  - Social media overlays
-- Adjustable confidence thresholds for precise control
-- Smart element detection using GPT-4 Vision
+© Screenshotly. All rights reserved.
 
-### 📱 Device Support
-- Multiple device viewports:
-  - Desktop (1920×1080)
-  - Laptop (1366×768)
-  - Tablet (768×1024)
-  - Mobile (375×812)
-- Custom viewport sizes supported
+---
 
-### 🖼️ Device Mockups
-- Professional device frames:
-  - Browser window (Light/Dark)
-  - iPhone 14 Pro
-  - MacBook Pro
-- High-quality mockup templates
+## Local development
 
-### 💪 Powerful Features
-- Full-page screenshots
-- Custom element capture
-- Multiple output formats:
-  - PNG (Best for transparency)
-  - JPEG (Adjustable quality)
-  - PDF (Document format)
-- Configurable capture delay
-- Intuitive UI with tooltips and feedback
-- Real-time format preview
-
-## Tech Stack
-
-- **Frontend**: Next.js 15, React, TypeScript, Tailwind CSS
-- **Backend**: Next.js API Routes
-- **AI**: OpenAI GPT-4 Vision API
-- **Authentication**: Clerk
-- **Database**: PostgreSQL with Prisma
-- **Rate Limiting**: Upstash Redis
-- **Screenshot Engine**: Puppeteer (Serverless-compatible)
-- **Image Processing**: Sharp
-- **Deployment**: Vercel-optimized
-
-## Getting Started
-
-### Prerequisites
-
-- Node.js 18+ and npm
-- PostgreSQL database
-- OpenAI API key
-- Upstash Redis account
-- Clerk account
-
-### Environment Setup
-
-Create a `.env` file in the root directory:
-
-```env
-# Database
-DATABASE_URL="your_postgresql_url"
-DIRECT_URL="your_direct_postgresql_url"
-
-# OpenAI
-OPENAI_API_KEY="your_openai_api_key"
-
-# Redis Configuration (Upstash)
-UPSTASH_REDIS_REST_URL="your_upstash_url"
-UPSTASH_REDIS_REST_TOKEN="your_upstash_token"
-
-# Clerk Authentication
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY="your_clerk_publishable_key"
-CLERK_SECRET_KEY="your_clerk_secret_key"
-
-# API Configuration
-NEXT_PUBLIC_PLAYGROUND_API_KEY="your_playground_api_key"
-```
-
-### Installation
-
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/yourusername/screenshotly.git
-   cd screenshotly
-   ```
-
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-
-3. Set up the database:
-   ```bash
-   npx prisma generate
-   npx prisma db push
-   ```
-
-4. Run the development server:
-   ```bash
-   npm run dev
-   ```
-
-The application will be available at `http://localhost:3000`.
-
-## API Usage
-
-### Basic Screenshot
-
-```typescript
-const response = await fetch('https://api.screenshotly.app/screenshot', {
-  method: 'POST',
-  headers: {
-    'Authorization': 'Bearer YOUR_API_TOKEN',
-    'Content-Type': 'application/json',
-  },
-  body: JSON.stringify({
-    url: 'https://example.com',
-    device: 'desktop',
-    format: 'png'
-  }),
-});
-
-const screenshot = await response.blob();
-```
-
-### With AI Element Removal
-
-```typescript
-const response = await fetch('https://api.screenshotly.app/screenshot', {
-  method: 'POST',
-  headers: {
-    'Authorization': 'Bearer YOUR_API_TOKEN',
-    'Content-Type': 'application/json',
-  },
-  body: JSON.stringify({
-    url: 'https://example.com',
-    aiRemoval: {
-      enabled: true,
-      types: ['cookie-banner', 'ad', 'chat-widget'],
-      confidence: 0.8
-    }
-  }),
-});
-```
-
-### With Device Mockup
-
-```typescript
-const response = await fetch('https://api.screenshotly.app/screenshot', {
-  method: 'POST',
-  headers: {
-    'Authorization': 'Bearer YOUR_API_TOKEN',
-    'Content-Type': 'application/json',
-  },
-  body: JSON.stringify({
-    url: 'https://example.com',
-    device: 'mobile',
-    mockup: 'iphone-14'
-  }),
-});
-```
-
-## Rate Limits
-
-- **Free Plan**: 500 requests/day
-- **Pro Plan**: 5000 requests/day
-
-Rate limit information is included in response headers:
 ```bash
-X-RateLimit-Limit: Your plan's limit
-X-RateLimit-Remaining: Requests remaining
-X-RateLimit-Reset: Timestamp when limit resets
+npm install
+cp .env.example .env.local     # fill in the required values
+npx prisma migrate deploy
+npm run dev
 ```
 
-## Development
+Visit <http://localhost:3000>. The `/playground` route is the fastest way to
+confirm captures are working end-to-end.
 
-### Project Structure
+The minimum required environment variables are a Postgres `DATABASE_URL` and
+a Clerk publishable + secret key. Everything else in `.env.example` is
+optional and documented inline.
+
+## API example
+
+```bash
+curl -X POST https://api.screenshotly.app/screenshot \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "url": "https://example.com",
+    "device": "desktop",
+    "format": "png",
+    "aiRemoval": { "enabled": true, "types": ["cookie-banner"] }
+  }' \
+  --output screenshot.png
+```
+
+The full request schema (all options, defaults, and bounds) is defined in
+`src/lib/api/screenshot-schema.ts`.
+
+## Repository layout
 
 ```
 screenshotly/
 ├── src/
-│   ├── app/              # Next.js app router
-│   ├── components/       # React components
-│   ├── lib/             # Utility functions
-│   └── types/           # TypeScript types
-├── prisma/              # Database schema
-├── public/             # Static assets
-└── docs/              # Documentation
+│   ├── app/                    # Next.js App Router routes + API handlers
+│   │   └── api/                # REST endpoints (thin handlers; logic in lib/)
+│   ├── components/             # React components
+│   │   ├── ui/                 # shadcn/radix primitives
+│   │   ├── home/               # homepage sections
+│   │   └── layouts/            # shared page shells
+│   ├── lib/
+│   │   ├── api/                # auth, schema, screenshot processor, webhooks
+│   │   ├── seo/                # structured-data + metadata helpers
+│   │   ├── branding.ts         # site name / tagline / canonical URLs
+│   │   ├── puppeteer.ts        # headless browser singleton
+│   │   └── markdown.ts         # blog + author loader
+│   └── data/                   # Marketing + pSEO content (use-cases, comparisons,
+│                                 integrations, testimonials, FAQs, enrichment)
+├── content/
+│   ├── blog/                   # Blog posts (Markdown with frontmatter)
+│   └── authors/                # Author profiles
+├── prisma/                     # Database schema + migrations
+└── public/                     # Static assets (og-image, demo, icons)
 ```
 
-### Running Tests
+## Tech stack
 
-```bash
-npm run test
-```
-
-### Building for Production
-
-```bash
-npm run build
-```
-
-## Contributing
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+- **Framework** — Next.js 15 (App Router, Server Components where useful)
+- **Auth** — Clerk (user sessions) + hashed API keys (REST access)
+- **Database** — PostgreSQL via Prisma
+- **Capture** — `puppeteer-core` + `@sparticuz/chromium` (serverless-compatible)
+- **Image processing** — Sharp
+- **AI element removal** — OpenAI Vision (only invoked when `aiRemoval.enabled`)
+- **Rate limiting + cache** — Redis
+- **Payments** — Stripe (wired to the pricing + billing routes)
+- **Storage** — S3 / Cloudflare R2 (for persisted captures)
 
 ## Deployment
 
-This project is optimized for **Vercel serverless deployment** with Chrome/Chromium support:
+The project is shaped for three deployment targets:
 
-### Vercel Deployment
-1. Connect your GitHub repository to Vercel
-2. Set environment variables in Vercel dashboard
-3. Deploy with automatic Chromium provisioning
+1. **Vercel** — serverless; uses `@sparticuz/chromium` to fit the function
+   size limit. Set `maxDuration = 30` (already configured on the capture
+   route).
+2. **Container platforms (Railway, Fly, Render)** — swap `puppeteer-core`
+   for full `puppeteer` in your Dockerfile and allocate ≥ 1 vCPU / 2 GB RAM
+   per worker.
+3. **VPS (Docker Compose)** — a reference `docker-compose.yml` lives under
+   the ops runbooks.
 
-### Environment Configuration
-```bash
-# Required for production
-PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
-NODE_ENV=production
+Set `NEXT_PUBLIC_APP_URL` to the canonical domain. Apply migrations with
+`npx prisma migrate deploy`. Verify `/robots.txt` and `/sitemap.xml` are
+reachable post-deploy.
 
-# Your other environment variables...
-DATABASE_URL=your_postgresql_url
-OPENAI_API_KEY=your_openai_key
-# ... etc
-```
+## Development conventions
 
-### Serverless Compatibility
-- Uses `puppeteer-core` + `@sparticuz/chromium`
-- Automatic environment detection (dev vs production)
-- Optimized for Vercel's 30-second function timeout
-- Built-in error handling and retries
+- `npm run lint && npm run typecheck` before every push.
+- Small, focused changes; one concern per PR.
+- Branching: feature branches off `main`, squash-merge on approval.
 
-## License
+## Security
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Support
-
-- Documentation: [https://docs.screenshotly.app](https://docs.screenshotly.app)
-- Email: support@screenshotly.app
-- GitHub Issues: [Report a bug](https://github.com/yourusername/screenshotly/issues)
+See [SECURITY.md](./SECURITY.md). Do not file public issues for
+vulnerabilities — email the maintainers first.

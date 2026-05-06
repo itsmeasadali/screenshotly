@@ -9,6 +9,13 @@ tags: ["e-commerce", "testing", "visual testing", "automation"]
 keywords: ["e-commerce screenshot testing", "checkout visual testing", "product page testing", "cart testing", "screenshot automation"]
 featured: false
 readingTime: 7
+faqs:
+  - question: "How do I capture the cart page without real inventory mutations?"
+    answer: "Seed a dedicated test account with a fixed cart state via an API call before capture, or use a feature flag that pins the cart to a known fixture. Either pattern keeps visual tests deterministic across runs. Avoid capturing a real user's cart — timing and inventory changes produce false regressions."
+  - question: "Should I test checkout at multiple pricing/tax locales?"
+    answer: "If you ship to multiple regions, yes. Geo-pin the capture via the user-agent locale or an explicit Accept-Language header, and verify each region's price display, currency symbol, and tax row. Missing a region in visual tests is how pricing bugs reach production in that region."
+  - question: "Dynamic promotional banners keep breaking my visual diffs. Fix?"
+    answer: "Strip them via a CSS selector in the element-removal list, or capture against a staging URL where promos are disabled. Banners are designed to rotate — they will always trigger diffs on product pages. Isolate them from the capture so only real layout regressions fire the alert."
 ---
 
 E-commerce sites have unique visual testing challenges—product images, dynamic pricing, cart states, and checkout flows all need verification. This guide covers screenshot strategies for comprehensive e-commerce testing.

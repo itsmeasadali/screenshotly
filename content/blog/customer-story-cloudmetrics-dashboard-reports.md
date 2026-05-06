@@ -1,5 +1,5 @@
 ---
-title: "How CloudMetrics Automated Dashboard Reports for 500+ Enterprise Clients"
+title: "CloudMetrics: Automated Dashboard Reports for 500 Clients"
 description: "Learn how CloudMetrics used Screenshotly to automate visual dashboard reports, reducing report generation time by 90% while serving 500+ enterprise clients."
 excerpt: "A customer success story about automating dashboard screenshot reports at scale. CloudMetrics reduced report generation from 4 hours to 20 minutes daily."
 author: "asad-ali"
@@ -9,6 +9,13 @@ tags: ["customer story", "dashboard", "enterprise", "automation", "reports"]
 keywords: ["dashboard screenshot automation", "automated reports", "enterprise screenshot", "business intelligence reports"]
 featured: false
 readingTime: 7
+faqs:
+  - question: "How does CloudMetrics handle per-tenant branding in their automated PDFs?"
+    answer: "Each report route on their backend reads a per-tenant branding record (logo URL, color system, typography tokens) and renders the report HTML using those variables. Screenshotly captures the rendered route as a PDF. No post-capture compositing — the branding is baked into the render."
+  - question: "What does the daily report generation pipeline actually cost at 500 clients?"
+    answer: "Roughly $2/day in API costs (500 reports × Growth-plan per-capture rate). The infrastructure cost dominates — queue workers and S3 storage — but total pipeline cost is a small single-digit percentage of their customer MRR at that tier."
+  - question: "How do they recover if a report generation fails mid-batch?"
+    answer: "Each report is a separate BullMQ job with tries=3 and exponential backoff. A transient 429 or 5xx retries automatically within minutes. Permanent failures route to a dead-letter queue where the on-call engineer reviews before the 8am SLA window."
 ---
 
 CloudMetrics is a business intelligence platform serving 500+ enterprise clients. Each client receives daily visual reports showing their key metrics, requiring thousands of dashboard screenshots every day. Manual capture was unsustainable—until they automated with Screenshotly.

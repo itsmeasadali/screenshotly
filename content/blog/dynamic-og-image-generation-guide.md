@@ -9,6 +9,13 @@ tags: ["og images", "social media", "automation", "performance"]
 keywords: ["og image generation", "dynamic og images", "social media preview", "open graph images", "twitter cards"]
 featured: false
 readingTime: 10
+faqs:
+  - question: "Should I capture a live content URL or a dedicated /og-template route?"
+    answer: "Dedicated template route. Designers and QA can preview it in a real browser, there's no cookie banner to strip, and no logged-in state can leak. Host at /og/:slug, pass dynamic data via query params, capture at 1200×630. Slightly more setup, materially cleaner output."
+  - question: "What cache TTL works for OG images?"
+    answer: "24 hours. Slack re-fetches every 26–34 hours, LinkedIn at 48–72, Twitter at 12–18 — all hit cached images within the TTL. Use a content-hash key so updates to the source content bust the cache automatically. Cache hit rate stabilizes around 93% after day 3."
+  - question: "How do I handle cold-capture latency for a first share?"
+    answer: "Accept 1–2 seconds for the first capture; serve cached from CDN after. For critical pages (product launches, press hits), pre-warm by calling the capture endpoint at publish time so the first real share hits a warm cache. This turns a 2s cold-share into a 100ms CDN hit."
 ---
 
 Open Graph (OG) images are the preview images that appear when your links are shared on social media platforms like Twitter, Facebook, and LinkedIn. A compelling OG image dramatically increases click-through rates, but creating unique images for every page at scale is challenging.

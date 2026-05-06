@@ -10,19 +10,19 @@ import { comparisons } from "@/data/comparisons";
 const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://screenshotly.app';
 
 export const metadata: Metadata = {
-    title: "Compare Screenshot APIs - Alternatives & Feature Comparison (2026)",
+    title: "Compare Screenshot APIs: Alternatives & Pricing",
     description: "Compare Screenshotly with other screenshot APIs and tools. See detailed feature comparisons and why developers choose Screenshotly.",
     alternates: {
         canonical: "/compare",
     },
     openGraph: {
-        title: "Compare Screenshot APIs - Alternatives & Feature Comparison (2026)",
+        title: "Compare Screenshot APIs: Alternatives & Pricing",
         description: "Compare Screenshotly with other screenshot APIs and tools. See detailed feature comparisons and why developers choose Screenshotly.",
         type: "website",
     },
     twitter: {
         card: "summary_large_image",
-        title: "Compare Screenshot APIs - Alternatives & Pricing (2026)",
+        title: "Compare Screenshot APIs: Alternatives & Pricing",
         description: "Compare Screenshotly with other screenshot APIs and tools. See feature comparisons, pricing, and why developers choose Screenshotly.",
     },
 };
@@ -113,7 +113,7 @@ export default function CompareIndexPage() {
                                     {comparison.description}
                                 </p>
                                 <div className="flex flex-wrap gap-2 mb-4">
-                                    {comparison.keywords.slice(0, 2).map((keyword) => (
+                                    {(comparison.keywords ?? []).slice(0, 2).map((keyword) => (
                                         <Badge key={keyword} variant="outline" className="text-xs">
                                             {keyword}
                                         </Badge>

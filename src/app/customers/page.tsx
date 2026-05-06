@@ -5,7 +5,8 @@ import GuestLayout from "@/components/layouts/GuestLayout";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { JsonLd } from "@/components/seo";
-import { getBreadcrumbSchema } from "@/lib/seo/structured-data";
+import { getBreadcrumbSchema, getCustomerReviewsSchema } from "@/lib/seo/structured-data";
+import { testimonials } from "@/data/testimonials";
 
 const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://screenshotly.app';
 
@@ -27,13 +28,11 @@ export const metadata: Metadata = {
     },
 };
 
-import { testimonials } from "@/data/testimonials";
-
 const stats = [
-    { value: "10M+", label: "Screenshots captured" },
-    { value: "99.9%", label: "Uptime SLA" },
-    { value: "1,000+", label: "Active developers" },
-    { value: "<3s", label: "Avg response time" },
+    { value: "99.9%", label: "Uptime target" },
+    { value: "2–5s", label: "Typical capture time" },
+    { value: "100", label: "Free screenshots / account" },
+    { value: "PNG·JPEG·PDF", label: "Output formats" },
 ];
 
 export default function CustomersPage() {
@@ -43,9 +42,20 @@ export default function CustomersPage() {
     ];
 
 
+    const reviewsSchema = getCustomerReviewsSchema(
+        testimonials.map((t) => ({
+            author: t.name,
+            role: t.title,
+            company: t.company,
+            quote: t.quote,
+            rating: t.rating,
+        }))
+    );
+
     return (
         <GuestLayout>
             <JsonLd data={getBreadcrumbSchema(breadcrumbs)} />
+            {reviewsSchema && <JsonLd data={reviewsSchema} />}
 
             <section className="py-16">
                 <div className="container mx-auto px-4">
@@ -236,7 +246,7 @@ export default function CustomersPage() {
                     {/* CTA */}
                     <div className="text-center bg-primary/10 rounded-2xl p-12">
                         <h2 className="text-3xl font-bold mb-4">
-                            Join 1,000+ Developers Using Screenshotly
+                            Start capturing in under 5 minutes
                         </h2>
                         <p className="text-muted-foreground mb-8 max-w-2xl mx-auto">
                             Start with 100 free screenshots. No credit card required.

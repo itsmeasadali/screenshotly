@@ -1,13 +1,14 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, Code, Copy, ExternalLink, Lightbulb, CheckCircle } from "lucide-react";
+import { ArrowLeft, ArrowRight, Code, Copy, ExternalLink, Lightbulb, CheckCircle, AlertTriangle, Shield, Activity } from "lucide-react";
 import GuestLayout from "@/components/layouts/GuestLayout";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { JsonLd } from "@/components/seo";
 import { getBreadcrumbSchema, getHowToSchema, getFAQSchema } from "@/lib/seo/structured-data";
 import { integrations } from "@/data/integrations";
+import { integrationEnrichment } from "@/data/integration-enrichment";
 
 const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://screenshotly.app';
 
@@ -113,25 +114,12 @@ export default async function IntegrationPage({ params }: Props) {
         .filter((i) => i.slug !== slug && i.type === integration.type)
         .slice(0, 4);
 
-    // Use integration-specific FAQs if available, otherwise use generic ones
-    const faqs = 'faqs' in integration && integration.faqs ? integration.faqs : [
-        {
-            question: `How do I get started with ${integration.name} and Screenshotly?`,
-            answer: integration.description,
-        },
-        {
-            question: "What authentication method should I use?",
-            answer: "Use Bearer token authentication by including your API key in the Authorization header: 'Bearer YOUR_API_KEY'.",
-        },
-        {
-            question: "How do I handle API errors?",
-            answer: "Always check the response status code. Common errors include 401 (invalid API key), 429 (rate limit exceeded), and 400 (invalid parameters).",
-        },
-        {
-            question: "Can I customize the screenshot format and quality?",
-            answer: "Yes! You can specify format (PNG, JPEG, PDF), quality settings, viewport size, and device type in your API request.",
-        },
-    ];
+    // Enrichment: AI summary, deep-dive paragraphs, error handling recipes,
+    // production hardening checklist, and rate-limit strategy per language/platform.
+    const enrichment = integrationEnrichment[slug];
+
+    // Per-slug FAQs only; no generic fallback (avoids duplicate-chunk emission)
+    const faqs = 'faqs' in integration && integration.faqs ? integration.faqs : [];
 
     return (
         <GuestLayout>
@@ -142,7 +130,7 @@ export default async function IntegrationPage({ params }: Props) {
                 totalTime: "PT10M",
                 steps: howToSteps,
             })} />
-            <JsonLd data={getFAQSchema(faqs)} />
+            {faqs.length > 0 && <JsonLd data={getFAQSchema(faqs)} />}
 
             <article className="py-16">
                 <div className="container mx-auto px-4 max-w-4xl">
@@ -166,7 +154,7 @@ export default async function IntegrationPage({ params }: Props) {
                     </nav>
 
                     {/* Header */}
-                    <header className="mb-12">
+                    <header className="mb-8">
                         <Badge variant="secondary" className="mb-4">
                             {isLanguage ? 'Language' : 'Platform'}
                         </Badge>
@@ -179,6 +167,19 @@ export default async function IntegrationPage({ params }: Props) {
                             {integration.description}
                         </p>
                     </header>
+
+                    {/* AI Summary Nugget */}
+                    {enrichment?.aiSummary && (
+                        <div
+                            className="mb-12 rounded-lg border-l-4 border-primary bg-primary/5 p-4 text-sm text-foreground"
+                            aria-label="Quick summary"
+                        >
+                            <span className="mb-1 block text-xs font-semibold uppercase tracking-wide text-primary">
+                                Quick summary
+                            </span>
+                            {enrichment.aiSummary}
+                        </div>
+                    )}
 
                     {/* Quick Start */}
                     <section className="mb-12">
@@ -282,6 +283,100 @@ export default async function IntegrationPage({ params }: Props) {
                         </section>
                     )}
 
+                    {/* Deep-dive production notes */}
+                    {enrichment?.deepDiveParagraphs && enrichment.deepDiveParagraphs.length > 0 && (
+                        <section className="mb-12 prose prose-gray dark:prose-invert max-w-none">
+                            <h2 className="text-2xl font-semibold mb-4">
+                                {integration.name}: Production Notes
+                            </h2>
+                            {enrichment.deepDiveParagraphs.map((p, i) => (
+                                <p key={i} className="text-muted-foreground mb-4 leading-relaxed">{p}</p>
+                            ))}
+                        </section>
+                    )}
+
+                    {/* Error Handling Recipes */}
+                    {enrichment?.errorHandling && enrichment.errorHandling.length > 0 && (
+                        <section className="mb-12">
+                            <h2 className="text-2xl font-semibold mb-6 flex items-center gap-2">
+                                <AlertTriangle className="w-6 h-6 text-amber-500" />
+                                Error Handling Recipes
+                            </h2>
+                            <p className="text-sm text-muted-foreground mb-4">
+                                Concrete strategies for each failure mode. Do not silently swallow errors — surface
+                                them to your monitoring so the pipeline is observable.
+                            </p>
+                            <div className="space-y-4">
+                                {enrichment.errorHandling.map((item, i) => (
+                                    <div key={i} className="border rounded-lg p-4">
+                                        <h3 className="font-medium mb-2">{item.condition}</h3>
+                                        <p className="text-sm text-muted-foreground mb-2">{item.strategy}</p>
+                                        {item.code && (
+                                            <pre className="bg-muted rounded-md p-3 text-xs overflow-x-auto">
+                                                <code>{item.code}</code>
+                                            </pre>
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
+                        </section>
+                    )}
+
+                    {/* Production Hardening Checklist */}
+                    {enrichment?.productionChecklist && enrichment.productionChecklist.length > 0 && (
+                        <section className="mb-12 rounded-xl border p-6">
+                            <h2 className="text-2xl font-semibold mb-4 flex items-center gap-2">
+                                <Shield className="w-6 h-6 text-primary" />
+                                Production Hardening Checklist
+                            </h2>
+                            <p className="text-sm text-muted-foreground mb-4">
+                                The difference between dev code and prod code. Work through these before putting
+                                {' '}{integration.name} captures on a critical path.
+                            </p>
+                            <ul className="space-y-2">
+                                {enrichment.productionChecklist.map((item, i) => (
+                                    <li key={i} className="flex items-start gap-3">
+                                        <CheckCircle className="w-4 h-4 text-green-500 mt-1 flex-shrink-0" />
+                                        <span className="text-sm text-foreground">{item}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </section>
+                    )}
+
+                    {/* Rate Limit Strategy */}
+                    {enrichment?.rateLimitStrategy && (
+                        <section className="mb-12 rounded-xl bg-muted/30 p-6">
+                            <h2 className="text-2xl font-semibold mb-4 flex items-center gap-2">
+                                <Activity className="w-6 h-6 text-primary" />
+                                Rate-Limit Strategy
+                            </h2>
+                            <p className="text-sm text-muted-foreground leading-relaxed">
+                                {enrichment.rateLimitStrategy}
+                            </p>
+                        </section>
+                    )}
+
+                    {/* When this isn't the right fit — honesty block (E-E-A-T trust signal) */}
+                    {enrichment?.notForYou && enrichment.notForYou.length > 0 && (
+                        <section className="mb-12 rounded-xl border border-dashed p-6">
+                            <h2 className="text-2xl font-semibold mb-4">
+                                When {integration.name} isn&apos;t the right fit
+                            </h2>
+                            <p className="text-sm text-muted-foreground mb-4">
+                                {integration.name} works well for most capture workloads, but these patterns are legitimate reasons to pick a different stack:
+                            </p>
+                            <ul className="space-y-2">
+                                {enrichment.notForYou.map((item, i) => (
+                                    <li key={i} className="flex items-start gap-3">
+                                        <span className="mt-1 inline-block h-1.5 w-1.5 flex-shrink-0 rounded-full bg-muted-foreground" />
+                                        <span className="text-sm text-foreground">{item}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </section>
+                    )}
+
                     {/* Deep Dive Blog Link */}
                     {deepDiveBlogPosts[slug] && (
                         <section className="mb-12 p-5 bg-muted/50 rounded-xl border">
@@ -322,17 +417,19 @@ export default async function IntegrationPage({ params }: Props) {
                     </section>
 
                     {/* FAQs */}
-                    <section className="mb-12">
-                        <h2 className="text-2xl font-semibold mb-6">Frequently Asked Questions</h2>
-                        <div className="space-y-4">
-                            {faqs.map((faq, index) => (
-                                <div key={index} className="border rounded-lg p-4">
-                                    <h3 className="font-medium mb-2">{faq.question}</h3>
-                                    <p className="text-muted-foreground">{faq.answer}</p>
-                                </div>
-                            ))}
-                        </div>
-                    </section>
+                    {faqs.length > 0 && (
+                        <section className="mb-12">
+                            <h2 className="text-2xl font-semibold mb-6">Frequently Asked Questions</h2>
+                            <div className="space-y-4">
+                                {faqs.map((faq, index) => (
+                                    <div key={index} className="border rounded-lg p-4">
+                                        <h3 className="font-medium mb-2">{faq.question}</h3>
+                                        <p className="text-muted-foreground">{faq.answer}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        </section>
+                    )}
 
                     {/* CTA */}
                     <section className="bg-primary/10 rounded-xl p-8 text-center mb-12">

@@ -1,5 +1,5 @@
 ---
-title: "Website Archival and Compliance: Capturing Web Pages for Legal Records"
+title: "Website Archival for Compliance & Legal Records"
 description: "Learn how to capture and archive website content for compliance, legal preservation, and historical records using automated screenshot solutions."
 excerpt: "A comprehensive guide to website archival for legal and compliance purposes. Covers capture strategies, metadata preservation, and chain of custody."
 author: "asad-ali"
@@ -9,6 +9,13 @@ tags: ["compliance", "legal", "archival", "enterprise", "documentation"]
 keywords: ["website archival", "web page preservation", "legal screenshot", "compliance capture", "digital preservation"]
 featured: false
 readingTime: 8
+faqs:
+  - question: "What metadata fields are required for legally admissible captures?"
+    answer: "At minimum: millisecond-precise UTC timestamp, SHA-256 hash of the captured bytes, user-agent string, and viewport dimensions. Attach as sidecar JSON alongside the image file. These four fields convert a pretty PNG into an evidentiary artifact that can survive discovery."
+  - question: "Is standard PDF output acceptable for legal retention?"
+    answer: "For most disputes, yes — PDF 1.7 with selectable text is widely accepted. For PDF/A-2b archival compliance (some EU jurisdictions, long-term evidentiary requirements), post-process with a dedicated library. Confirm the specific standard your compliance team or auditor requires before standardizing."
+  - question: "How do I make captures tamper-evident for chain of custody?"
+    answer: "Immutable storage. S3 Object Lock in compliance mode, Azure immutable blobs, or equivalent. Once written, the object cannot be modified or deleted by anyone — including your admins — until the retention period expires. Without immutability, opposing counsel can challenge whether captures were altered."
 ---
 
 Organizations often need to preserve website content for legal, regulatory, or historical purposes. Whether for litigation holds, regulatory compliance, or brand monitoring, capturing web pages as evidence requires more than a simple screenshot—it requires reliability, completeness, and chain of custody.

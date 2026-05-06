@@ -1,5 +1,5 @@
 ---
-title: "Automated Website Monitoring with Screenshots: A Complete Guide"
+title: "Automated Website Monitoring with Screenshots"
 description: "Set up automated website monitoring using screenshots. Detect visual changes, downtime, and content updates with scheduled captures."
 excerpt: "Monitor websites for visual changes automatically. Get alerts when pages change unexpectedly or go down."
 author: "asad-ali"
@@ -9,6 +9,13 @@ tags: ["monitoring", "automation", "alerts", "visual testing"]
 keywords: ["website monitoring", "visual monitoring", "screenshot monitoring", "website change detection", "automated screenshots"]
 featured: false
 readingTime: 7
+faqs:
+  - question: "How often should I capture a monitored page?"
+    answer: "Default daily, with a 'ratchet to hourly for 72 hours when a change is detected' pattern. Hourly on every page is wasteful — most pages change quarterly or less. The ratchet catches genuine updates fast without burning capture budget on unchanged pages."
+  - question: "How do I avoid alert fatigue from rotating testimonials and dynamic banners?"
+    answer: "Zone-split each monitored page into 3–4 regions (hero, pricing, features, footer) and hash each zone independently. The footer changes weekly on most sites — suppress it entirely. Alert only on zones that produce actionable signal, usually pricing and feature areas."
+  - question: "What should the alert look like?"
+    answer: "Slack Block Kit message with before/after thumbnails, zone changed, diff percentage, and a direct link to the full diff viewer. A bare 'page changed' message gets ignored; a richly formatted message with visual evidence gets opened and acted on within minutes."
 ---
 
 Website monitoring goes beyond uptime checks. Visual monitoring with screenshots catches layout breaks, content changes, and rendering issues that traditional monitoring misses.

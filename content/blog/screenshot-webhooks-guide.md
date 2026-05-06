@@ -9,6 +9,13 @@ tags: ["webhooks", "async", "events", "integration"]
 keywords: ["screenshot webhook", "async screenshot", "screenshot callback", "screenshot notification", "event-driven screenshot"]
 featured: false
 readingTime: 7
+faqs:
+  - question: "When should I use webhooks instead of synchronous capture?"
+    answer: "When the capture is slow enough that an HTTP request would time out (large PDFs, scrolling full-page captures on heavy SPAs), or when you're kicking off many captures at once and don't want to hold connections open. For fast single captures, sync response is simpler and lower-latency."
+  - question: "How do I verify a webhook came from the screenshot API and not an attacker?"
+    answer: "HMAC signature verification. The webhook includes an X-Signature header computed as HMAC-SHA256 of the raw body using your webhook secret. Compute the same hash server-side and compare in constant time. Reject any request where the signature doesn't match — without this, an attacker can forge capture completion events."
+  - question: "What retry policy should I use on webhook delivery failures?"
+    answer: "Exponential backoff for up to 24 hours: 1m, 5m, 15m, 1h, 6h, 24h. After final failure, route to dead-letter queue for manual review. On the receiving end, ensure your webhook handler is idempotent (dedupe on capture ID) so replayed deliveries don't cause duplicate work."
 ---
 
 Synchronous screenshot requests block your application while waiting for captures to complete. Webhooks enable async processing—submit captures, continue working, and receive notifications when they're ready.

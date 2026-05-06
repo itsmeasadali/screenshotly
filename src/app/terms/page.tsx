@@ -4,19 +4,19 @@ import { JsonLd } from '@/components/seo';
 import { getBreadcrumbSchema } from '@/lib/seo/structured-data';
 
 export const metadata: Metadata = {
-  title: "Terms of Service",
+  title: "Terms of Service – API Usage & Payment",
   description: "Terms governing use of the Screenshotly screenshot API service. Covers API usage guidelines, rate limits, payment terms, and service availability.",
   alternates: {
     canonical: "/terms",
   },
   openGraph: {
-    title: "Terms of Service",
+    title: "Terms of Service – API Usage & Payment",
     description: "Terms governing use of the Screenshotly screenshot API service. Covers API usage guidelines, rate limits, payment terms, and service availability.",
     type: "website",
   },
   twitter: {
     card: "summary",
-    title: "Terms of Service",
+    title: "Terms of Service – API Usage & Payment",
     description: "Terms governing use of the Screenshotly screenshot API service.",
   },
 };

@@ -33,6 +33,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         };
     }
 
+    // Per-post OG image. Static `image:` frontmatter wins when set; otherwise
+    // fall back to the dynamic generator at /api/og/blog/<slug>.
+    const ogImage = post.image
+        ? (post.image.startsWith('http') ? post.image : `${BASE_URL}${post.image}`)
+        : `${BASE_URL}/api/og/blog/${slug}`;
+
     return {
         title: post.title,
         description: post.excerpt,
@@ -49,11 +55,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
             modifiedTime: post.updatedAt || post.publishedAt,
             authors: [post.author],
             tags: post.tags,
+            images: [{ url: ogImage, width: 1200, height: 630, alt: post.title }],
         },
         twitter: {
             card: "summary_large_image",
             title: post.title,
             description: post.excerpt,
+            images: [ogImage],
         },
     };
 }

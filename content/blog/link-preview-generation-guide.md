@@ -9,6 +9,13 @@ tags: ["link-preview", "og-image", "social-media", "integration"]
 keywords: ["link preview generator", "og image screenshot", "url preview api", "rich link preview"]
 featured: false
 readingTime: 6
+faqs:
+  - question: "Should I extract the og:image meta tag or capture the page fresh?"
+    answer: "Capture fresh for the primary preview; fall back to og:image when capture fails. Fresh captures reflect current page state (live price, stock, updated hero). og:image is often stale, undersized, or missing entirely. Two-tier: try capture, then og:image, then a branded placeholder."
+  - question: "How do I handle paywalled URLs gracefully?"
+    answer: "Detect the paywall in the response (most render as partial content behind an overlay). Fall back to the page's og:image tag if present — almost all news sites set one. If no og:image, serve a branded 'Preview unavailable' placeholder. Do not try to defeat the paywall."
+  - question: "What's the right latency budget for user-facing previews?"
+    answer: "Show a skeleton immediately on paste, swap in the preview when ready. Users tolerate 1–2 seconds for a preview they didn't request; anything longer needs a visible loading state. Cache aggressively — 7-day TTL keyed on URL + content hash — so repeat shares hit sub-100ms."
 ---
 
 Link previews make shared content more engaging. This guide covers building Twitter/Slack-style previews using screenshots and metadata.

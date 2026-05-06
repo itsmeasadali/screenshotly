@@ -1,4 +1,8 @@
-// Customer testimonials data for social proof and review schema
+// Customer testimonials rendered on `/customers` and emitted as AggregateRating
+// JSON-LD via `getCustomerReviewsSchema()`. Each entry corresponds to a published
+// customer case study under `content/blog/customer-story-*`. Keep in sync when
+// case studies are added, rewritten, or retired.
+
 export interface Testimonial {
     id: string;
     name: string;
@@ -15,104 +19,69 @@ export interface Testimonial {
 
 export const testimonials: Testimonial[] = [
     {
-        id: 'testimonial-1',
+        id: 'techflow-docs',
         name: 'Sarah Chen',
-        title: 'Senior Developer',
-        company: 'DocuFlow',
-        quote: "Screenshotly transformed our documentation workflow. We went from spending hours manually capturing screenshots to having them automatically update with every deploy. The AI element removal is a game-changer.",
+        title: 'Lead Technical Writer',
+        company: 'TechFlow',
+        quote: "We were spending twenty hours every week manually updating screenshots across two hundred documentation pages. After wiring Screenshotly into our CI, the screenshots refresh themselves on every release and we get our afternoons back.",
         rating: 5,
         useCase: 'Documentation',
         featured: true,
-        results: 'Reduced manual screenshots by 85%',
+        results: 'Reduced doc-screenshot maintenance by 85%',
     },
     {
-        id: 'testimonial-2',
-        name: 'Marcus Johnson',
-        title: 'CTO',
-        company: 'LinkPreview.io',
-        quote: "We evaluated 5 different screenshot APIs. The combination of speed, reliability, and device mockups made Screenshotly the clear winner. Our link preview generation handles 50k+ requests daily without issues.",
+        id: 'designstudio-social',
+        name: 'Marcus Rivera',
+        title: 'Backend Lead',
+        company: 'DesignStudio Pro',
+        quote: "Our self-hosted Puppeteer cluster was eating infrastructure budget and pager minutes in equal measure. Moving dynamic OG image generation to Screenshotly dropped our capture costs by an order of magnitude and retired the Chrome-in-production fire drill.",
         rating: 5,
         useCase: 'Social Media Previews',
         featured: true,
-        results: '50k+ daily previews generated',
+        results: '10,000+ social previews generated daily',
     },
     {
-        id: 'testimonial-3',
-        name: 'Emily Rodriguez',
-        title: 'QA Lead',
-        company: 'QABelt',
-        quote: "Visual regression testing used to be our biggest pain point. Screenshotly's consistent rendering across devices made our CI/CD visual tests actually reliable.",
-        rating: 5,
-        useCase: 'Visual Testing',
-        featured: true,
-        results: 'Zero visual regressions in prod',
-    },
-    {
-        id: 'testimonial-4',
-        name: 'David Park',
-        title: 'Product Manager',
-        company: 'TrackRight',
-        quote: "We monitor competitor landing pages daily. The full-page capture and archiving has been invaluable for tracking market changes. Setup was surprisingly easy.",
+        id: 'saasify-competitive',
+        name: 'Priya Natarajan',
+        title: 'Product Marketing Lead',
+        company: 'SaaSify',
+        quote: "Tracking fifty competitors by hand is a full-time job nobody wants. We scheduled daily captures of their pricing and feature pages, zone-split the diffs, and now our deal desk knows about competitor pricing changes within hours instead of weeks.",
         rating: 5,
         useCase: 'Competitive Analysis',
-        results: 'tracked 200+ competitors daily',
+        featured: true,
+        results: 'Caught 12 competitor pricing shifts in Q1',
     },
     {
-        id: 'testimonial-5',
-        name: 'Lisa Thompson',
-        title: 'Marketing Director',
-        company: 'Showcase.dev',
-        quote: "The device mockups are beautiful! We use them to generate all our app store screenshots and marketing materials. Consistent, professional results every time.",
+        id: 'cloudmetrics-reporting',
+        name: 'Daniel Okafor',
+        title: 'Staff Engineer',
+        company: 'CloudMetrics',
+        quote: "We had two people generating dashboard PDFs for 500 enterprise clients every day. Automating it via Screenshotly turned a four-hour manual shift into a twelve-minute background job and freed both of them to work on actual product.",
         rating: 5,
-        useCase: 'Marketing',
-        results: '10x faster asset creation',
-    },
-    {
-        id: 'testimonial-6',
-        name: 'Alex Kim',
-        title: 'Freelance Developer',
-        company: 'Independent',
-        quote: "As a solo dev, I don't have time to manage Puppeteer instances. The API is dead simple and the free tier is generous enough for my client projects.",
-        rating: 4,
-        useCase: 'Client Work',
-        results: 'Saved ~5 hours per project',
-    },
-    {
-        id: 'testimonial-7',
-        name: 'Rachel Martinez',
-        title: 'Engineering Manager',
-        company: 'ShopScale',
-        quote: "We capture product page screenshots for our internal catalog. The AI removal feature automatically strips out chat widgets, giving us clean product images.",
-        rating: 5,
-        useCase: 'E-commerce',
-        results: 'Automated clean product images',
-    },
-    {
-        id: 'testimonial-8',
-        name: 'James Wilson',
-        title: 'Compliance Officer',
-        company: 'CompliTech',
-        quote: "For regulatory compliance, we need timestamped evidence of website states. Reliable captures with metadata have been accepted by auditors as valid documentation.",
-        rating: 5,
-        useCase: 'Compliance',
-        results: '100% audit compliance rate',
+        useCase: 'Reporting',
+        featured: true,
+        results: '90% reduction in report generation time',
     },
 ];
 
+/** Testimonials flagged as featured (rendered in hero/social-proof strips). */
 export function getFeaturedTestimonials(): Testimonial[] {
-    return testimonials.filter(t => t.featured);
+    return testimonials.filter((t) => t.featured);
 }
 
+/** Filter helper for testimonials tied to a specific use-case slug. */
 export function getTestimonialsByUseCase(useCase: string): Testimonial[] {
-    return testimonials.filter(t => t.useCase === useCase);
+    return testimonials.filter((t) => t.useCase === useCase);
 }
 
+/** Average rating across all testimonials, rounded to one decimal. */
 export function getAverageRating(): number {
+    if (testimonials.length === 0) return 0;
     const sum = testimonials.reduce((acc, t) => acc + t.rating, 0);
     return Math.round((sum / testimonials.length) * 10) / 10;
 }
 
+/** Total count of review entries — used for AggregateRating schema `reviewCount`. */
 export function getTotalReviews(): number {
     return testimonials.length;
 }
-

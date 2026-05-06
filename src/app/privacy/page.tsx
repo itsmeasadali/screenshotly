@@ -5,19 +5,19 @@ import { JsonLd } from '@/components/seo';
 import { getBreadcrumbSchema } from '@/lib/seo/structured-data';
 
 export const metadata: Metadata = {
-  title: "Privacy Policy",
+  title: "Privacy Policy – Data Handling & Your Rights",
   description: "How Screenshotly collects, uses, and protects your data. Read our full privacy policy covering account information, API usage data, and your rights.",
   alternates: {
     canonical: "/privacy",
   },
   openGraph: {
-    title: "Privacy Policy",
+    title: "Privacy Policy – Data Handling & Your Rights",
     description: "How Screenshotly collects, uses, and protects your data. Read our full privacy policy covering account information, API usage data, and your rights.",
     type: "website",
   },
   twitter: {
     card: "summary",
-    title: "Privacy Policy",
+    title: "Privacy Policy – Data Handling & Your Rights",
     description: "How Screenshotly collects, uses, and protects your data.",
   },
 };

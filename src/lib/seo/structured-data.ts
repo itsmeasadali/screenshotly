@@ -32,8 +32,7 @@ export function getOrganizationSchema() {
         },
         sameAs: [
             'https://twitter.com/screenshotly',
-            'https://github.com/screenshotly',
-            'https://www.linkedin.com/in/itsmeasadali/'
+            'https://www.linkedin.com/in/itsmeasadali/',
         ],
     };
 }
@@ -129,14 +128,17 @@ export function getWebSiteSchema() {
     };
 }
 
-// Product Schema for API
+// Product Schema for API (detailed AggregateOffer with per-plan Offer entries for /pricing SERP filtering)
 export function getProductSchema() {
+    const priceValidUntil = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000)
+        .toISOString()
+        .split('T')[0];
     return {
         '@context': 'https://schema.org',
         '@type': 'Product',
         name: 'Screenshotly API',
         description: 'RESTful API for capturing high-quality website screenshots with AI-powered element removal and device mockups.',
-        url: BASE_URL,
+        url: `${BASE_URL}/pricing`,
         image: `${BASE_URL}/og-image.png`,
         brand: {
             '@type': 'Brand',
@@ -147,8 +149,101 @@ export function getProductSchema() {
             lowPrice: '0',
             highPrice: '199',
             priceCurrency: 'USD',
+            offerCount: 4,
             availability: 'https://schema.org/InStock',
+            offers: [
+                {
+                    '@type': 'Offer',
+                    name: 'Free Plan',
+                    price: '0',
+                    priceCurrency: 'USD',
+                    url: `${BASE_URL}/pricing`,
+                    availability: 'https://schema.org/InStock',
+                    description: '100 free screenshots (lifetime) — no credit card required',
+                },
+                {
+                    '@type': 'Offer',
+                    name: 'Basic Plan',
+                    price: '14',
+                    priceCurrency: 'USD',
+                    priceValidUntil,
+                    url: `${BASE_URL}/pricing`,
+                    availability: 'https://schema.org/InStock',
+                    description: '2,500 screenshots per month with PDF rendering and caching',
+                },
+                {
+                    '@type': 'Offer',
+                    name: 'Growth Plan',
+                    price: '59',
+                    priceCurrency: 'USD',
+                    priceValidUntil,
+                    url: `${BASE_URL}/pricing`,
+                    availability: 'https://schema.org/InStock',
+                    description: '12,000 screenshots per month with AI element removal and video generation',
+                },
+                {
+                    '@type': 'Offer',
+                    name: 'Scale Plan',
+                    price: '199',
+                    priceCurrency: 'USD',
+                    priceValidUntil,
+                    url: `${BASE_URL}/pricing`,
+                    availability: 'https://schema.org/InStock',
+                    description: '50,000 screenshots per month with GPU rendering and priority support',
+                },
+            ],
         },
+    };
+}
+
+// Customer Reviews Schema (Product + AggregateRating + Review[]) for /customers
+export interface CustomerReview {
+    author: string;
+    role?: string;
+    company?: string;
+    quote: string;
+    rating: number;
+}
+
+export function getCustomerReviewsSchema(reviews: CustomerReview[]) {
+    if (reviews.length === 0) return null;
+    const ratingValue =
+        reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length;
+    return {
+        '@context': 'https://schema.org',
+        '@type': 'Product',
+        name: 'Screenshotly API',
+        description: 'Screenshot API for developers — automated website captures with AI-powered element removal and device mockups.',
+        brand: { '@type': 'Brand', name: 'Screenshotly' },
+        url: `${BASE_URL}/customers`,
+        image: `${BASE_URL}/og-image.png`,
+        aggregateRating: {
+            '@type': 'AggregateRating',
+            ratingValue: ratingValue.toFixed(2),
+            bestRating: '5',
+            worstRating: '1',
+            ratingCount: reviews.length,
+            reviewCount: reviews.length,
+        },
+        review: reviews.map((r) => ({
+            '@type': 'Review',
+            reviewRating: {
+                '@type': 'Rating',
+                ratingValue: String(r.rating),
+                bestRating: '5',
+                worstRating: '1',
+            },
+            author: {
+                '@type': 'Person',
+                name: r.author,
+                ...(r.role && r.company
+                    ? { jobTitle: `${r.role} at ${r.company}` }
+                    : r.role
+                        ? { jobTitle: r.role }
+                        : {}),
+            },
+            reviewBody: r.quote,
+        })),
     };
 }
 

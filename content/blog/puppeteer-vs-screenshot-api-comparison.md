@@ -1,6 +1,6 @@
 ---
 title: "Puppeteer vs Screenshot API: When to Build vs Buy"
-description: "Should you build your own screenshot infrastructure with Puppeteer, or use a managed API? We compare costs, complexity, and performance to help you decide."
+description: "Build your own screenshot infra with Puppeteer, or use a managed API? Costs, complexity, and performance compared to help you decide."
 excerpt: "A detailed comparison of self-hosted Puppeteer vs managed screenshot APIs. Includes cost analysis, performance benchmarks, and decision framework."
 author: "asad-ali"
 publishedAt: "2026-02-01"
@@ -9,6 +9,13 @@ tags: ["puppeteer", "comparison", "infrastructure", "build vs buy"]
 keywords: ["puppeteer vs api", "screenshot infrastructure", "puppeteer alternative", "headless browser api"]
 featured: false
 readingTime: 11
+faqs:
+  - question: "At what volume does a managed API clearly win?"
+    answer: "Roughly 5,000 captures/month. Below that, self-hosted Puppeteer on a single Fargate/Lambda worker can be cheaper if your team already runs Chrome in production. Above 5,000, the engineering maintenance cost (memory tuning, Chrome version drift, OOM recovery) pushes the managed API ahead by 2–5× on TCO."
+  - question: "What does Puppeteer genuinely do better than a managed API?"
+    answer: "Multi-step browser interactions — filling forms, handling OAuth flows, solving CAPTCHA with a third-party service, scraping behind a login. A managed screenshot API is optimized for 'URL in, image out.' Anything more complex than that belongs in a Puppeteer or Playwright codebase you own."
+  - question: "Is it safe to run Chrome in my VPC for captures of third-party URLs?"
+    answer: "Measured risk. A headless browser rendering arbitrary URLs is an SSRF and DNS-exfiltration surface. For captures of first-party URLs you control, in-VPC is fine. For third-party URLs (competitor sites, customer-submitted links), a managed API is actually the safer posture because the browser lives outside your perimeter."
 ---
 
 Every development team capturing website screenshots faces a fundamental question: should we build our own solution with Puppeteer, or use a managed screenshot API? Both approaches have merits, and the right choice depends on your specific situation.

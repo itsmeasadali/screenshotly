@@ -1,5 +1,5 @@
 ---
-title: "PDF Generation with Screenshot APIs: Complete Implementation Guide"
+title: "PDF Generation with a Screenshot API: Implementation Guide"
 slug: "pdf-generation-guide"
 excerpt: "Learn how to generate professional PDFs from web pages using Screenshotly's API. Perfect for invoices, reports, certificates, and documentation."
 publishedAt: "2024-11-05T10:00:00Z"
@@ -47,7 +47,7 @@ PDF generation is essential for:
 - **Documentation exports**
 - **Archival and compliance**
 
-Screenshotly's PDF output handles all these use cases with a simple API. This guide covers the **core API mechanics**: page sizes, margins, headers/footers, multi-page handling, and output settings. For invoice-specific workflows, see our [Invoice & Financial PDF Generation](/blog/pdf-generation-complete-guide) guide. For CSS print styling (`@media print`, page breaks, font embedding), see our [CSS Print Styling for PDFs](/blog/html-to-pdf-generation-guide) guide. For batch generation and email delivery pipelines, see our [Automated Invoice & Report Generation](/blog/invoice-report-generation-guide) guide.
+Screenshotly's PDF output handles all these use cases with a simple API. This guide covers the **core API mechanics**: page sizes, margins, headers/footers, multi-page handling, and output settings. For invoice-specific workflows, see our [Invoice & Financial PDF Generation](/blog/invoice-pdf-generation-guide) guide. For CSS print styling (`@media print`, page breaks, font embedding), see our [CSS Print Styling for PDFs](/blog/html-to-pdf-generation-guide) guide. For batch generation and email delivery pipelines, see our [Automated Invoice & Report Generation](/blog/invoice-report-generation-guide) guide.
 
 ## Basic PDF Generation
 
@@ -120,7 +120,7 @@ The PDF API works for invoices, reports, certificates, documentation exports, an
 
 ### Invoice and Financial Documents
 
-Invoices, receipts, and tax documents require precise formatting, currency handling, and tax compliance sections. For a complete walkthrough including HTML templates, currency formatting helpers, and tax compliance layouts, see our [Invoice & Financial PDF Generation](/blog/pdf-generation-complete-guide) guide.
+Invoices, receipts, and tax documents require precise formatting, currency handling, and tax compliance sections. For a complete walkthrough including HTML templates, currency formatting helpers, and tax compliance layouts, see our [Invoice & Financial PDF Generation](/blog/invoice-pdf-generation-guide) guide.
 
 ### Report and Dashboard PDFs
 
@@ -371,7 +371,7 @@ For more security practices, see our [security guide](/blog/screenshot-api-secur
 
 Explore related PDF guides:
 
-- **[Invoice & Financial PDFs](/blog/pdf-generation-complete-guide)**: Templates, currency formatting, tax compliance
+- **[Invoice & Financial PDFs](/blog/invoice-pdf-generation-guide)**: Templates, currency formatting, tax compliance
 - **[CSS Print Styling for PDFs](/blog/html-to-pdf-generation-guide)**: `@media print`, page breaks, orphan/widow control
 - **[Batch Generation & Email Delivery](/blog/invoice-report-generation-guide)**: Automation pipelines, scheduled generation, email attachments
 

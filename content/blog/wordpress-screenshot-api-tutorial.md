@@ -1,5 +1,5 @@
 ---
-title: "Screenshot API for WordPress: Capture and Embed Website Images"
+title: "Screenshot API for WordPress: Capture & Embed"
 description: "Add screenshot functionality to WordPress. Capture external sites, generate link previews, and display website thumbnails in posts."
 excerpt: "Automatically generate website screenshots and link previews in WordPress using a screenshot API."
 author: "asad-ali"
@@ -9,6 +9,13 @@ tags: ["wordpress", "php", "integration", "shortcodes"]
 keywords: ["wordpress screenshot", "link preview wordpress", "website thumbnail wordpress", "screenshot plugin"]
 featured: false
 readingTime: 6
+faqs:
+  - question: "Can I trigger a screenshot automatically when a WordPress post is published?"
+    answer: "Yes — hook into the publish_post action. When a post is published, extract any URLs in the content, call the Screenshot API, and store the resulting image as a post meta field or as a featured image. For heavy sites, dispatch the work to Action Scheduler (bundled with WooCommerce) so the editor doesn't wait for the capture."
+  - question: "How do I avoid exposing my API key in WordPress?"
+    answer: "Store the key in a constant in wp-config.php (outside the database) and read it via get_option() or a helper that returns the constant. Never save the key in the Options table — database dumps leak. For multisite, use a dedicated site-level option with appropriate capability checks on access."
+  - question: "Should I use a plugin or a custom implementation?"
+    answer: "Custom implementation for anything beyond a single shortcode. Generic screenshot plugins add code weight, may not match your caching strategy, and lock you into the plugin maintainer's roadmap. A 50-line mu-plugin that wraps the API is usually enough and easier to audit."
 ---
 
 WordPress powers millions of sites that need screenshot functionality—link previews, portfolio displays, documentation, and more. This guide shows how to integrate screenshot capture into WordPress.

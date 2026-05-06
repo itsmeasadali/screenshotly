@@ -1,5 +1,5 @@
 ---
-title: "Screenshot API for Notion and Productivity Tools Integration"
+title: "Screenshot API for Notion + Productivity Tools"
 description: "Integrate screenshots into Notion, Airtable, and other productivity tools. Automate link previews and visual documentation."
 excerpt: "Add dynamic screenshots to Notion databases, Airtable bases, and productivity workflows."
 author: "asad-ali"
@@ -9,6 +9,13 @@ tags: ["notion", "airtable", "automation", "no-code"]
 keywords: ["notion screenshot", "airtable screenshot", "productivity automation", "link preview automation"]
 featured: false
 readingTime: 5
+faqs:
+  - question: "Can I auto-populate a Notion database with screenshots of each linked URL?"
+    answer: "Yes — the pattern is a Zapier or Make workflow triggered by a new Notion page creation. The automation extracts the URL property, calls the Screenshot API, uploads the resulting image to Notion as a file attachment or external image URL, and links it back to the record."
+  - question: "How do I keep Airtable attachment screenshots fresh without re-capturing every row?"
+    answer: "Store the capture hash or Last-Modified timestamp as a hidden field alongside the image. On scheduled refresh, re-capture only rows where the source page's Last-Modified is newer than the stored hash. This cuts refresh cost by 80–90% on typical catalogs."
+  - question: "Why capture screenshots into a productivity tool instead of just linking?"
+    answer: "Visual context speeds comprehension for non-technical stakeholders. A Notion database of competitor pages is dramatically more useful with thumbnails than a bare list of URLs — reviewers can scan visually without clicking through, and stale captures flag changes at a glance."
 ---
 
 Productivity tools like Notion and Airtable benefit enormously from visual content. This guide shows how to automatically capture and embed website screenshots.

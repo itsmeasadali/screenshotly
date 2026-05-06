@@ -9,6 +9,13 @@ tags: ["nodejs", "tutorial", "api", "express", "automation"]
 keywords: ["nodejs screenshot", "node screenshot api", "express screenshot", "javascript screenshot automation"]
 featured: false
 readingTime: 11
+faqs:
+  - question: "Should I use node-fetch or native fetch?"
+    answer: "On Node 18+, use native fetch (or undici directly). node-fetch is deprecated for new projects and adds dependency weight for no benefit. The native API is fully compatible with the browser fetch interface, which makes the same client code work across environments."
+  - question: "How do I stream large captures to S3 without buffering in memory?"
+    answer: "Pipe the fetch response body directly into the S3 upload stream: pass response.body (a ReadableStream) to the SDK's upload function. This avoids loading multi-MB PDFs into RAM, which matters once you run 20+ concurrent captures per worker."
+  - question: "What should graceful shutdown look like for a capture worker?"
+    answer: "On SIGTERM, stop consuming new jobs, finish in-flight captures (typically under 5 seconds), flush any buffered metrics, and exit 0. A shutdown handler missing any of those steps produces lost captures and orphaned S3 multipart uploads."
 ---
 
 Node.js is one of the most popular environments for building APIs and automation tools. Whether you're building a documentation system, social media tool, or testing pipeline, integrating screenshot capabilities into your Node.js application is straightforward with a REST API.

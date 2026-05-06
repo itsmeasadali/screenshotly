@@ -1,5 +1,5 @@
 ---
-title: "Screenshot API for SaaS Applications: Complete Implementation Guide"
+title: "Screenshot API for SaaS: Multi-Tenant Implementation"
 description: "Build screenshot features into your SaaS product. Learn multi-tenancy, usage tracking, billing integration, and white-labeling patterns."
 excerpt: "Add screenshot capabilities to your SaaS platform. From usage metering to white-labeled screenshot services."
 author: "asad-ali"
@@ -9,6 +9,13 @@ tags: ["saas", "multi-tenant", "billing", "architecture"]
 keywords: ["saas screenshot api", "multi-tenant screenshots", "screenshot service", "saas integration", "usage based billing"]
 featured: false
 readingTime: 8
+faqs:
+  - question: "How do I meter screenshot usage per tenant for billing?"
+    answer: "Wrap the API call in a service-layer method that increments a per-tenant usage counter (Redis or Postgres) after each successful capture. On plan limits, check the counter before dispatching. For Stripe-native metering, push usage records to Stripe's UsageRecords API on every capture."
+  - question: "What's the cleanest way to apply per-tenant branding to captures?"
+    answer: "Host a /report/:tenant/:resource route on your own app that reads the tenant's branding record (logo, color tokens, fonts) and renders the output page. Call the capture API against that URL. The branding is baked into the HTML render — no post-capture compositing, no mismatched logos."
+  - question: "How do I rate-limit per tenant without affecting others?"
+    answer: "Apply rate limits at your API gateway keyed on tenant ID, not globally. A sliding-window counter in Redis per (tenant, endpoint) pair isolates noisy customers. Reserve a small percentage of your upstream capacity for each tenant so a single tenant can't consume the whole pool during a spike."
 ---
 
 Many SaaS applications need screenshot features—link previews, PDF exports, thumbnail generation, visual testing. This guide covers building screenshot capabilities that scale with your SaaS platform.

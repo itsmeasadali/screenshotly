@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Sparkles, ArrowRight, PlayCircle } from 'lucide-react';
+import { HERO_HEADLINE, HERO_SUBHEADLINE } from "@/lib/branding";
 
 interface HeroSectionProps {
   userId?: string | null;
@@ -19,18 +20,11 @@ export const HeroSection = ({ userId }: HeroSectionProps) => {
         </Badge>
 
         <h1 className="mb-6 text-4xl font-bold tracking-tight sm:text-6xl">
-          Screenshot API for{" "}
-          <span className="relative inline-block">
-            <span className="bg-primary text-primary-foreground px-2 py-1 rounded">
-              Developers
-            </span>
-          </span>
+          {HERO_HEADLINE}
         </h1>
 
         <p className="mb-8 text-xl text-muted-foreground max-w-3xl mx-auto">
-          Screenshotly is a REST API that captures website screenshots programmatically with AI-powered
-          element removal and device mockups. Integrate directly into your applications, testing pipelines,
-          and automation workflows.
+          {HERO_SUBHEADLINE}
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
@@ -48,16 +42,16 @@ export const HeroSection = ({ userId }: HeroSectionProps) => {
           </Button>
         </div>
 
-        {/* Social Proof */}
+        {/* Product facts (verifiable capability claims, not vanity counters) */}
         <div className="flex flex-wrap items-center justify-center gap-8 text-sm text-muted-foreground">
           <div className="flex items-center gap-2">
-            <span className="text-2xl font-bold text-foreground">10M+</span>
-            <span>Screenshots captured</span>
+            <span className="text-2xl font-bold text-foreground">100</span>
+            <span>Free screenshots on signup</span>
           </div>
           <div className="w-px h-8 bg-border hidden sm:block" />
           <div className="flex items-center gap-2">
-            <span className="text-2xl font-bold text-foreground">1,000+</span>
-            <span>Developers</span>
+            <span className="text-2xl font-bold text-foreground">2–5s</span>
+            <span>Typical capture</span>
           </div>
           <div className="w-px h-8 bg-border hidden sm:block" />
           <div className="flex items-center gap-2">
@@ -66,8 +60,8 @@ export const HeroSection = ({ userId }: HeroSectionProps) => {
           </div>
           <div className="w-px h-8 bg-border hidden sm:block" />
           <div className="flex items-center gap-2">
-            <span className="text-2xl font-bold text-foreground">2–5s</span>
-            <span>Typical capture</span>
+            <span className="text-2xl font-bold text-foreground">PNG · JPEG · PDF</span>
+            <span>Output formats</span>
           </div>
         </div>
 

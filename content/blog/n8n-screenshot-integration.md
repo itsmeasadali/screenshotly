@@ -9,6 +9,13 @@ tags: ["n8n", "no-code", "automation", "self-hosted", "integrations"]
 keywords: ["n8n screenshot", "n8n automation", "self-hosted automation", "open source automation", "screenshot workflow"]
 featured: false
 readingTime: 8
+faqs:
+  - question: "Should I self-host n8n or use n8n Cloud?"
+    answer: "Self-host when volume is high enough (>20k captures/month) or when data residency requires it — Community Edition is free but you own the Docker container, Postgres, backups, and upgrades. Use n8n Cloud for teams that need the feature set without the DevOps overhead and can accept per-execution pricing."
+  - question: "How do I handle binary responses in the HTTP Request node?"
+    answer: "Set Response Format to File. n8n treats the response as binary and passes it natively to downstream nodes (Write Binary File, S3 Upload, Google Drive Upload, Dropbox Upload). Do not try to parse JSON — the body is raw image bytes."
+  - question: "Is Queue Mode required for production?"
+    answer: "For any production workflow, yes. Default memory mode loses in-flight executions on restart. Queue Mode uses Redis to persist jobs across workers and survives restarts gracefully. Configure it with main + 3–5 worker processes for reasonable throughput."
 ---
 
 n8n is an open-source, self-hostable workflow automation platform. Unlike Zapier or Make.com, you can run n8n on your own infrastructure with unlimited executions. This makes it ideal for screenshot automation workflows that need scale without per-execution costs.

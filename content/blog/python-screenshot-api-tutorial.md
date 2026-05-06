@@ -1,6 +1,6 @@
 ---
 title: "Python Screenshot API: Complete Tutorial with Examples"
-description: "Learn how to capture website screenshots in Python using Screenshotly's API. Includes code examples for basic captures, full-page screenshots, and AI element removal."
+description: "Capture website screenshots in Python using Screenshotly's API. Code examples for basic captures, full-page, and AI element removal."
 excerpt: "A hands-on Python tutorial for capturing website screenshots programmatically. From basic captures to advanced AI-powered cleanup."
 author: "asad-ali"
 publishedAt: "2026-02-03"
@@ -9,6 +9,13 @@ tags: ["python", "tutorial", "api", "code examples", "automation"]
 keywords: ["python screenshot api", "python capture website", "python screenshot", "website screenshot python", "selenium alternative"]
 featured: false
 readingTime: 10
+faqs:
+  - question: "Should I use requests or httpx for the capture call?"
+    answer: "Use requests for sync scripts and classic Flask/Django views where the blocking model is acceptable. Use httpx when concurrency matters — its async API lets you fire 20 parallel captures via asyncio.gather() while reusing connection pools."
+  - question: "How do I avoid blocking Django requests with screenshot capture?"
+    answer: "Never call the capture API inside save() or a view handler. Offload to Celery or django-q: the post_save signal enqueues a task, the task calls the API, and the result attaches to the model. The user sees the preview on their next page load."
+  - question: "What's the right concurrency limit for batch captures in Python?"
+    answer: "Use asyncio.Semaphore(5) with a single long-lived httpx.AsyncClient. Five concurrent captures gives good throughput without breaching rate limits or exhausting the event loop. Bump to 10 only if you have a generous plan and tuned retry logic."
 ---
 
 Python developers often need to capture website screenshots for documentation, testing, monitoring, or content generation. While libraries like Selenium and Playwright can do this, they require browser management and infrastructure setup. A screenshot API simplifies this to a single HTTP request.

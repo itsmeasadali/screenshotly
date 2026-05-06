@@ -9,6 +9,13 @@ tags: ["make.com", "no-code", "automation", "integrations"]
 keywords: ["make.com screenshot", "integromat screenshot", "no-code screenshot", "automate screenshots", "screenshot workflow"]
 featured: false
 readingTime: 7
+faqs:
+  - question: "Is Make.com cheaper than Zapier for screenshot workflows?"
+    answer: "Meaningfully, yes. Make prices per operation (a typical capture scenario runs 3–5 operations), so the $9/month plan includes ~2,000–3,000 captures. Zapier's Professional tier at $74/month gives roughly 2,000 tasks for the same shape of work. For anything iterative, Make is 5–8× cheaper."
+  - question: "How do I handle binary image responses in Make?"
+    answer: "In the HTTP module, set Parse Response to No and pass the binary directly into your destination module (Google Drive, Dropbox, S3 via HTTP). Trying to parse as JSON breaks because the response body is raw bytes, not text."
+  - question: "What happens when a scenario hits Make's operation quota?"
+    answer: "The scenario stops executing until the next billing period or a plan upgrade. Set an email alert at 80% usage in the dashboard to avoid mid-run quota failures. For workflows running near the ceiling, consider routing high-volume iterations to n8n instead."
 ---
 
 Make.com (formerly Integromat) is a powerful automation platform that connects your favorite apps and services. By integrating screenshot capabilities, you can automate visual capture for social media, documentation, monitoring, and more—all without writing code.

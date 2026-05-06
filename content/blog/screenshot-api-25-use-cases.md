@@ -9,6 +9,13 @@ tags: ["use-cases", "examples", "applications", "business"]
 keywords: ["screenshot api use cases", "screenshot api examples", "website capture applications", "screenshot automation"]
 featured: true
 readingTime: 8
+faqs:
+  - question: "What are the top 3 highest-ROI screenshot API use cases?"
+    answer: "Documentation screenshots (CI-triggered captures that keep docs in sync with UI), dynamic OG image generation (2–3× CTR lift on shared links), and visual regression testing (catch UI bugs before production). These three cover most developer and marketing workflows and ship real engineering hours back to the team."
+  - question: "Which use case has the fastest payback?"
+    answer: "Documentation automation. A team spending 20+ hours/month on manual screenshot updates recovers that time in the first month after setup — setup is typically 4–8 hours. Social preview generation is close behind, with CTR lift showing up in marketing analytics within the first share cycle."
+  - question: "Which use cases should I skip unless I have specific need?"
+    answer: "Anything requiring multi-step browser interaction (form fills, OAuth flows, CAPTCHA) — use Playwright or Puppeteer instead. Native mobile app screenshots — use device farms. Real-time video preview — use a dedicated media service. A screenshot API is optimized for 'URL in, image out' — stay inside that scope."
 ---
 
 Screenshot APIs power features across industries—from automated documentation to real-time monitoring. Below are 25 proven applications, each with specific implementation context and the API parameters you'll need to get started.
@@ -364,7 +371,7 @@ Choose your primary use case and follow this implementation framework:
 
 Browse detailed implementation guides:
 - [Link Preview Generation →](/blog/link-preview-generation-guide)
-- [PDF Generation Complete Guide →](/blog/pdf-generation-complete-guide)
+- [PDF Generation Complete Guide →](/blog/invoice-pdf-generation-guide)
 - [Batch Screenshot Processing →](/blog/batch-screenshot-processing)
 - [Screenshot Caching Strategies →](/blog/screenshot-caching-strategies-guide)
 

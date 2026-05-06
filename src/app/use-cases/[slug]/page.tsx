@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { JsonLd } from "@/components/seo";
 import { getBreadcrumbSchema, getFAQSchema, getHowToSchema } from "@/lib/seo/structured-data";
 import { useCases } from "@/data/use-cases";
+import { useCaseEnrichment } from "@/data/use-case-enrichment";
 
 const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://screenshotly.app';
 
@@ -17,7 +18,7 @@ const relatedBlogPosts: Record<string, { title: string; slug: string }> = {
     'e-commerce-product-images': { title: "E-Commerce Screenshot Testing Guide", slug: "ecommerce-screenshot-testing-guide" },
     'automated-testing': { title: "Visual Regression Testing Guide", slug: "visual-regression-testing-guide" },
     'website-thumbnails': { title: "Website Thumbnail Generation Guide", slug: "website-thumbnail-generation-guide" },
-    'pdf-generation': { title: "PDF Generation Complete Guide", slug: "pdf-generation-complete-guide" },
+    'pdf-generation': { title: "Invoice & Financial PDF Generation", slug: "invoice-pdf-generation-guide" },
     'web-archiving': { title: "Website Archival & Compliance Guide", slug: "website-archival-compliance-guide" },
     'competitive-analysis': { title: "Website Monitoring Screenshots Guide", slug: "website-monitoring-screenshots-guide" },
     'saas-reporting': { title: "SaaS Screenshot API Integration Guide", slug: "saas-screenshot-api-integration-guide" },
@@ -134,41 +135,41 @@ export default async function UseCasePage({ params }: Props) {
         { name: useCase.title, url: `${BASE_URL}/use-cases/${slug}` },
     ];
 
-    // Use specific FAQs from use case data, or fall back to generic ones
-    const faqs = 'faqs' in useCase && useCase.faqs ? useCase.faqs : [
-        {
-            question: `How can I use Screenshotly for ${useCase.shortTitle.toLowerCase()}?`,
-            answer: useCase.description,
-        },
-        {
-            question: "What formats are supported?",
-            answer: "Screenshotly supports PNG (best for transparency), JPEG (adjustable quality), and PDF output formats.",
-        },
-        {
-            question: "Can I remove cookie banners automatically?",
-            answer: "Yes! Our AI-powered detection automatically identifies and removes cookie banners, popups, and other distracting elements.",
-        },
-    ];
+    // Per-slug FAQs only; no generic fallback (avoids duplicate-chunk emission across indexed pages)
+    const faqs = 'faqs' in useCase && useCase.faqs ? useCase.faqs : [];
 
-    const howToSteps = [
-        { name: "Get your API key", text: "Sign up for a free account and get your API key from the dashboard." },
-        { name: "Configure your request", text: "Set up the URL, device type, and any AI removal options you need." },
-        { name: "Make the API call", text: "Send a POST request to our API endpoint with your configuration." },
-        { name: "Use your screenshot", text: "Download or process the returned image in your application." },
-    ];
+    // HowTo schema is built from the use-case's own `steps` array so each page emits unique steps
+    const howToSteps = ('steps' in useCase && useCase.steps)
+        ? useCase.steps.map((step, index) => ({
+            name: `Step ${index + 1}`,
+            text: step,
+        }))
+        : [];
+
+    // Enrichment layer: per-slug AI summary, additional paragraphs, Not For You block,
+    // operational data table, and Original Research section.
+    const enrichment = useCaseEnrichment[slug];
+    const aiSummary = enrichment?.aiSummary ?? null;
+    const notForYou = enrichment?.notForYou ?? [];
+    const additionalParagraphs = enrichment?.additionalParagraphs ?? [];
+    const dataTable = enrichment?.dataTable ?? null;
+    const originalResearch = enrichment?.originalResearch ?? null;
+    const hasNoteColumn = !!dataTable?.rows.some((r) => r.note);
 
     const relatedUseCases = getRelatedUseCases(slug);
 
     return (
         <GuestLayout>
             <JsonLd data={getBreadcrumbSchema(breadcrumbs)} />
-            <JsonLd data={getFAQSchema(faqs)} />
-            <JsonLd data={getHowToSchema({
-                name: `How to capture ${useCase.shortTitle.toLowerCase()} with Screenshotly`,
-                description: useCase.description,
-                totalTime: "PT5M",
-                steps: howToSteps,
-            })} />
+            {faqs.length > 0 && <JsonLd data={getFAQSchema(faqs)} />}
+            {howToSteps.length > 0 && (
+                <JsonLd data={getHowToSchema({
+                    name: `How to capture ${useCase.shortTitle.toLowerCase()} with Screenshotly`,
+                    description: useCase.description,
+                    totalTime: "PT5M",
+                    steps: howToSteps,
+                })} />
+            )}
 
             <article className="py-16">
                 <div className="container mx-auto px-4 max-w-4xl">
@@ -192,7 +193,7 @@ export default async function UseCasePage({ params }: Props) {
                     </nav>
 
                     {/* Header */}
-                    <header className="mb-12">
+                    <header className="mb-8">
                         <Badge variant="secondary" className="mb-4">
                             Use Case
                         </Badge>
@@ -202,11 +203,27 @@ export default async function UseCasePage({ params }: Props) {
                         </p>
                     </header>
 
-                    {/* Long Description */}
+                    {/* AI Summary Nugget — fact-dense top-of-page block for LLM extraction */}
+                    {aiSummary && (
+                        <div
+                            className="mb-12 rounded-lg border-l-4 border-primary bg-primary/5 p-4 text-sm text-foreground"
+                            aria-label="Quick summary"
+                        >
+                            <span className="mb-1 block text-xs font-semibold uppercase tracking-wide text-primary">
+                                Quick summary
+                            </span>
+                            {aiSummary}
+                        </div>
+                    )}
+
+                    {/* Long Description (base + enrichment paragraphs for indexed slugs) */}
                     {'longDescription' in useCase && useCase.longDescription && (
                         <section className="mb-12 prose prose-gray dark:prose-invert max-w-none">
                             <h2 className="text-2xl font-semibold mb-4">Overview</h2>
-                            {useCase.longDescription.split('\n\n').map((paragraph, index) => (
+                            {[
+                                ...useCase.longDescription.split('\n\n'),
+                                ...additionalParagraphs,
+                            ].map((paragraph, index) => (
                                 <p key={index} className="text-muted-foreground mb-4 leading-relaxed">
                                     {paragraph}
                                 </p>
@@ -274,18 +291,90 @@ export default async function UseCasePage({ params }: Props) {
                         </div>
                     </section>
 
+                    {/* Operational data table (enrichment) */}
+                    {dataTable && (
+                        <section className="mb-12">
+                            <h2 className="text-2xl font-semibold mb-6">{dataTable.title}</h2>
+                            <div className="border rounded-lg overflow-hidden">
+                                <table className="w-full text-sm">
+                                    <thead>
+                                        <tr className="bg-muted">
+                                            <th className="text-left p-4 font-medium">
+                                                {dataTable.labelHeader ?? 'Metric'}
+                                            </th>
+                                            <th className="text-left p-4 font-medium text-primary">
+                                                {dataTable.valueHeader ?? 'Value'}
+                                            </th>
+                                            {hasNoteColumn && (
+                                                <th className="text-left p-4 font-medium">
+                                                    {dataTable.noteHeader ?? 'Context'}
+                                                </th>
+                                            )}
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {dataTable.rows.map((row, i) => (
+                                            <tr key={i} className="border-t">
+                                                <td className="p-4 font-medium">{row.label}</td>
+                                                <td className="p-4">{row.value}</td>
+                                                {hasNoteColumn && (
+                                                    <td className="p-4 text-muted-foreground">{row.note ?? ''}</td>
+                                                )}
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </section>
+                    )}
+
+                    {/* Original Research / Data Experiment block (§14 rubric) */}
+                    {originalResearch && (
+                        <section className="mb-12 rounded-xl bg-muted/30 p-6">
+                            <h2 className="text-2xl font-semibold mb-2">{originalResearch.heading}</h2>
+                            <p className="text-sm text-muted-foreground mb-4 italic">
+                                Methodology: {originalResearch.methodology}
+                            </p>
+                            <ol className="space-y-3 list-decimal list-inside">
+                                {originalResearch.findings.map((finding, i) => (
+                                    <li key={i} className="text-foreground leading-relaxed">{finding}</li>
+                                ))}
+                            </ol>
+                        </section>
+                    )}
+
                     {/* FAQs */}
-                    <section className="mb-12">
-                        <h2 className="text-2xl font-semibold mb-6">Frequently Asked Questions</h2>
-                        <div className="space-y-4">
-                            {faqs.map((faq, index) => (
-                                <div key={index} className="border rounded-lg p-4">
-                                    <h3 className="font-medium mb-2">{faq.question}</h3>
-                                    <p className="text-muted-foreground">{faq.answer}</p>
-                                </div>
-                            ))}
-                        </div>
-                    </section>
+                    {faqs.length > 0 && (
+                        <section className="mb-12">
+                            <h2 className="text-2xl font-semibold mb-6">Frequently Asked Questions</h2>
+                            <div className="space-y-4">
+                                {faqs.map((faq, index) => (
+                                    <div key={index} className="border rounded-lg p-4">
+                                        <h3 className="font-medium mb-2">{faq.question}</h3>
+                                        <p className="text-muted-foreground">{faq.answer}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        </section>
+                    )}
+
+                    {/* Not For You — honesty block (E-E-A-T trust signal) */}
+                    {notForYou.length > 0 && (
+                        <section className="mb-12 rounded-xl border border-dashed p-6">
+                            <h2 className="text-2xl font-semibold mb-4">When this isn&apos;t the right fit</h2>
+                            <p className="text-sm text-muted-foreground mb-4">
+                                Screenshotly is not ideal for every workflow. Consider a different approach if any of the following apply:
+                            </p>
+                            <ul className="space-y-2">
+                                {notForYou.map((item, index) => (
+                                    <li key={index} className="flex items-start gap-3">
+                                        <span className="mt-1 inline-block h-1.5 w-1.5 flex-shrink-0 rounded-full bg-muted-foreground" />
+                                        <span className="text-foreground">{item}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </section>
+                    )}
 
                     {/* Deep Dive Blog Link */}
                     {relatedBlogPosts[slug] && (

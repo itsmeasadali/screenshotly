@@ -1,5 +1,5 @@
 ---
-title: "Screenshot API Rate Limits: Understanding and Optimizing Usage"
+title: "Screenshot API Rate Limits: Headers & Backoff"
 description: "Master screenshot API rate limits. Learn about rate limit headers, backoff strategies, and optimization techniques for high-volume usage."
 excerpt: "Navigate API rate limits effectively. Maximize throughput while staying within limits through smart batching and caching."
 author: "asad-ali"
@@ -9,6 +9,13 @@ tags: ["rate limits", "optimization", "api", "performance"]
 keywords: ["api rate limits", "rate limiting", "screenshot api limits", "api throttling", "rate limit optimization"]
 featured: false
 readingTime: 6
+faqs:
+  - question: "What rate limit headers should I inspect on every response?"
+    answer: "X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, and Retry-After (on 429). Log these in your observability stack — a shrinking Remaining over a sustained window is early warning for a throttle event. Automate concurrency reduction when Remaining drops below 20%."
+  - question: "Should I stagger requests proactively or only retry on 429?"
+    answer: "Both. Proactive staggering (a token-bucket rate limiter on your side at ~80% of the published rate) prevents the majority of 429s. Reactive backoff on Retry-After handles the edge cases when your limiter is miscalibrated or downstream shrinks your quota."
+  - question: "How do I coordinate rate limits across multiple workers?"
+    answer: "Redis-backed distributed rate limiting. Every worker decrements a shared counter before the capture. Without coordination, 10 workers each enforcing their own local 60/min limit produce 600/min aggregate — well past the actual plan ceiling. Redis is the usual answer; a dedicated rate-limit service is overkill for this."
 ---
 
 Rate limits protect API infrastructure and ensure fair usage across customers. Understanding how rate limits work helps you maximize throughput while avoiding errors.

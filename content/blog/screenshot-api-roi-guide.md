@@ -1,5 +1,5 @@
 ---
-title: "Screenshot API ROI Guide: Build the Business Case for API Adoption"
+title: "Screenshot API ROI: Build the Business Case"
 description: "Build a business case for screenshot API adoption. Calculate ROI, compare build vs buy, and get budget approval with proven formulas and pilot strategies."
 excerpt: "How to justify screenshot API spend to your manager or finance team. ROI formulas, TCO comparison with self-hosted solutions, and pilot program planning."
 author: "asad-ali"
@@ -9,6 +9,13 @@ tags: ["roi", "budget-planning", "business-case", "build-vs-buy"]
 keywords: ["screenshot API ROI", "API cost calculator", "build vs buy screenshot", "screenshot API total cost", "justify API investment"]
 featured: false
 readingTime: 8
+faqs:
+  - question: "What's a simple ROI formula for a managed screenshot API?"
+    answer: "Monthly value = (hours saved × loaded engineering cost) + (infra cost avoided) − (API cost). Teams shifting from manual or self-hosted Puppeteer typically save 15–40 engineering hours/month plus $100–500 in infra. At a $150/hr loaded rate, a $59 Growth plan pays back on the first engineering hour of avoided work each month."
+  - question: "How do I pitch this to a finance team that thinks in CapEx?"
+    answer: "Reframe as deferred CapEx avoidance. Building equivalent capability in-house requires engineering time (visible CapEx) plus ongoing infra (OpEx) plus on-call overhead (hidden OpEx). Most finance teams accept a two-line comparison: 'Internal build: $X initial + $Y/mo ongoing. Managed API: $Z/mo flat.' The second line is easier to defend."
+  - question: "What's the right pilot program length?"
+    answer: "30–45 days. Long enough to run through one full business cycle (one month-end, one release cadence), short enough that no one loses interest before you have data. Define one success metric up front (e.g., 'reduce doc-screenshot maintenance by 80%') and measure against it at the end."
 ---
 
 You’ve validated that a screenshot API fits your workflow—but how do you get budget approved? Engineering leaders and finance teams want clear numbers: ROI, total cost of ownership, and break-even. This guide helps you build a business case with formulas, TCO comparisons, and a structured pilot so you can justify the investment with confidence.

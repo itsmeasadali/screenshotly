@@ -9,11 +9,18 @@ tags: ["pdf", "batch-processing", "email-delivery", "automation"]
 keywords: ["batch PDF generation", "email PDF attachment", "scheduled PDF reports", "PDF automation pipeline", "bulk invoice generation"]
 featured: false
 readingTime: 8
+faqs:
+  - question: "What concurrency should I use for a month-end batch of 500 invoices?"
+    answer: "6–10 concurrent generators is the sweet spot. Each PDF takes 1.5–2.5 seconds; concurrency 8 gets a 500-invoice batch through in about 10 minutes. Above 10 you start hitting diminishing returns from queue contention and downstream upload bandwidth, not API rate limits."
+  - question: "Should I regenerate PDFs on re-email requests, or serve the stored copy?"
+    answer: "Always serve the stored PDF. If the underlying data has changed since the original generation (late invoices posting, adjusted accruals), a re-render would differ from what the customer originally received — which is a legal and reconciliation problem. Email the archived artifact, never a fresh generation."
+  - question: "How long should I retain generated PDFs?"
+    answer: "Seven years is the common defensible default for financial and billing documents in most jurisdictions. Store with content-addressed hash and a human-readable name in object storage with retention lock. Compliance will ask for it during SOC2 and enterprise sales cycles."
 ---
 
 Once you have your PDF templates and API integration working, the next challenge is **automation at scale**: generating hundreds of invoices at month-end, emailing them to customers, running scheduled report generation, and archiving everything to cloud storage. This guide focuses on the **automation pipeline** — not the templates or API mechanics themselves.
 
-For invoice HTML templates, currency formatting, and tax compliance, see our [Invoice & Financial PDF Generation](/blog/pdf-generation-complete-guide) guide. For the core PDF API options (page sizes, margins, headers/footers), see our [PDF Generation API Guide](/blog/pdf-generation-guide). For CSS print styling, see our [CSS Print Styling for PDFs](/blog/html-to-pdf-generation-guide) guide.
+For invoice HTML templates, currency formatting, and tax compliance, see our [Invoice & Financial PDF Generation](/blog/invoice-pdf-generation-guide) guide. For the core PDF API options (page sizes, margins, headers/footers), see our [PDF Generation API Guide](/blog/pdf-generation-guide). For CSS print styling, see our [CSS Print Styling for PDFs](/blog/html-to-pdf-generation-guide) guide.
 
 ## Automation Architecture
 
@@ -86,7 +93,7 @@ async function generateBatchInvoices(invoices) {
 }
 ```
 
-For the `generateInvoicePdf` function itself (templates, currency formatting, tax sections), see our [Invoice & Financial PDF Generation](/blog/pdf-generation-complete-guide) guide.
+For the `generateInvoicePdf` function itself (templates, currency formatting, tax sections), see our [Invoice & Financial PDF Generation](/blog/invoice-pdf-generation-guide) guide.
 
 ### End-of-Month Billing Pipeline
 
@@ -280,7 +287,7 @@ Generate all PDFs first, then deliver. This lets you retry failed emails without
 [Get your free API key →](/sign-up) — 100 free screenshots to get started.
 
 See also:
-- [Invoice & Financial PDF Generation →](/blog/pdf-generation-complete-guide)
+- [Invoice & Financial PDF Generation →](/blog/invoice-pdf-generation-guide)
 - [PDF Generation API Guide →](/blog/pdf-generation-guide)
 - [CSS Print Styling for PDFs →](/blog/html-to-pdf-generation-guide)
 

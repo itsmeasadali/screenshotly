@@ -1,8 +1,12 @@
 import { Metadata } from 'next';
 import GuestLayout from '@/components/layouts/GuestLayout';
+import { JsonLd } from '@/components/seo';
+import { getBreadcrumbSchema } from '@/lib/seo/structured-data';
+
+const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://screenshotly.app';
 
 export const metadata: Metadata = {
-  title: "Cookie Policy",
+  title: "Cookie Policy – Essential, Analytics & Functional",
   description: "How Screenshotly uses cookies and similar technologies. Learn about essential, analytics, and functional cookies on our website.",
   alternates: {
     canonical: "/cookies",
@@ -10,8 +14,14 @@ export const metadata: Metadata = {
 };
 
 export default function CookiePage() {
+  const breadcrumbs = [
+    { name: 'Home', url: BASE_URL },
+    { name: 'Cookie Policy', url: `${BASE_URL}/cookies` },
+  ];
+
   return (
     <GuestLayout>
+      <JsonLd data={getBreadcrumbSchema(breadcrumbs)} />
       <div className="container mx-auto px-4 py-12 max-w-4xl">
         <h1 className="text-4xl font-bold text-foreground mb-8">Cookie Policy</h1>
 

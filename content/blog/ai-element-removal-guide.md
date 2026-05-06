@@ -1,5 +1,5 @@
 ---
-title: "AI-Powered Element Removal: Clean Screenshots Without Popups and Banners"
+title: "AI Element Removal: Clean Screenshots Without Popups"
 slug: "ai-element-removal-guide"
 excerpt: "Learn how Screenshotly's AI automatically detects and removes cookie banners, chat widgets, and popups for pristine website screenshots."
 publishedAt: "2024-06-15T10:00:00Z"
@@ -38,7 +38,7 @@ These elements are everywhere. GDPR compliance means cookie banners on virtually
 
 For [documentation screenshots](/use-cases/documentation-screenshots), these distractions are unacceptable. For [social media previews](/use-cases/social-media-previews), they look unprofessional. For [visual testing](/use-cases/automated-testing), they create false positives.
 
-This guide explores how Screenshotly's AI-powered element removal solves this problem automatically, and how you can leverage it for pristine, professional screenshots every time.
+This guide explains how Screenshotly's AI-powered element removal solves the problem automatically, and how to configure it for clean, professional screenshots every time.
 
 ## Understanding AI Element Detection
 

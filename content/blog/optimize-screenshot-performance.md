@@ -1,7 +1,7 @@
 ---
 title: "Optimizing Screenshot API Performance: Speed and Efficiency"
 slug: "optimize-screenshot-performance"
-excerpt: "Reduce screenshot capture times and costs with these performance optimization techniques."
+excerpt: "Cut screenshot capture times by up to 70% with resource blocking, viewport tuning, parallel processing, and caching. Real benchmarks included."
 publishedAt: "2024-05-01T10:00:00Z"
 updatedAt: "2024-12-15T10:00:00Z"
 author: "asad-ali"
@@ -36,7 +36,7 @@ Every millisecond counts in production. This guide focuses on **speed and latenc
 
 Screenshot APIs are critical for modern web applications, from [automated testing](/use-cases/automated-testing) to [content generation](/use-cases/social-media-previews). However, slow screenshot capture can bottleneck your entire application. After analyzing millions of screenshot requests, we've identified the key speed optimization strategies that can reduce capture times by up to 70%.
 
-For **cost reduction strategies** (credit savings, budget monitoring, plan optimization), see our [Screenshot API Cost Optimization](/blog/screenshot-api-performance-optimization) guide. For **caching strategies** (Redis, CDN, multi-layer caching), see our [Screenshot Caching Strategies](/blog/screenshot-caching-strategies-guide) guide.
+For **cost reduction strategies** (credit savings, budget monitoring, plan optimization), see our [Screenshot API Cost Optimization](/blog/reduce-screenshot-api-costs) guide. For **caching strategies** (Redis, CDN, multi-layer caching), see our [Screenshot Caching Strategies](/blog/screenshot-caching-strategies-guide) guide.
 
 This guide builds on our [getting started tutorial](/blog/getting-started-with-screenshot-api) and complements our [integration guides](/integrations) for [JavaScript](/integrations/javascript), [Python](/integrations/python), and other popular languages.
 
@@ -51,7 +51,7 @@ Before diving into optimizations, it's crucial to understand where time is spent
 
 ### Performance Benchmarks
 
-Based on our analysis of over 10 million screenshots:
+Across representative workloads captured during our internal benchmarks:
 - **Average capture time**: 3.2 seconds
 - **Optimized capture time**: 0.9 seconds (72% improvement)
 - **Cost reduction**: Up to 60% through efficient resource usage
@@ -310,7 +310,7 @@ Focus optimization efforts on the biggest impact areas:
 
 Related guides:
 
-- **[Screenshot API Cost Optimization](/blog/screenshot-api-performance-optimization)**: Reduce spend with credit-saving techniques and budget monitoring
+- **[Screenshot API Cost Optimization](/blog/reduce-screenshot-api-costs)**: Reduce spend with credit-saving techniques and budget monitoring
 - **[Screenshot Caching Strategies](/blog/screenshot-caching-strategies-guide)**: Redis, CDN, and multi-layer caching implementations
 - **[Mobile Screenshot Optimization](/blog/mobile-responsive-screenshots)**: Device-specific performance tuning
 

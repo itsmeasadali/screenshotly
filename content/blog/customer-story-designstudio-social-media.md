@@ -1,5 +1,5 @@
 ---
-title: "How DesignStudio Pro Generates 10,000+ Social Media Previews Daily"
+title: "DesignStudio Pro: 10,000+ Social Media Previews Daily"
 description: "DesignStudio Pro uses Screenshotly to power their social media preview feature, generating over 10,000 OG images daily for their design platform users."
 excerpt: "DesignStudio Pro needed to generate thousands of dynamic social media previews. Here's how they scaled to 10,000+ daily with Screenshotly."
 author: "asad-ali"
@@ -9,6 +9,13 @@ tags: ["customer story", "social media", "og images", "case study", "high volume
 keywords: ["social media previews", "og image generation", "dynamic og images", "social sharing automation"]
 featured: false
 readingTime: 7
+faqs:
+  - question: "Why did DesignStudio Pro move off their own Puppeteer cluster?"
+    answer: "Infrastructure cost and pager fatigue. Running Chrome at 10k+ captures/day required 8–12 GB RAM workers that regularly OOM-killed themselves. Engineering spent hours per month on Chrome-version drift, memory tuning, and retry logic — none of which was product work. Moving to a managed API removed the entire operational surface."
+  - question: "What's the cache hit rate on their dynamic OG images?"
+    answer: "About 94% at steady state. Social platforms (Slack, LinkedIn, Twitter) re-fetch OG images every 12–72 hours, so their 24-hour CDN cache absorbs most requests. New shares trigger the single first-capture; everything after is CDN-served."
+  - question: "How much did they actually save after the migration?"
+    answer: "Roughly 85% of prior infrastructure spend on the capture pipeline. The Puppeteer cluster ran $2,400+/month on AWS; Screenshotly Scale plan is $199/month for equivalent volume. The larger win was engineering time — previously two engineer-days per month on maintenance, now zero."
 ---
 
 DesignStudio Pro is a collaborative design platform used by over 50,000 creative professionals. When users share their designs on social media, they expect beautiful, eye-catching preview images. But generating these previews at scale presented a significant engineering challenge.

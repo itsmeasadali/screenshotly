@@ -9,11 +9,18 @@ tags: ["pdf", "css", "print", "styling", "page-breaks", "layout"]
 keywords: ["CSS print styles PDF", "PDF page breaks CSS", "print stylesheet", "@media print guide", "orphans widows CSS", "page-break CSS", "CSS @page size"]
 featured: false
 readingTime: 12
+faqs:
+  - question: "How do I force a page break before a specific element?"
+    answer: "`page-break-before: always` on the element (CSS 2.1) or `break-before: page` (CSS 3). Both work in print renderers. Use on invoice line-item separators, chapter headings, and certificate boundaries — anywhere the content logically starts a new page."
+  - question: "Why do my tables split across page breaks mid-row?"
+    answer: "Apply `page-break-inside: avoid` (or `break-inside: avoid`) to `<tr>` elements. This tells the print renderer to keep each row whole — if it doesn't fit on the current page, push the entire row to the next. Critical for invoices and financial tables where row integrity matters."
+  - question: "Can I show page numbers in the footer?"
+    answer: "Yes, via the `@page` rule with a `@bottom-center` margin box: `@page { @bottom-center { content: 'Page ' counter(page) ' of ' counter(pages); } }`. This produces 'Page 1 of 5' automatically. Combine with a header rule for document title + date."
 ---
 
 Web pages are designed for screens—fluid layouts, hover states, fixed headers. When you generate a PDF, the output often looks wrong: elements cut across pages, navigation appears in the document, backgrounds vanish, and text breaks awkwardly. The fix is **CSS print styling**: `@media print` rules that control how your content renders on paper. This guide focuses exclusively on the **CSS design and formatting** side of PDF generation—page breaks, orphan/widow control, `@page` margins, paper sizes, and print-specific layouts.
 
-For the PDF API itself (endpoints, options, headers/footers via JavaScript), see our [PDF Generation API Guide](/blog/pdf-generation-guide). For invoice-specific templates and currency formatting, see our [Invoice & Financial PDF Generation](/blog/pdf-generation-complete-guide) guide.
+For the PDF API itself (endpoints, options, headers/footers via JavaScript), see our [PDF Generation API Guide](/blog/pdf-generation-guide). For invoice-specific templates and currency formatting, see our [Invoice & Financial PDF Generation](/blog/invoice-pdf-generation-guide) guide.
 
 ## The PDF Formatting Challenge
 
@@ -391,4 +398,4 @@ Key takeaways:
 
 [Get your free API key →](/sign-up) – 100 free requests to start.
 
-Learn more: [PDF Generation API Guide →](/blog/pdf-generation-guide) | [Invoice & Financial PDFs →](/blog/pdf-generation-complete-guide) | [Batch Generation & Email Delivery →](/blog/invoice-report-generation-guide)
+Learn more: [PDF Generation API Guide →](/blog/pdf-generation-guide) | [Invoice & Financial PDFs →](/blog/invoice-pdf-generation-guide) | [Batch Generation & Email Delivery →](/blog/invoice-report-generation-guide)

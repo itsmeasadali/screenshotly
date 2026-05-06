@@ -9,6 +9,13 @@ tags: ["php", "tutorial", "api", "integration", "laravel"]
 keywords: ["php screenshot api", "php screenshot tutorial", "laravel screenshot", "guzzle screenshot", "php website screenshot"]
 featured: false
 readingTime: 8
+faqs:
+  - question: "Should I use cURL or Guzzle for PHP screenshot integration?"
+    answer: "Use Guzzle for any production code. Its middleware stack handles retries, connection pooling, and response streaming cleanly, and Laravel/Symfony integrate with it out of the box. Raw cURL is fine for quick scripts but accumulates boilerplate fast in real applications."
+  - question: "How do I avoid blocking PHP-FPM workers with screenshot capture?"
+    answer: "Always run captures inside a queued job — Laravel Queue, Symfony Messenger, or Action Scheduler on WordPress. Inline controller capture blocks a worker for 2–5 seconds and saturates your pool under even modest traffic, producing 502s."
+  - question: "Why does my Guzzle call fail on large PDF captures?"
+    answer: "You're buffering the response into memory. Use Guzzle's sink option — `new Client(['sink' => $path])` — to stream the body directly to disk or S3. Calling getBody()->getContents() on an 8 MB PDF will exceed PHP-FPM's default memory_limit."
 ---
 
 PHP powers a significant portion of the web, from WordPress to Laravel applications. Integrating screenshot capabilities into your PHP application is straightforward with the right approach.

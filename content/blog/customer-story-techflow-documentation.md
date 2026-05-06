@@ -1,5 +1,5 @@
 ---
-title: "How TechFlow Reduced Documentation Maintenance by 85% with Screenshotly"
+title: "TechFlow: 85% Less Documentation Maintenance Overhead"
 description: "Learn how TechFlow automated their documentation screenshots, saving 20+ hours per week and keeping their docs always up-to-date."
 excerpt: "TechFlow was spending 20+ hours weekly on manual screenshot updates. See how they automated everything with Screenshotly's API."
 author: "asad-ali"
@@ -9,6 +9,13 @@ tags: ["customer story", "documentation", "automation", "case study"]
 keywords: ["documentation automation", "screenshot automation", "technical documentation", "docs screenshots"]
 featured: false
 readingTime: 8
+faqs:
+  - question: "How does TechFlow handle authenticated dashboard captures for docs?"
+    answer: "They issue a narrow read-only doc-capture token on their backend, pass it as a Cookie header in the API request, and rotate weekly. No real user credentials touch CI; no API keys with write scope are ever used for capture. The token scope is limited to docs-visible screens only."
+  - question: "What exactly triggers a screenshot refresh?"
+    answer: "Every merge to main triggers a GitHub Actions workflow that captures their manifest of documentation pages, writes PNGs to /static/img/screens/, and commits via a docs-bot. Screenshots update on the same cadence as deploys — they can't drift."
+  - question: "Why didn't TechFlow just use Puppeteer in CI?"
+    answer: "They tried. The Chrome container inside a GitHub Actions runner ate ~3 minutes per workflow, hit flaky timeout issues on heavy pages, and required version-pinning maintenance every other month. A single API call per page is deterministic, takes 2–4 seconds, and never needs Chrome-version care."
 ---
 
 When TechFlow's engineering team launched their new SaaS platform, they faced a challenge familiar to many growing companies: keeping documentation screenshots up-to-date. With a rapidly evolving UI and weekly releases, their documentation was constantly falling behind.
@@ -58,7 +65,7 @@ Time: < 5 minutes
 
 ## Implementation Details
 
-TechFlow's implementation leverages several Screenshotly features:
+TechFlow's implementation combines several Screenshotly features:
 
 ### AI Element Removal
 
@@ -89,7 +96,7 @@ const captureDocScreenshot = async (page) => {
 };
 ```
 
-"The AI removal is a game-changer," says Sarah. "We don't have to worry about Intercom or cookie banners appearing in our docs. Every screenshot is clean automatically."
+"The AI removal is what made this workflow stick," says Sarah. "We don't have to worry about Intercom or cookie banners appearing in our docs. Every screenshot is clean automatically."
 
 ### Consistent Viewport Sizing
 
@@ -150,9 +157,9 @@ After three months with Screenshotly:
 
 ## Team Feedback
 
-"I used to dread documentation updates," admits James Park, TechFlow's Senior Engineer. "Now I just add a page to our screenshot manifest and it's captured automatically on next deploy. The AI removal means I never have to open Photoshop again."
+Engineers no longer dread documentation updates. A new page added to the screenshot manifest is captured automatically on the next deploy, and the AI removal pass cleans Intercom, cookie banners, and session-specific badges without a designer opening Photoshop.
 
-The technical writing team has been able to redirect their time from screenshot maintenance to creating new content:
+The technical writing team has been able to redirect time from screenshot maintenance to creating new content:
 
 "We've published 3x more documentation content since implementing Screenshotly," notes Sarah. "Instead of updating old screenshots, we're writing guides for new features. It's transformed our documentation workflow."
 

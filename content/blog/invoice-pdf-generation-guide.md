@@ -9,6 +9,13 @@ tags: ["pdf", "invoices", "billing", "financial", "receipts", "automation"]
 keywords: ["invoice PDF API", "receipt PDF generation", "financial document API", "invoice generation API", "tax document PDF", "currency formatting PDF", "invoice HTML template"]
 featured: false
 readingTime: 12
+faqs:
+  - question: "How do I handle multi-currency formatting in invoices?"
+    answer: "Lock the locale per-invoice based on the customer's billing country (not server timezone) and use Intl.NumberFormat on the server. Render with full currency codes (USD, EUR) not just symbols. For multi-currency vendors, include an exchange-rate footer line citing the source and date."
+  - question: "Where should invoice numbers come from — at generation or at creation?"
+    answer: "At invoice creation, stored on the invoice record. Many jurisdictions require sequential invoice numbers for tax audits. Generating the number at PDF render time means re-renders can change the number, which breaks audit trails. The PDF template reads from the record; the record is immutable."
+  - question: "Is the PDF output acceptable for legal/audit retention?"
+    answer: "Standard PDF 1.7 with embedded fonts meets most audit requirements — selectable text, immutable structure, auditor-friendly. For PDF/A-2b archival compliance (some EU jurisdictions, some long-term legal retention policies), post-process with a dedicated library. Confirm the specific archival standard your auditor requires."
 ---
 
 Billing systems, e-commerce platforms, and financial software need reliable PDF generation for invoices, receipts, and tax documents. Screenshot APIs deliver pixel-perfect, production-ready PDFs from your existing HTML templates—without heavyweight PDF libraries or server-side rendering complexity. This guide focuses exclusively on **invoice and financial document design**: HTML templates, currency/number formatting, tax compliance layouts, and receipt generation.

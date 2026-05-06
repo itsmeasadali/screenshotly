@@ -6,8 +6,20 @@ import { getAllBlogPosts, getAllAuthors } from '@/lib/markdown';
 
 const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://screenshotly.app';
 
+// Deploy-date baseline used as `lastModified` for static / hub / detail pages.
+// Pinning it (rather than `new Date()` at request time) gives search engines a
+// stable freshness signal — every refetch of /sitemap.xml otherwise reported
+// "everything changed today," which Google eventually learns to ignore.
+//
+// Source order:
+//   1. NEXT_PUBLIC_BUILD_DATE (set at deploy time in CI; ISO string)
+//   2. The hardcoded fallback below — bump on meaningful site refreshes.
+const BUILD_DATE = process.env.NEXT_PUBLIC_BUILD_DATE
+    ? new Date(process.env.NEXT_PUBLIC_BUILD_DATE)
+    : new Date('2026-05-01T00:00:00Z');
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const now = new Date();
+  const now = BUILD_DATE;
 
   // Static pages
   const staticPages: MetadataRoute.Sitemap = [

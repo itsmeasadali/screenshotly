@@ -2,11 +2,25 @@
   "name": "screenshotly",
   "version": "0.1.0",
   "private": true,
+  "description": "Screenshotly — screenshot API with AI-powered element removal, device mockups, and a REST endpoint built on Next.js 15 + Puppeteer.",
+  "license": "UNLICENSED",
+  "author": "Screenshotly",
+  "homepage": "https://screenshotly.app",
+  "keywords": [
+    "screenshot-api",
+    "headless-chrome",
+    "puppeteer",
+    "nextjs",
+    "web-capture",
+    "pdf-generation",
+    "og-image"
+  ],
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
+    "typecheck": "tsc --noEmit",
     "postinstall": "prisma generate"
   },
   "dependencies": {

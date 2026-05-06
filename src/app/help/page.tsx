@@ -104,7 +104,7 @@ export default function HelpPage() {
       description: "Common issues and solutions",
       articles: [
         { label: "Error Handling & Debugging", href: "/blog/screenshot-api-error-handling-guide" },
-        { label: "Cost & Budget Optimization", href: "/blog/screenshot-api-performance-optimization" },
+        { label: "Cost & Budget Optimization", href: "/blog/reduce-screenshot-api-costs" },
         { label: "Dynamic Content Captures", href: "/blog/dynamic-content-screenshot-guide" },
         { label: "Mobile Responsive Screenshots", href: "/blog/mobile-responsive-screenshots" },
       ]

@@ -9,6 +9,13 @@ tags: ["ci/cd", "github actions", "devops", "automation", "testing"]
 keywords: ["ci/cd screenshot", "github actions screenshot", "gitlab ci screenshot", "automated screenshot pipeline", "visual testing ci"]
 featured: false
 readingTime: 9
+faqs:
+  - question: "Can I run screenshot capture inside a GitHub Actions workflow without installing Chrome?"
+    answer: "Yes — that's the whole point of using a hosted API. A single cURL call replaces the entire browser container. Store the API key as a repo secret, call the API on push to main, upload the PNG as a workflow artifact. Total runtime: 4–6 seconds per capture, zero Chrome setup."
+  - question: "How do I fail a PR build on a visual regression?"
+    answer: "After capture, diff the new image against the baseline stored in main using ImageMagick's compare or pixelmatch. Any pixel-diff above your threshold (typically 2–3% with pHash/SSIM) exits the job non-zero, which blocks the merge. Post the diff image as a PR comment so the reviewer can see what changed."
+  - question: "What's the right visual-regression tolerance?"
+    answer: "Start at 2% pHash/SSIM diff. Tighter triggers false positives from anti-aliasing and subpixel rendering; looser misses real regressions. Zone-split long pages (hero, pricing, footer) with separate baselines so a rotated testimonial on one zone doesn't fail the whole build."
 ---
 
 Modern CI/CD pipelines do more than build and deploy code. They can automatically update documentation screenshots, run visual regression tests, and generate preview images—all without manual intervention.

@@ -9,6 +9,13 @@ tags: ["documentation", "automation", "ci/cd", "developer experience"]
 keywords: ["documentation screenshots", "docs automation", "screenshot api documentation", "technical documentation"]
 featured: false
 readingTime: 10
+faqs:
+  - question: "Should I commit generated screenshots to the docs repo?"
+    answer: "Yes. Committing keeps the docs bundle self-contained, makes diffs visible in PRs, and lets writers preview changes locally. For large sites, use Git LFS or a dedicated /assets submodule to avoid bloating the main repo. Auto-commit via a docs-bot keeps the human out of the loop."
+  - question: "How do I capture authenticated pages in CI?"
+    answer: "Mint a narrow read-only doc-capture token on your backend, pass it in a Cookie header on the API request, and rotate weekly. Never store real user credentials in CI secrets. The token scope should only allow access to pages that will appear in public docs."
+  - question: "What do I do when the screenshot doesn't match the rendered page?"
+    answer: "Ninety percent of mismatches are timing. Set waitUntil: 'networkidle' to hold the capture until the page has finished loading lazy images and async data. For SPAs, add waitForSelector pointing at a known post-hydration element. If still inconsistent, add a 500ms delay as a last resort."
 ---
 
 Documentation screenshots that don't match your product erode user trust and increase support tickets. Yet keeping screenshots manually updated is time-consuming and error-prone, especially with frequent releases.

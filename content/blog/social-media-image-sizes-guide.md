@@ -1,5 +1,5 @@
 ---
-title: "Social Media Image Sizes in 2026: Complete Guide with Automation"
+title: "Social Media Image Sizes 2026: Complete Reference"
 description: "Complete reference for social media image dimensions in 2026. Plus how to automate perfect-sized previews for every platform."
 excerpt: "The definitive guide to social media image sizes. Learn optimal dimensions for every platform and automate preview generation."
 author: "asad-ali"
@@ -9,6 +9,13 @@ tags: ["social media", "image sizes", "automation", "marketing"]
 keywords: ["social media image sizes", "og image dimensions", "twitter card size", "facebook image size", "linkedin image dimensions"]
 featured: false
 readingTime: 6
+faqs:
+  - question: "What's the single most important OG image size to get right?"
+    answer: "1200×630 pixels. It works across Facebook, LinkedIn, Twitter/X, Slack, Discord, iMessage, and every other platform that implements the Open Graph spec. If you only optimize one size, pick this one and move on. Platform-specific overrides (like Twitter cards) are nice-to-have, not required."
+  - question: "Do I need separate images for Twitter/X cards?"
+    answer: "Only if you want to use Twitter's summary_large_image card format, which crops differently than standard OG. In practice most teams use the same 1200×630 OG image and accept the slight Twitter crop — the ROI of maintaining separate assets rarely justifies the pipeline complexity."
+  - question: "How do I know if my OG images are actually rendering correctly?"
+    answer: "Paste the URL into each platform's official debugger: Facebook Sharing Debugger, LinkedIn Post Inspector, Twitter Card Validator. These show exactly what each platform will render and cache. Run this check after every OG template change before marketing shares the link."
 ---
 
 Social media platforms have specific image dimension requirements. Using the wrong size means cropped previews, blurry images, or wasted screen real estate. This guide covers optimal dimensions for every major platform, plus how to automate perfect images every time.

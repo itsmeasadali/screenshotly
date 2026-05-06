@@ -9,6 +9,13 @@ tags: ["dynamic content", "spa", "javascript", "technical"]
 keywords: ["dynamic content screenshot", "spa screenshot", "lazy loading screenshot", "javascript screenshot", "wait for content"]
 featured: false
 readingTime: 8
+faqs:
+  - question: "What's the right wait strategy for a React SPA?"
+    answer: "Use waitUntil: 'networkidle' plus a selector wait for a known post-hydration element (like a specific data-testid on a loaded component). networkidle alone can fire before React finishes client-side rendering; the selector wait catches the hydrated state."
+  - question: "How do I capture past lazy-loaded images?"
+    answer: "Enable scroll-and-capture mode, which scrolls the page top-to-bottom before capture and triggers IntersectionObserver-based lazy loaders. Alternatively, pre-warm the capture with a scrollHeight trigger. For infinite-scroll pages, explicitly set a max scroll depth — otherwise the capture runs until timeout."
+  - question: "Can I freeze CSS animations for a deterministic capture?"
+    answer: "Yes — inject CSS via the API's custom-CSS parameter: `* { animation: none !important; transition: none !important; }`. This freezes all keyframe animations and transitions at their final state, producing a deterministic image that reliably diffs against a baseline."
 ---
 
 Modern websites are dynamic—content loads asynchronously, images lazy load, and animations run continuously. Capturing accurate screenshots of these pages requires understanding the timing and using the right techniques.

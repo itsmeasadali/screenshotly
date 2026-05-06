@@ -9,6 +9,13 @@ tags: ["authentication", "cookies", "protected pages", "api", "security"]
 keywords: ["authenticated screenshot", "screenshot with login", "capture logged in page", "session cookies screenshot"]
 featured: false
 readingTime: 8
+faqs:
+  - question: "Is it safe to pass my real user session cookie to the capture API?"
+    answer: "No — mint a narrow, read-only service account instead. Real user sessions have full permissions and can be rotated accidentally, locking the capture pipeline out. A dedicated capture account with scoped read-only permissions is safer, revocable, and easier to audit."
+  - question: "How do I capture pages behind SSO (SAML, OAuth)?"
+    answer: "Complete the login flow once in a browser, export the resulting session cookies, and inject them in the API request's cookies array. For SAML specifically, the session cookie post-redirect is usually sufficient — you don't need to replay the full auth handshake on every capture."
+  - question: "My captures keep expiring mid-run — how do I prevent that?"
+    answer: "Short-lived session tokens expire during long batches. Either use a longer-lived service-account API key (if the target supports it), or refresh the session at the start of the batch and pass the fresh cookie through. Implement a 401 handler that refreshes and retries once."
 ---
 
 Many valuable screenshots require authentication—dashboards, admin panels, user profiles, and internal tools. Capturing these programmatically requires passing authentication credentials to the screenshot service.

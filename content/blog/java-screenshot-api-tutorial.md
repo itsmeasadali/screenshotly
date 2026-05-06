@@ -9,6 +9,13 @@ tags: ["java", "tutorial", "api", "integration", "spring"]
 keywords: ["java screenshot api", "spring boot screenshot", "java website screenshot", "okhttp screenshot", "java capture url"]
 featured: false
 readingTime: 8
+faqs:
+  - question: "Should I use Java's built-in HttpClient or OkHttp?"
+    answer: "Java 11+ HttpClient is production-grade and comes with the JDK — use it for new projects unless you already have OkHttp in your dependency graph. OkHttp has richer middleware semantics (interceptors, caching) but adds a library dependency. For Spring Boot, the WebClient abstraction from WebFlux is idiomatic if you're already async."
+  - question: "Where does the capture call belong in a Spring Boot service?"
+    answer: "Behind an @Async method or as a @JmsListener/@RabbitListener consumer — never in a @RequestMapping controller. Controller-inline capture blocks a Tomcat thread for 2–5 seconds, draining the thread pool under load. Offload to a dedicated executor or an AMQP/Kafka consumer."
+  - question: "How do I handle timeouts properly in Java?"
+    answer: "Configure HttpClient with connectTimeout(Duration.ofSeconds(5)) at the builder, and per-request timeout(Duration.ofSeconds(30)) on the request. The request-level timeout is separate from connect and bounds the total call. Without both, a stalled connection can hang an @Async thread indefinitely."
 ---
 
 Java remains one of the most popular languages for enterprise applications. Adding screenshot capabilities to Java apps requires proper HTTP handling, error management, and often async processing for production workloads.

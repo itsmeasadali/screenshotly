@@ -1,8 +1,12 @@
 import { Metadata } from 'next';
 import GuestLayout from '@/components/layouts/GuestLayout';
+import { JsonLd } from '@/components/seo';
+import { getBreadcrumbSchema } from '@/lib/seo/structured-data';
+
+const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://screenshotly.app';
 
 export const metadata: Metadata = {
-  title: "GDPR Compliance",
+  title: "GDPR Compliance – Your Data Rights & Our Obligations",
   description: "Screenshotly's commitment to GDPR compliance. Learn about your data rights, our legal basis for processing, and how to exercise your rights.",
   alternates: {
     canonical: "/gdpr",
@@ -10,8 +14,14 @@ export const metadata: Metadata = {
 };
 
 export default function GDPRPage() {
+  const breadcrumbs = [
+    { name: 'Home', url: BASE_URL },
+    { name: 'GDPR Compliance', url: `${BASE_URL}/gdpr` },
+  ];
+
   return (
     <GuestLayout>
+      <JsonLd data={getBreadcrumbSchema(breadcrumbs)} />
       <div className="container mx-auto px-4 py-12 max-w-4xl">
         <h1 className="text-4xl font-bold text-foreground mb-8">GDPR Compliance</h1>
 

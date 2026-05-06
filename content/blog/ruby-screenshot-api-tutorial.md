@@ -9,6 +9,13 @@ tags: ["ruby", "tutorial", "api", "integration", "rails"]
 keywords: ["ruby screenshot api", "rails screenshot", "ruby website screenshot", "faraday screenshot", "ruby capture url"]
 featured: false
 readingTime: 8
+faqs:
+  - question: "Should I use Net::HTTP or Faraday in Ruby?"
+    answer: "Use Faraday for production integrations. Its middleware stack handles retries, response parsing, and error normalization cleanly — Net::HTTP leaves all of that to you. For a one-off rake task, Net::HTTP is fine; anything touched by more than one dev should use Faraday."
+  - question: "Where should the capture run in a Rails app?"
+    answer: "In a Sidekiq or GoodJob background job, never in a controller. Controller inline capture ties up a Puma worker for 2–5 seconds and destroys throughput. The clean pattern: controller enqueues ScreenshotJob.perform_later(post); the job captures; ActiveStorage attaches the image."
+  - question: "How do I handle rate limits in Sidekiq?"
+    answer: "Raise a custom RateLimitError from the job and configure sidekiq_retry_in to respect Retry-After. The job requeues with the right delay automatically — no busy-wait, no blocked threads. For concurrency limits per job class, use the sidekiq-throttled gem."
 ---
 
 Ruby's elegant syntax makes API integration straightforward. Whether you're building a Rails application or a standalone Ruby script, adding screenshot capabilities requires just a few lines of code.

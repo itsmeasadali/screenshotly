@@ -1,5 +1,5 @@
 ---
-title: "Device Mockup API Reference: Parameters, Automation & CI/CD Integration"
+title: "Device Mockup API Reference: Parameters & CI/CD"
 description: "Complete API reference for device mockups. Parameters for every mockup type, batch generation, CI/CD pipelines, and automated app store screenshot workflows."
 excerpt: "Technical reference for the Screenshotly device mockup API. Parameter documentation, batch automation, GitHub Actions integration, and programmatic mockup selection."
 author: "asad-ali"
@@ -9,6 +9,13 @@ tags: ["mockups", "api", "automation", "ci-cd", "reference"]
 keywords: ["device mockup API", "screenshot mockup parameters", "automate device mockups", "CI/CD screenshot mockups", "mockup API reference"]
 featured: false
 readingTime: 13
+faqs:
+  - question: "Which mockup frame should I use for app store screenshots?"
+    answer: "Match the target: iPhone 15 Pro frame for iOS App Store listings, Pixel 8 for Play Store, MacBook for desktop web apps. App stores require exact pixel dimensions per device — wrap captures at the correct viewport before frame composition rather than scaling after."
+  - question: "Can I batch-generate all app store assets in a single pipeline run?"
+    answer: "Yes. Loop over (device × locale × screen) tuples, call the API with the correct viewport and mockup parameter per tuple, write to a structured output directory. A 5-device × 3-locale × 10-screen matrix (150 assets) completes in under 2 minutes at concurrency=10."
+  - question: "Should I use device mockups on every screenshot?"
+    answer: "No — reserve them for hero images and marketing. Plain crops work better for inline documentation screenshots, internal reports, and support articles. Device frames add visual weight that competes with UI detail at small sizes."
 ---
 
 Developers who need to generate device mockups at scale—app store screenshots, documentation assets, or visual regression suites—often struggle to find a consolidated API reference. This guide covers the Screenshotly device mockup API from a technical perspective: every parameter, automation patterns, and CI/CD integration.

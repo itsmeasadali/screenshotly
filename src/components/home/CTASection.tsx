@@ -26,8 +26,9 @@ export const CTASection = ({ userId }: CTASectionProps) => {
             Start building with our screenshot API
           </h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
-            Join thousands of developers using our API to automate screenshot capture,
-            testing workflows, and documentation generation.
+            Automate screenshot capture, testing workflows, and documentation
+            generation with a single REST API. 100 free captures on signup, no
+            credit card required.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">

@@ -17,32 +17,36 @@ export const metadata: Metadata = {
 };
 
 export default function StatusPage() {
-  // In a real app, this would come from your monitoring API
+  // Stub data. Replace with real values from a monitoring API (Better Uptime,
+  // StatusPage.io, Atlassian Statuspage, a custom Prometheus endpoint, etc.)
+  // before wiring this page into production. The page is noindexed so stub
+  // content is not indexed by search engines, but it is still visible to any
+  // user who lands here — keep it honest.
   const services = [
     {
       name: "Screenshot API",
       status: "operational",
       description: "Core screenshot capture service",
-      uptime: "99.98%"
+      uptime: "—",
     },
     {
       name: "AI Processing",
       status: "operational",
       description: "Element removal and image processing",
-      uptime: "99.95%"
+      uptime: "—",
     },
     {
       name: "Authentication",
       status: "operational",
       description: "User authentication and API keys",
-      uptime: "99.99%"
+      uptime: "—",
     },
     {
       name: "Dashboard",
       status: "operational",
       description: "Web dashboard and user interface",
-      uptime: "99.97%"
-    }
+      uptime: "—",
+    },
   ];
 
   const getStatusColor = (status: string) => {
@@ -137,12 +141,12 @@ export default function StatusPage() {
             <CardHeader>
               <div className="flex items-center gap-2">
                 <Globe className="w-5 h-5 text-primary" />
-                <CardTitle className="text-lg">Global Availability</CardTitle>
+                <CardTitle className="text-lg">Availability Target</CardTitle>
               </div>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-foreground mb-1">99.98%</div>
-              <p className="text-sm text-muted-foreground">Last 30 days</p>
+              <div className="text-3xl font-bold text-foreground mb-1">99.9%</div>
+              <p className="text-sm text-muted-foreground">Operational SLO</p>
             </CardContent>
           </Card>
 
@@ -150,12 +154,12 @@ export default function StatusPage() {
             <CardHeader>
               <div className="flex items-center gap-2">
                 <Zap className="w-5 h-5 text-primary" />
-                <CardTitle className="text-lg">Response Time</CardTitle>
+                <CardTitle className="text-lg">Capture Latency</CardTitle>
               </div>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-foreground mb-1">245ms</div>
-              <p className="text-sm text-muted-foreground">Average API response</p>
+              <div className="text-3xl font-bold text-foreground mb-1">2–5s</div>
+              <p className="text-sm text-muted-foreground">Typical end-to-end capture</p>
             </CardContent>
           </Card>
 
@@ -163,65 +167,25 @@ export default function StatusPage() {
             <CardHeader>
               <div className="flex items-center gap-2">
                 <Shield className="w-5 h-5 text-primary" />
-                <CardTitle className="text-lg">Security</CardTitle>
+                <CardTitle className="text-lg">Transport</CardTitle>
               </div>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-foreground mb-1">100%</div>
-              <p className="text-sm text-muted-foreground">SSL/TLS encrypted</p>
+              <div className="text-3xl font-bold text-foreground mb-1">TLS 1.3</div>
+              <p className="text-sm text-muted-foreground">All API traffic encrypted in transit</p>
             </CardContent>
           </Card>
         </div>
 
-        {/* Recent Updates */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Recent Updates</CardTitle>
-            <CardDescription>Latest maintenance and improvements</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div className="flex items-start gap-3">
-                <div className="w-2 h-2 bg-foreground rounded-full mt-2"></div>
-                <div>
-                  <p className="font-medium text-foreground">API Performance Optimization</p>
-                  <p className="text-sm text-muted-foreground">
-                    Improved response times and reduced latency across all endpoints.
-                  </p>
-                  <p className="text-xs text-muted-foreground mt-1">2 hours ago</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-3">
-                <div className="w-2 h-2 bg-foreground rounded-full mt-2"></div>
-                <div>
-                  <p className="font-medium text-foreground">Security Update</p>
-                  <p className="text-sm text-muted-foreground">
-                    Enhanced authentication security and rate limiting improvements.
-                  </p>
-                  <p className="text-xs text-muted-foreground mt-1">1 day ago</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-3">
-                <div className="w-2 h-2 bg-purple-500 rounded-full mt-2"></div>
-                <div>
-                  <p className="font-medium text-foreground">New Mockup Templates</p>
-                  <p className="text-sm text-muted-foreground">
-                    Added 5 new device mockup templates including latest smartphone models.
-                  </p>
-                  <p className="text-xs text-muted-foreground mt-1">3 days ago</p>
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
         {/* Footer Note */}
         <div className="text-center mt-12 p-6 bg-muted/50 rounded-lg">
           <p className="text-muted-foreground">
-            Status updates are posted in real-time. For support inquiries, contact us at{' '}
+            For live incident updates, subscribe to the{' '}
+            <a href="/changelog" className="text-primary hover:underline">changelog</a>.
+            Report issues or reach support at{' '}
             <a href="mailto:support@screenshotly.app" className="text-primary hover:underline">
               support@screenshotly.app
-            </a>
+            </a>.
           </p>
         </div>
       </div>

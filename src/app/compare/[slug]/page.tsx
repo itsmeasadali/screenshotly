@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { JsonLd } from "@/components/seo";
 import { getBreadcrumbSchema, getFAQSchema } from "@/lib/seo/structured-data";
 import { comparisons } from "@/data/comparisons";
+import { compareEnrichment } from "@/data/compare-enrichment";
 import { BookOpen } from "lucide-react";
 
 const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://screenshotly.app';
@@ -19,7 +20,7 @@ const relatedBlogPosts: Record<string, Array<{ title: string; slug: string }>> =
     ],
     urlbox: [
         { title: "Best Screenshot API in 2026", slug: "best-screenshot-api-comparison-2026" },
-        { title: "Screenshot API ROI Calculator", slug: "screenshot-api-pricing-guide" },
+        { title: "Screenshot API ROI Calculator", slug: "screenshot-api-roi-guide" },
     ],
     puppeteer: [
         { title: "Migrating from Puppeteer to a Screenshot API", slug: "puppeteer-playwright-practical-guide" },
@@ -34,7 +35,7 @@ const relatedBlogPosts: Record<string, Array<{ title: string; slug: string }>> =
         { title: "Visual Regression Testing Guide", slug: "visual-regression-testing-guide" },
     ],
     browserstack: [
-        { title: "Mobile Responsive Screenshot Testing", slug: "mobile-responsive-screenshot-testing" },
+        { title: "2026 Device Viewport Sizes Reference", slug: "device-viewport-sizes-reference-2026" },
         { title: "Visual Regression Testing Guide", slug: "visual-regression-testing-guide" },
     ],
     apiflash: [
@@ -74,7 +75,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
             : comparison.description;
 
     return {
-        title: `${comparison.name} Alternative - Screenshot API Comparison (${new Date().getFullYear()})`,
+        title: `${comparison.name} vs Screenshotly Comparison`,
         description: metaDesc,
         alternates: {
             canonical: `/compare/${slug}`,
@@ -102,31 +103,21 @@ export default async function ComparisonPage({ params }: Props) {
         { name: `vs ${comparison.name}`, url: `${BASE_URL}/compare/${slug}` },
     ];
 
-    // Use specific FAQs from comparison data, or fall back to generic ones
-    const faqs = 'faqs' in comparison && comparison.faqs ? comparison.faqs : [
-        {
-            question: `What's the difference between Screenshotly and ${comparison.name}?`,
-            answer: `Screenshotly offers AI-powered element removal, built-in device mockups, and a simpler developer experience. ${comparison.name} ${comparison.competitor.cons[0].toLowerCase()}.`,
-        },
-        {
-            question: `Is Screenshotly a good alternative to ${comparison.name}?`,
-            answer: `Yes! Many developers switch to Screenshotly for its AI features that automatically remove cookie banners and popups, professional device mockups, and competitive pricing.`,
-        },
-        {
-            question: "How do I migrate from " + comparison.name + "?",
-            answer: "Screenshotly's API is designed to be simple to integrate. Sign up, get your API key, and update your API calls. Most migrations take less than an hour.",
-        },
-    ];
+    // Per-slug FAQs only; no generic fallback (avoids duplicate-chunk emission across indexed pages)
+    const faqs = 'faqs' in comparison && comparison.faqs ? comparison.faqs : [];
 
     // Get other comparisons (excluding current)
     const otherComparisons = comparisons
         .filter((c) => c.slug !== slug)
         .slice(0, 3);
 
+    // Enrichment: AI summary, break-even math, migration walkthrough, honest competitor-wins block
+    const enrichment = compareEnrichment[slug];
+
     return (
         <GuestLayout>
             <JsonLd data={getBreadcrumbSchema(breadcrumbs)} />
-            <JsonLd data={getFAQSchema(faqs)} />
+            {faqs.length > 0 && <JsonLd data={getFAQSchema(faqs)} />}
 
             <article className="py-16">
                 <div className="container mx-auto px-4 max-w-4xl">
@@ -150,7 +141,7 @@ export default async function ComparisonPage({ params }: Props) {
                     </nav>
 
                     {/* Header */}
-                    <header className="mb-12 text-center">
+                    <header className="mb-8 text-center">
                         <Badge variant="secondary" className="mb-4">
                             Comparison
                         </Badge>
@@ -161,6 +152,19 @@ export default async function ComparisonPage({ params }: Props) {
                             {comparison.description}
                         </p>
                     </header>
+
+                    {/* AI Summary Nugget — fact-dense top-of-page block for LLM extraction */}
+                    {enrichment?.aiSummary && (
+                        <div
+                            className="mb-12 rounded-lg border-l-4 border-primary bg-primary/5 p-4 text-sm text-foreground"
+                            aria-label="Quick summary"
+                        >
+                            <span className="mb-1 block text-xs font-semibold uppercase tracking-wide text-primary">
+                                Quick summary
+                            </span>
+                            {enrichment.aiSummary}
+                        </div>
+                    )}
 
                     {/* Quick Summary */}
                     <section className="mb-12 p-6 bg-primary/5 rounded-xl border border-primary/20">
@@ -296,18 +300,111 @@ export default async function ComparisonPage({ params }: Props) {
                         </section>
                     )}
 
-                    {/* FAQs */}
-                    <section className="mb-12">
-                        <h2 className="text-2xl font-semibold mb-6">Frequently Asked Questions</h2>
-                        <div className="space-y-4">
-                            {faqs.map((faq, index) => (
-                                <div key={index} className="border rounded-lg p-4">
-                                    <h3 className="font-medium mb-2">{faq.question}</h3>
-                                    <p className="text-muted-foreground">{faq.answer}</p>
-                                </div>
+                    {/* Deep-dive analysis paragraphs (enrichment) */}
+                    {enrichment?.deepDiveParagraphs && enrichment.deepDiveParagraphs.length > 0 && (
+                        <section className="mb-12 prose prose-gray dark:prose-invert max-w-none">
+                            <h2 className="text-2xl font-semibold mb-4">Deep Dive: What This Trade-off Actually Looks Like</h2>
+                            {enrichment.deepDiveParagraphs.map((p, i) => (
+                                <p key={i} className="text-muted-foreground mb-4 leading-relaxed">{p}</p>
                             ))}
-                        </div>
-                    </section>
+                        </section>
+                    )}
+
+                    {/* Break-even pricing table */}
+                    {enrichment?.breakEven && enrichment.breakEven.length > 0 && (
+                        <section className="mb-12">
+                            <h2 className="text-2xl font-semibold mb-6">Break-Even Math by Monthly Volume</h2>
+                            <p className="text-muted-foreground mb-4 text-sm">
+                                Cost comparison across typical capture volumes. Figures exclude engineering time;
+                                self-hosted comparisons assume conservative infra-only cost.
+                            </p>
+                            <div className="border rounded-lg overflow-hidden">
+                                <table className="w-full text-sm">
+                                    <thead>
+                                        <tr className="bg-muted">
+                                            <th className="text-left p-4 font-medium">Monthly volume</th>
+                                            <th className="text-left p-4 font-medium text-primary">Screenshotly</th>
+                                            <th className="text-left p-4 font-medium">{comparison.name}</th>
+                                            <th className="text-left p-4 font-medium">Difference</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {enrichment.breakEven.map((row, i) => (
+                                            <tr key={i} className="border-t">
+                                                <td className="p-4 font-medium">{row.volume}</td>
+                                                <td className="p-4">{row.screenshotly}</td>
+                                                <td className="p-4">{row.competitor}</td>
+                                                <td className="p-4 text-muted-foreground">{row.delta}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </section>
+                    )}
+
+                    {/* Migration walkthrough */}
+                    {enrichment?.migrationSteps && enrichment.migrationSteps.length > 0 && (
+                        <section className="mb-12">
+                            <h2 className="text-2xl font-semibold mb-6">Migration Walkthrough</h2>
+                            <p className="text-muted-foreground mb-6 text-sm">
+                                Most teams migrate in under an hour. The order below mirrors the sequence we recommend.
+                            </p>
+                            <ol className="space-y-4">
+                                {enrichment.migrationSteps.map((step, i) => (
+                                    <li key={i} className="flex gap-4">
+                                        <div className="flex-shrink-0 w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-medium text-sm">
+                                            {i + 1}
+                                        </div>
+                                        <div className="flex-1">
+                                            <h3 className="font-medium mb-1">{step.title}</h3>
+                                            <p className="text-sm text-muted-foreground mb-2">{step.detail}</p>
+                                            {step.code && (
+                                                <pre className="bg-muted rounded-md p-3 text-xs overflow-x-auto">
+                                                    <code>{step.code}</code>
+                                                </pre>
+                                            )}
+                                        </div>
+                                    </li>
+                                ))}
+                            </ol>
+                        </section>
+                    )}
+
+                    {/* When the competitor is actually the right call (honest block) */}
+                    {enrichment?.competitorWinsWhen && enrichment.competitorWinsWhen.length > 0 && (
+                        <section className="mb-12 rounded-xl border border-dashed p-6">
+                            <h2 className="text-2xl font-semibold mb-2">
+                                When {comparison.name} is actually the right call
+                            </h2>
+                            <p className="text-sm text-muted-foreground mb-4">
+                                Every tool has legitimate fits. Be honest with yourself — if any of these apply, stay with {comparison.name}.
+                            </p>
+                            <ul className="space-y-2">
+                                {enrichment.competitorWinsWhen.map((item, i) => (
+                                    <li key={i} className="flex items-start gap-3">
+                                        <span className="mt-1 inline-block h-1.5 w-1.5 flex-shrink-0 rounded-full bg-muted-foreground" />
+                                        <span className="text-foreground text-sm">{item}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </section>
+                    )}
+
+                    {/* FAQs */}
+                    {faqs.length > 0 && (
+                        <section className="mb-12">
+                            <h2 className="text-2xl font-semibold mb-6">Frequently Asked Questions</h2>
+                            <div className="space-y-4">
+                                {faqs.map((faq, index) => (
+                                    <div key={index} className="border rounded-lg p-4">
+                                        <h3 className="font-medium mb-2">{faq.question}</h3>
+                                        <p className="text-muted-foreground">{faq.answer}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        </section>
+                    )}
 
                     {/* CTA */}
                     <section className="bg-primary/10 rounded-xl p-8 text-center mb-12">

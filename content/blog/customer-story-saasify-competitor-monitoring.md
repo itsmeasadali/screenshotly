@@ -7,6 +7,13 @@ publishedAt: "2025-12-18"
 category: "case-study"
 tags: ["customer story", "competitive intelligence", "monitoring", "automation"]
 keywords: ["competitor monitoring automation", "competitive intelligence screenshot", "competitor website tracking", "automated competitor analysis"]
+faqs:
+  - question: "How does SaaSify avoid drowning in false-positive competitor alerts?"
+    answer: "Zone-splitting each tracked page into 4 regions (hero, pricing, feature grid, footer) and hashing each zone separately. The footer changes weekly on most sites and is suppressed entirely. Pricing and feature-grid alerts are prioritized — that's where real competitive signal lives."
+  - question: "What cadence does SaaSify use for competitor captures?"
+    answer: "Daily by default, ratcheting to hourly for 72 hours when any zone changes. Pricing pages rarely move faster than quarterly, so the hourly ratchet rarely fires; when it does, SaaSify catches pricing moves within 6 hours of the change going live."
+  - question: "What's the legal posture on this kind of monitoring?"
+    answer: "SaaSify captures only public pages, respects robots.txt, and runs at a cadence that doesn't degrade target site performance. No credentials, no bot evasion, no scraping behind logins. That stays inside most jurisdictions' competitive-intelligence norms — but each program should run its policy past legal before launch."
 featured: false
 readingTime: 7
 ---

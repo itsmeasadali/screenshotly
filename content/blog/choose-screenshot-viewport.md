@@ -1,5 +1,5 @@
 ---
-title: "How to Choose the Right Screenshot Viewport: A Decision Guide"
+title: "How to Choose the Right Screenshot Viewport Size"
 description: "Stop guessing viewport sizes. This decision guide explains which viewport to use for documentation, marketing, social media, and responsive testing — with aspect ratio and DPR recommendations."
 excerpt: "Not sure which viewport to use? This guide helps you pick the right size based on your screenshot's purpose — documentation, marketing, social media, or testing."
 author: "asad-ali"
@@ -9,9 +9,16 @@ tags: ["viewport", "responsive", "devices", "technical"]
 keywords: ["which viewport for screenshots", "screenshot size guide", "best viewport documentation", "screenshot aspect ratio", "DPR screenshot quality"]
 featured: false
 readingTime: 5
+faqs:
+  - question: "What's the default viewport for a new capture pipeline?"
+    answer: "1440×900 at DPR 1 or 2 is the safest default for product marketing and documentation. It matches the most common desktop resolution, renders cleanly on retina displays, and produces images at the size most marketing tools expect without resizing."
+  - question: "Should I capture at DPR 2 or DPR 3?"
+    answer: "DPR 2 for web use (documentation, social previews, in-app). DPR 3 only for print or ultra-high-DPI marketing assets. DPR 3 doubles the byte size of every capture and is imperceptible on typical screens — wasted bandwidth unless your downstream consumer actually uses the extra density."
+  - question: "Do I need separate captures for mobile, tablet, and desktop?"
+    answer: "For responsive design testing, yes — at minimum 390 (mobile), 768 (tablet), 1440 (desktop). For documentation, pick one viewport per screen; mixing breaks visual consistency. For social previews, stick to 1200×630 regardless of viewport intent."
 ---
 
-Every screenshot starts with a viewport choice. Pick the wrong size and your capture looks stretched, cropped, or blurry on the target device. This guide doesn't list every device dimension — for that, see our [2026 Device Viewport Reference](/blog/mobile-responsive-screenshot-testing). Instead, it helps you **decide which viewport to use** based on your screenshot's purpose.
+Every screenshot starts with a viewport choice. Pick the wrong size and your capture looks stretched, cropped, or blurry on the target device. This guide doesn't list every device dimension — for that, see our [2026 Device Viewport Reference](/blog/device-viewport-sizes-reference-2026). Instead, it helps you **decide which viewport to use** based on your screenshot's purpose.
 
 ## Choosing the Right Size
 
@@ -184,7 +191,7 @@ If your goal is responsive testing or cross-device QA, you need more than one vi
 | Tablet | 768px | iPad portrait breakpoint |
 | Desktop | 1920px | Full HD standard |
 
-For a complete list of 50+ device dimensions with copy-paste code, see the [2026 Device Viewport Reference](/blog/mobile-responsive-screenshot-testing). For CI/CD integration and visual regression workflows, see [Mobile Screenshot Optimization](/blog/mobile-responsive-screenshots).
+For a complete list of 50+ device dimensions with copy-paste code, see the [2026 Device Viewport Reference](/blog/device-viewport-sizes-reference-2026). For CI/CD integration and visual regression workflows, see [Mobile Screenshot Optimization](/blog/mobile-responsive-screenshots).
 
 ## Common Mistakes
 
@@ -273,6 +280,6 @@ Use device presets for convenience, custom viewports for precision.
 
 [Get your free API key →](/sign-up) - 100 free screenshots to get started.
 
-- [2026 Device Viewport Reference →](/blog/mobile-responsive-screenshot-testing) — 50+ device dimensions
+- [2026 Device Viewport Reference →](/blog/device-viewport-sizes-reference-2026) — 50+ device dimensions
 - [Mobile Screenshot Optimization →](/blog/mobile-responsive-screenshots) — CI/CD, visual regression, device emulation
 - Try configurations in our [API Playground →](/playground)

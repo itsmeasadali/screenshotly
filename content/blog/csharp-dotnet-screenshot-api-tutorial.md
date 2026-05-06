@@ -9,6 +9,13 @@ tags: ["csharp", "dotnet", "tutorial", "api", "aspnet"]
 keywords: ["c# screenshot api", "dotnet screenshot", ".net screenshot api", "aspnet screenshot", "csharp capture website"]
 featured: false
 readingTime: 8
+faqs:
+  - question: "Why use IHttpClientFactory instead of new HttpClient()?"
+    answer: "new HttpClient() creates a new socket each time and leads to port exhaustion on busy workloads. IHttpClientFactory (registered in DI) pools and rotates handlers correctly, handles DNS changes, and integrates with Polly for retries. This is the documented .NET pattern for any outbound HTTP at scale."
+  - question: "Where should screenshot capture run in ASP.NET Core?"
+    answer: "Inside a hosted background service (IHostedService) or a Hangfire/MassTransit consumer — not in a controller action. Controller-inline capture blocks a Kestrel request thread for seconds and starves other requests. Queue the capture job and return 202 Accepted with a status URL."
+  - question: "How do I add retry and circuit-breaker logic cleanly?"
+    answer: "Use Polly via the Microsoft.Extensions.Http.Polly package. Register retry (3 attempts, exponential backoff) and circuit-breaker policies on your named HttpClient in DI. Polly handles 429/5xx automatically and prevents cascading failures when the upstream is unhealthy."
 ---
 
 C# and .NET power many enterprise applications that need screenshot capabilities—from internal tools to SaaS platforms. This guide covers integration patterns from basic to production-grade.

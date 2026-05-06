@@ -38,7 +38,7 @@ export function Testimonials({ showAll = false, className = '' }: TestimonialsPr
                         </span>
                     </div>
                     <p className="text-muted-foreground max-w-2xl mx-auto">
-                        Join thousands of developers who trust Screenshotly for their screenshot automation
+                        Real teams using Screenshotly in production — documentation, social media, competitive intelligence, and enterprise reporting.
                     </p>
                 </div>
 
