@@ -14,7 +14,6 @@ keywords:
   - "screenshot automation guide"
 readingTime: 5
 featured: true
-image: "/images/blog/getting-started/hero.jpg"
 faqs:
   - question: "Do I need a credit card to get started?"
     answer: "No! Screenshotly offers 100 free screenshots without requiring a credit card. You can start testing immediately after signing up."
@@ -26,7 +25,7 @@ faqs:
 
 ## Getting Started with Screenshotly
 
-Welcome to Screenshotly! This guide will walk you through making your first API call to capture a website screenshot.
+**The first capture takes about five minutes:** sign up, copy your API key from the dashboard, and POST to `https://api.screenshotly.app/screenshot` with `{ "url": "..." }` plus a Bearer token header. The response is a PNG (or JPEG/WebP/PDF). Below, the same flow with code samples for cURL, JavaScript, Python, and PHP.
 
 Whether you're building [automated testing workflows](/use-cases/automated-testing), creating [social media previews](/use-cases/social-media-previews), or generating [documentation screenshots](/use-cases/documentation-screenshots), Screenshotly makes it simple to capture high-quality website screenshots programmatically.
 

@@ -1,5 +1,5 @@
 ---
-title: "Mobile Screenshot Optimization: Capturing Responsive Designs Perfectly"
+title: "How to Capture Responsive Mobile Screenshots"
 slug: "mobile-responsive-screenshots"
 excerpt: "Master mobile screenshot capture with proper viewport settings, device emulation, and responsive design testing techniques."
 publishedAt: "2024-08-10T10:00:00Z"
@@ -18,7 +18,6 @@ keywords:
   - "responsive screenshot tutorial"
 readingTime: 11
 featured: false
-image: "/images/blog/mobile-screenshots/hero.jpg"
 faqs:
   - question: "What mobile viewports does Screenshotly support?"
     answer: "Screenshotly supports any custom viewport size you specify. We also provide preset device emulations for iPhone (all generations), Android phones (Pixel, Samsung), and tablets (iPad, Android tablets) with accurate viewport and device pixel ratio settings."

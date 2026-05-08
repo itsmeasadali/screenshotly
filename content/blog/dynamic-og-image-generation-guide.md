@@ -1,5 +1,5 @@
 ---
-title: "How to Generate OG Images Dynamically at Scale"
+title: "How to Generate Dynamic OG Images at Scale"
 description: "Learn how to generate Open Graph images dynamically for social media sharing. Covers architecture, caching strategies, and scaling to millions of previews."
 excerpt: "A practical guide to dynamic OG image generation. From architecture design to production deployment with caching and CDN integration."
 author: "asad-ali"
@@ -20,7 +20,7 @@ faqs:
 
 Open Graph (OG) images are the preview images that appear when your links are shared on social media platforms like Twitter, Facebook, and LinkedIn. A compelling OG image dramatically increases click-through rates, but creating unique images for every page at scale is challenging.
 
-In this guide, we'll explore how to generate OG images dynamically, covering architecture decisions, implementation patterns, and scaling strategies.
+In this guide, we'll explore how to generate OG images dynamically, covering architecture decisions, implementation patterns, and scaling strategies. The Open Graph protocol itself is documented at [ogp.me](https://ogp.me/) (the canonical spec). Twitter's card variant lives in the [Twitter Cards docs](https://developer.x.com/en/docs/twitter-for-websites/cards/overview/abouts-cards). For platform-specific debugging during development, the [Facebook Sharing Debugger](https://developers.facebook.com/tools/debug/), [LinkedIn Post Inspector](https://www.linkedin.com/post-inspector/), and [Twitter Card Validator](https://cards-dev.twitter.com/validator) show exactly what each platform will render and cache.
 
 ## Why Dynamic OG Images Matter
 

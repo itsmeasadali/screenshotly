@@ -172,7 +172,7 @@ export default function ScreenshotToolClient() {
                             {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img
                                 src={screenshotUrl}
-                                alt="Captured screenshot"
+                                alt={url ? `Website screenshot of ${url}` : 'Captured website screenshot result'}
                                 className="w-full h-auto"
                             />
                         </div>

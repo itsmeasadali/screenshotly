@@ -1,5 +1,5 @@
 ---
-title: "Screenshot API Error Handling: Retries & Recovery"
+title: "How Should You Handle Screenshot API Errors?"
 description: "Build robust screenshot automation with proper error handling. Covers common errors, retry strategies, and graceful failure recovery."
 excerpt: "Master error handling for screenshot APIs. Retry logic, timeout configuration, and graceful degradation for production systems."
 author: "asad-ali"
@@ -20,7 +20,11 @@ faqs:
 
 Production screenshot systems need robust error handling. Pages time out, networks fail, and edge cases emerge. This guide covers strategies for building reliable screenshot automation that handles failures gracefully.
 
+The retry-and-backoff patterns we'll cover are documented authoritatively in the [AWS Architecture Blog on exponential backoff and jitter](https://aws.amazon.com/builders-library/timeouts-retries-and-backoff-with-jitter/) and Google SRE's [Site Reliability Engineering book chapter on handling overload](https://sre.google/sre-book/handling-overload/). For HTTP retry libraries in production, the well-tested options are [Polly for .NET](https://www.thepollyproject.org/), [Tenacity for Python](https://tenacity.readthedocs.io/), and [Faraday::Retry for Ruby](https://github.com/lostisland/faraday-retry).
+
 ## Common Error Types
+
+**Five error classes cover 95% of production screenshot failures: timeouts (slow target page), HTTP 429 (rate limited), HTTP 5xx (transient upstream), network errors (DNS, TLS, connection reset), and HTTP 4xx config errors (bad URL, bad auth).** The first four are retryable with exponential backoff + jitter; 4xx errors should fail fast and route to alerts.
 
 ### 1. Timeout Errors
 

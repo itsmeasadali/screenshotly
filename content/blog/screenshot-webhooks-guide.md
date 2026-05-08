@@ -1,5 +1,5 @@
 ---
-title: "Screenshot Webhooks: Real-Time Capture Notifications"
+title: "How Do Screenshot Webhooks Work?"
 description: "Implement webhook-based screenshot automation for real-time notifications and async processing. Covers setup, security, and scaling patterns."
 excerpt: "Build event-driven screenshot automation with webhooks. Get notified when captures complete and process results asynchronously."
 author: "asad-ali"
@@ -20,9 +20,11 @@ faqs:
 
 Synchronous screenshot requests block your application while waiting for captures to complete. Webhooks enable async processing—submit captures, continue working, and receive notifications when they're ready.
 
-This guide covers implementing webhook-based screenshot automation.
+This guide covers implementing webhook-based screenshot automation. The reference implementations worth studying first: [Stripe webhooks](https://docs.stripe.com/webhooks) (the de-facto standard for HMAC-signed delivery), [GitHub webhooks](https://docs.github.com/en/webhooks/about-webhooks) (well-documented retry semantics), and [Standard Webhooks](https://www.standardwebhooks.com/) (the cross-vendor spec aimed at unifying webhook conventions). For HMAC verification specifics, the [OWASP authentication cheatsheet](https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html) has the constant-time comparison patterns you should use.
 
 ## Why Webhooks?
+
+**Webhooks turn a 10-30 second blocking call into a fire-and-forget async pattern.** Submit the capture, get a job ID back in milliseconds, and your server gets pinged at a callback URL when the image is ready. HMAC-signed payloads prevent forged events; idempotent handlers (deduped on capture ID) prevent duplicate work on replay.
 
 ### Synchronous Problems
 

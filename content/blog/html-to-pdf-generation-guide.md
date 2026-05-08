@@ -20,6 +20,8 @@ faqs:
 
 Web pages are designed for screens—fluid layouts, hover states, fixed headers. When you generate a PDF, the output often looks wrong: elements cut across pages, navigation appears in the document, backgrounds vanish, and text breaks awkwardly. The fix is **CSS print styling**: `@media print` rules that control how your content renders on paper. This guide focuses exclusively on the **CSS design and formatting** side of PDF generation—page breaks, orphan/widow control, `@page` margins, paper sizes, and print-specific layouts.
 
+The authoritative references for everything below: the [W3C CSS Paged Media specification](https://www.w3.org/TR/css-page-3/) (the canonical spec for `@page`, page breaks, and margin boxes), MDN's pages on [`@media print`](https://developer.mozilla.org/en-US/docs/Web/CSS/@media), [`@page`](https://developer.mozilla.org/en-US/docs/Web/CSS/@page), and the [`break-before` / `break-inside` properties](https://developer.mozilla.org/en-US/docs/Web/CSS/break-before). For more advanced print layouts (running headers/footers, cross-references, page numbering via JavaScript), [Paged.js](https://pagedjs.org/) is the open-source polyfill that implements much of CSS Paged Media in browsers.
+
 For the PDF API itself (endpoints, options, headers/footers via JavaScript), see our [PDF Generation API Guide](/blog/pdf-generation-guide). For invoice-specific templates and currency formatting, see our [Invoice & Financial PDF Generation](/blog/invoice-pdf-generation-guide) guide.
 
 ## The PDF Formatting Challenge

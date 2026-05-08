@@ -1,5 +1,5 @@
 ---
-title: "Screenshot API Rate Limits: Headers & Backoff"
+title: "How Do Screenshot API Rate Limits Work?"
 description: "Master screenshot API rate limits. Learn about rate limit headers, backoff strategies, and optimization techniques for high-volume usage."
 excerpt: "Navigate API rate limits effectively. Maximize throughput while staying within limits through smart batching and caching."
 author: "asad-ali"
@@ -20,7 +20,11 @@ faqs:
 
 Rate limits protect API infrastructure and ensure fair usage across customers. Understanding how rate limits work helps you maximize throughput while avoiding errors.
 
+The HTTP standard for rate limiting is documented in [RFC 6585 §4 (HTTP 429)](https://datatracker.ietf.org/doc/html/rfc6585#section-4) and the [`Retry-After` header in RFC 9110](https://datatracker.ietf.org/doc/html/rfc9110#name-retry-after). MDN has a reader-friendly summary of [HTTP 429 Too Many Requests](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429) and the [Retry-After header semantics](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Retry-After). The convention for `X-RateLimit-*` headers is documented in the [IETF draft](https://datatracker.ietf.org/doc/html/draft-ietf-httpapi-ratelimit-headers).
+
 ## How Rate Limits Work
+
+**API rate limits cap requests across three windows simultaneously: per-second (burst), per-minute (sustained), and per-day (quota).** Hit any window and the API returns HTTP 429 with a `Retry-After` header telling you when to try again. Production code reads four headers on every response — `X-RateLimit-Limit`, `X-RateLimit-Remaining`, `X-RateLimit-Reset`, and `Retry-After` — and reduces concurrency proactively before the limit fires.
 
 ### Common Limit Types
 

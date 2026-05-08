@@ -20,7 +20,7 @@ faqs:
 
 Screenshot APIs can access any public URL and potentially capture sensitive information. Proper security practices protect your API keys, prevent abuse, and ensure data privacy.
 
-This guide covers security best practices for screenshot API integration at every level.
+This guide covers security best practices for screenshot API integration at every level. The most important external references for this topic: the [OWASP API Security Top 10](https://owasp.org/API-Security/editions/2023/en/0x11-t10/) (broken auth, SSRF, mass assignment), the [OWASP SSRF prevention cheat sheet](https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html), and the [Mozilla Observatory](https://observatory.mozilla.org/) for verifying the security posture of your domain.
 
 ## API Key Management
 

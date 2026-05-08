@@ -17,7 +17,6 @@ keywords:
   - "screenshot service costs"
 readingTime: 10
 featured: false
-image: "/images/blog/pricing-comparison/hero.jpg"
 faqs:
   - question: "What's the average cost per screenshot?"
     answer: "Most APIs charge between $0.001 and $0.01 per screenshot, with volume discounts. Screenshotly offers 100 free screenshots to start (no credit card). Paid plans from $14/mo for 2,500 screenshots."

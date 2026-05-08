@@ -209,7 +209,7 @@ export default function ScrollingScreenshotClient() {
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
                             src={screenshotUrl}
-                            alt="Full page scrolling screenshot"
+                            alt={url ? `Scrolling capture of ${url} at ${width}×${height} viewport` : 'Scrolling screenshot result spanning the full page height'}
                             className="w-full"
                         />
                     </div>

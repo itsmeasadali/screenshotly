@@ -18,7 +18,6 @@ keywords:
   - "remove chat widget screenshot"
 readingTime: 14
 featured: true
-image: "/images/blog/ai-removal/hero.jpg"
 faqs:
   - question: "How does AI element removal work?"
     answer: "Our AI uses computer vision and machine learning models trained on millions of web pages to identify common UI patterns like cookie banners, chat widgets, and promotional popups. Once detected, these elements are removed from the DOM before the screenshot is captured."
@@ -32,9 +31,11 @@ faqs:
 
 ## The Problem with Modern Website Screenshots
 
+**Cookie banners, chat widgets, and popups obscure roughly 30% of every fresh capture.** The fix is element-removal at the render layer — selectors plus an AI classifier that recognizes the patterns even when third-party scripts inject them at runtime. The detail:
+
 Every developer who's automated website screenshots knows the frustration: you capture a beautiful landing page, only to find it obscured by a massive cookie consent banner, an aggressive chat widget, or a "Subscribe to our newsletter" popup blocking half the content.
 
-These elements are everywhere. GDPR compliance means cookie banners on virtually every European-targeting site. Customer support tools mean chat bubbles in the corner. Growth hacking means exit-intent popups and newsletter modals.
+These elements are everywhere. [GDPR compliance](https://gdpr.eu/cookies/) means cookie banners on virtually every European-targeting site. Customer support tools like [Intercom](https://www.intercom.com/) and [Drift](https://www.drift.com/) mean chat bubbles in the corner. Growth tools mean exit-intent popups and newsletter modals. The patterns AI detection learns from are catalogued in research like the [CookieBlock dataset](https://karelkubicek.github.io/post/cookieblock) and [public consent-banner taxonomies](https://github.com/cavi-au/Consent-O-Matic).
 
 For [documentation screenshots](/use-cases/documentation-screenshots), these distractions are unacceptable. For [social media previews](/use-cases/social-media-previews), they look unprofessional. For [visual testing](/use-cases/automated-testing), they create false positives.
 

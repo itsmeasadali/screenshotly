@@ -175,7 +175,7 @@ export default function ScreenshotCapture() {
                   <div className="aspect-video bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg overflow-hidden border shadow-sm">
                     <Image
                       src={finalImage}
-                      alt="Screenshot with mockup"
+                      alt={url ? `Browser-frame mockup of ${url}` : 'Website screenshot wrapped in a browser-frame mockup'}
                       width={1920}
                       height={1080}
                       className="w-full h-full object-contain"

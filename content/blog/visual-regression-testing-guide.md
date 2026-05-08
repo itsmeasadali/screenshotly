@@ -1,5 +1,5 @@
 ---
-title: "Automated Visual Regression Testing with Screenshots"
+title: "What Is Visual Regression Testing? (with Screenshots)"
 description: "Learn how to implement automated visual regression testing using screenshot APIs. Catch UI bugs before they reach production."
 excerpt: "A complete guide to visual regression testing with automated screenshots. Detect layout shifts, style changes, and UI bugs automatically."
 author: "asad-ali"
@@ -21,6 +21,8 @@ faqs:
 Visual regression testing catches UI bugs that traditional unit and integration tests miss. A button that moved 5 pixels, a font that changed weight, a card that lost its shadow—these issues slip through code-level tests but are immediately obvious in screenshots.
 
 In this guide, you'll learn how to implement automated visual regression testing using screenshot APIs. We'll cover the fundamentals, build a complete testing pipeline, and share best practices from teams running visual tests in production.
+
+The dedicated commercial offerings in this space — [Chromatic](https://www.chromatic.com/), [Percy by BrowserStack](https://percy.io/), and [Applitools](https://applitools.com/) — pioneered most of the workflow patterns we'll cover. The pixel-diff math itself ([pHash](http://www.phash.org/) and [SSIM](https://en.wikipedia.org/wiki/Structural_similarity_index_measure)) is well-documented public research.
 
 ## What is Visual Regression Testing?
 

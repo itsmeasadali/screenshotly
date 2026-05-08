@@ -1,5 +1,5 @@
 ---
-title: "Optimizing Screenshot API Performance: Speed and Efficiency"
+title: "How to Speed Up Screenshot API Capture Times"
 slug: "optimize-screenshot-performance"
 excerpt: "Cut screenshot capture times by up to 70% with resource blocking, viewport tuning, parallel processing, and caching. Real benchmarks included."
 publishedAt: "2024-05-01T10:00:00Z"
@@ -18,7 +18,6 @@ keywords:
   - "resource blocking screenshots"
 readingTime: 12
 featured: true
-image: "/images/blog/optimize-performance/hero.jpg"
 faqs:
   - question: "How much can I reduce screenshot capture times?"
     answer: "With proper optimization, most sites see 50-70% reduction in capture times. The biggest gains come from resource blocking and viewport optimization."
@@ -34,6 +33,8 @@ faqs:
 
 Every millisecond counts in production. This guide focuses on **speed and latency optimization** — reducing the time each screenshot takes to capture and process.
 
+The capture engine itself is built on [Chromium's headless mode](https://developer.chrome.com/blog/headless-chrome) — most of the optimization techniques map directly to Chrome DevTools Protocol semantics documented at [Chrome DevTools Protocol Viewer](https://chromedevtools.github.io/devtools-protocol/). For broader page-load optimization theory, [web.dev's performance guides](https://web.dev/learn/performance/) and the [Core Web Vitals docs](https://web.dev/articles/vitals) remain the canonical reference.
+
 Screenshot APIs are critical for modern web applications, from [automated testing](/use-cases/automated-testing) to [content generation](/use-cases/social-media-previews). However, slow screenshot capture can bottleneck your entire application. After analyzing millions of screenshot requests, we've identified the key speed optimization strategies that can reduce capture times by up to 70%.
 
 For **cost reduction strategies** (credit savings, budget monitoring, plan optimization), see our [Screenshot API Cost Optimization](/blog/reduce-screenshot-api-costs) guide. For **caching strategies** (Redis, CDN, multi-layer caching), see our [Screenshot Caching Strategies](/blog/screenshot-caching-strategies-guide) guide.
@@ -41,6 +42,8 @@ For **cost reduction strategies** (credit savings, budget monitoring, plan optim
 This guide builds on our [getting started tutorial](/blog/getting-started-with-screenshot-api) and complements our [integration guides](/integrations) for [JavaScript](/integrations/javascript), [Python](/integrations/python), and other popular languages.
 
 ## Understanding Screenshot Performance Bottlenecks
+
+**Screenshot capture time is dominated by page load (60–80%), not by anything you can fix client-side.** The optimization order matters: cut page-load time first via resource blocking and viewport tuning, then trim rendering, then minimize image-processing overhead. Network and API overhead are usually under 10%.
 
 Before diving into optimizations, it's crucial to understand where time is spent during screenshot capture:
 

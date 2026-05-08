@@ -38,7 +38,7 @@ export const ScreenshotPreview = ({ result, error, successMessage, format }: Scr
         <div className="bg-muted/50 rounded-lg overflow-hidden border-2 border-dashed border-border">
           <Image
             src={result}
-            alt="Screenshot"
+            alt="Playground screenshot preview rendered from your URL"
             width={1920}
             height={1080}
             className="w-full h-auto max-h-96 object-contain"

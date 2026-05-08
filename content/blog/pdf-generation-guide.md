@@ -1,5 +1,5 @@
 ---
-title: "PDF Generation with a Screenshot API: Implementation Guide"
+title: "How to Generate PDFs from Web Pages via API"
 slug: "pdf-generation-guide"
 excerpt: "Learn how to generate professional PDFs from web pages using Screenshotly's API. Perfect for invoices, reports, certificates, and documentation."
 publishedAt: "2024-11-05T10:00:00Z"
@@ -18,7 +18,6 @@ keywords:
   - "PDF margin settings"
 readingTime: 12
 featured: false
-image: "/images/blog/pdf-generation/hero.jpg"
 faqs:
   - question: "What's the difference between screenshot and PDF output?"
     answer: "Screenshots capture a visual image of the page (PNG/JPEG), while PDF output creates a paginated document with selectable text, clickable links, and proper print formatting. PDFs are better for documents that need to be printed or shared as files."

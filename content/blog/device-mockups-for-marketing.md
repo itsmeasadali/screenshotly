@@ -18,7 +18,6 @@ keywords:
   - "product screenshot frames"
 readingTime: 12
 featured: true
-image: "/images/blog/device-mockups/hero.jpg"
 faqs:
   - question: "What device mockups are available?"
     answer: "Screenshotly offers iPhone (multiple generations), MacBook Pro, MacBook Air, iPad, browser frames (Chrome, Safari, Firefox), and generic device frames. All mockups are high-resolution and commercially licensed."

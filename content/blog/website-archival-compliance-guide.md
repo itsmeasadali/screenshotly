@@ -20,7 +20,7 @@ faqs:
 
 Organizations often need to preserve website content for legal, regulatory, or historical purposes. Whether for litigation holds, regulatory compliance, or brand monitoring, capturing web pages as evidence requires more than a simple screenshot—it requires reliability, completeness, and chain of custody.
 
-This guide explores how to implement website archival systems that meet enterprise compliance requirements.
+This guide explores how to implement website archival systems that meet enterprise compliance requirements. The standards bodies and tools worth referencing first: the [PDF/A archival format spec at ISO](https://www.iso.org/standard/57229.html), [WARC (Web ARChive) format](https://iipc.github.io/warc-specifications/specifications/warc-format/warc-1.1/) used by the Wayback Machine, [AWS S3 Object Lock](https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lock.html) and [Azure immutable blob storage](https://learn.microsoft.com/en-us/azure/storage/blobs/immutable-storage-overview) for tamper-evident retention, and [RFC 3161 (Time-Stamp Protocol)](https://datatracker.ietf.org/doc/html/rfc3161) for trusted timestamps.
 
 ## Why Website Archival Matters
 

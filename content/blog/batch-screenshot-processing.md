@@ -17,7 +17,6 @@ keywords:
   - "mass website capture"
 readingTime: 14
 featured: false
-image: "/images/blog/batch-processing/hero.jpg"
 faqs:
   - question: "How many screenshots can I process at once?"
     answer: "Screenshotly supports up to 50 concurrent requests per API key. For higher concurrency, consider our Enterprise plan or implement request queuing to stay within limits while maintaining throughput."

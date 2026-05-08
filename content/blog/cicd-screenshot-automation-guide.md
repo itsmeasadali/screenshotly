@@ -20,7 +20,7 @@ faqs:
 
 Modern CI/CD pipelines do more than build and deploy code. They can automatically update documentation screenshots, run visual regression tests, and generate preview images—all without manual intervention.
 
-This guide covers practical patterns for integrating screenshots into your deployment workflows.
+This guide covers practical patterns for integrating screenshots into your deployment workflows. The CI platforms referenced throughout: [GitHub Actions](https://docs.github.com/en/actions), [GitLab CI/CD](https://docs.gitlab.com/ee/ci/), [CircleCI](https://circleci.com/docs/), and [Buildkite](https://buildkite.com/docs). For visual-diff specifically in CI, [pixelmatch](https://github.com/mapbox/pixelmatch) and [ImageMagick's compare](https://imagemagick.org/script/compare.php) are the open-source primitives most pipelines build on.
 
 ## Why CI/CD Screenshots?
 

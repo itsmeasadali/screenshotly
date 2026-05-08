@@ -22,6 +22,8 @@ Python developers often need to capture website screenshots for documentation, t
 
 In this tutorial, you'll learn how to capture screenshots in Python using Screenshotly's REST API. We'll cover everything from basic captures to advanced features like AI element removal and batch processing.
 
+The Python HTTP libraries we'll reference: the synchronous [Requests library](https://requests.readthedocs.io/) for simple scripts and Django/Flask views, and [HTTPX](https://www.python-httpx.org/) for async + concurrency. For task queues that handle screenshot work asynchronously, [Celery](https://docs.celeryq.dev/) is the most common choice in Django stacks; [RQ (Redis Queue)](https://python-rq.org/) is a lighter-weight alternative. Retry logic typically uses [Tenacity](https://tenacity.readthedocs.io/), and rate-limiting uses [aiolimiter](https://github.com/mjpieters/aiolimiter) for async or [limits](https://limits.readthedocs.io/) for sync code.
+
 ## Prerequisites
 
 Before we start, make sure you have:

@@ -20,6 +20,8 @@ faqs:
 
 Social media platforms have specific image dimension requirements. Using the wrong size means cropped previews, blurry images, or wasted screen real estate. This guide covers optimal dimensions for every major platform, plus how to automate perfect images every time.
 
+Canonical sources to bookmark for these specs: the [Open Graph protocol at ogp.me](https://ogp.me/), [Twitter/X Cards documentation](https://developer.x.com/en/docs/twitter-for-websites/cards/overview/abouts-cards), [LinkedIn share API](https://www.linkedin.com/help/linkedin/answer/a521928), and the [Pinterest Rich Pins guide](https://help.pinterest.com/en/business/article/rich-pins). For verifying renders before launch: [Facebook Sharing Debugger](https://developers.facebook.com/tools/debug/), [LinkedIn Post Inspector](https://www.linkedin.com/post-inspector/), and [Twitter Card Validator](https://cards-dev.twitter.com/validator).
+
 ## Quick Reference: All Platforms
 
 ### Open Graph (Universal)

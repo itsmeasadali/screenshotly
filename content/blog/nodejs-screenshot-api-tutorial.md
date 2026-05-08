@@ -22,6 +22,8 @@ Node.js is one of the most popular environments for building APIs and automation
 
 In this comprehensive guide, we'll cover everything from basic screenshot capture to production-ready implementations with webhooks, queuing, and error handling.
 
+Reference docs for the Node.js APIs we'll use: native [Fetch API on Node 18+](https://nodejs.org/api/globals.html#fetch) (built on [undici](https://undici.nodejs.org/)), [AbortController and AbortSignal](https://developer.mozilla.org/en-US/docs/Web/API/AbortController) for cancellation, [p-limit](https://github.com/sindresorhus/p-limit) for concurrency control, and [BullMQ](https://docs.bullmq.io/) for production queue workers. For Express middleware patterns: the [Express docs on writing middleware](https://expressjs.com/en/guide/writing-middleware.html). For S3 streaming uploads, the [AWS SDK v3 S3 docs](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/s3/) and the [Upload utility helper](https://github.com/aws/aws-sdk-js-v3/tree/main/lib/lib-storage).
+
 ## Getting Started
 
 ### Installation

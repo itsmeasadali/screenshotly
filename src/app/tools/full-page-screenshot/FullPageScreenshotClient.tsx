@@ -134,7 +134,7 @@ export default function FullPageScreenshotClient() {
                             {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img
                                 src={screenshotUrl}
-                                alt="Full page screenshot"
+                                alt={url ? `Full-page screenshot of ${url} from header to footer` : 'Full-page website screenshot result, top to bottom'}
                                 className="w-full rounded-lg shadow-2xl"
                             />
                         </div>

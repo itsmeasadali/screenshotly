@@ -1,5 +1,5 @@
 ---
-title: "Screenshot Caching: Redis, CDN & Local Patterns"
+title: "How Should You Cache Screenshots at Scale?"
 description: "Optimize screenshot performance with effective caching. Learn Redis, CDN, and local caching patterns for different use cases."
 excerpt: "Speed up screenshot delivery and reduce API costs with smart caching. From Redis to CDN edge caching for global performance."
 author: "asad-ali"
@@ -20,9 +20,13 @@ faqs:
 
 Screenshots are expensive to generate but often reusable. Effective caching reduces API costs, improves response times, and provides offline resilience. This is the canonical caching reference — covering Redis, CDN, local file, and multi-layer caching strategies for different scales.
 
+For HTTP-cache fundamentals: [RFC 9111 (HTTP Caching)](https://datatracker.ietf.org/doc/html/rfc9111) is the authoritative spec, MDN has reader-friendly summaries of [`Cache-Control`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control) and [`ETag`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/ETag). For Redis-backed caching specifics, the [Redis caching strategies guide](https://redis.io/docs/latest/develop/use/client-side-caching/) covers the patterns we'll reference. For CDN-edge specifics, both [Cloudflare Cache documentation](https://developers.cloudflare.com/cache/) and [Vercel Edge Network docs](https://vercel.com/docs/edge-network/caching) describe how cached binary assets behave at the edge.
+
 For **speed optimization** beyond caching (resource blocking, viewport tuning, parallel processing), see our [Screenshot Speed Optimization](/blog/optimize-screenshot-performance) guide. For **cost reduction strategies** (credit-saving techniques, budget monitoring, plan optimization), see our [Screenshot API Cost Optimization](/blog/reduce-screenshot-api-costs) guide.
 
 ## Why Cache Screenshots?
+
+**A well-tuned cache turns 90%+ of screenshot requests into CDN hits at near-zero cost.** Captures are expensive (multi-second compute, real $); the rendered output is small (~50–500 KB) and usually safe to reuse for hours or days. Content-hash cache keys invalidate automatically when the source page changes.
 
 ### Cost Reduction
 

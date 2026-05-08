@@ -1,5 +1,5 @@
 ---
-title: "Screenshot API vs Browser Extensions: When to Use Each"
+title: "When Should You Use a Screenshot API vs Extension?"
 description: "Compare screenshot APIs and browser extensions for different use cases. Learn when to use each approach for automation, quality, and scale."
 excerpt: "A practical comparison of screenshot APIs vs browser extensions. Understand the tradeoffs for different screenshot workflows and requirements."
 author: "asad-ali"

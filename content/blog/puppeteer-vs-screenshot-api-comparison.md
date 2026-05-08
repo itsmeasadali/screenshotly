@@ -22,6 +22,8 @@ Every development team capturing website screenshots faces a fundamental questio
 
 In this guide, we'll compare self-hosted Puppeteer against managed screenshot APIs across every dimension that matters: cost, complexity, performance, reliability, and scalability.
 
+The official browser-automation projects worth bookmarking before starting: [Puppeteer](https://pptr.dev/) (Chrome DevTools Protocol via Node), [Playwright](https://playwright.dev/) (multi-browser, Microsoft-backed), and [Selenium WebDriver](https://www.selenium.dev/) (the long-running standard). Pricing for managed-Chrome alternatives like [Browserless](https://www.browserless.io/) and [BrowserStack Automate](https://www.browserstack.com/automate) is also worth comparing if you need dedicated session-based runs.
+
 ## The Contenders
 
 ### Self-Hosted Puppeteer/Playwright
